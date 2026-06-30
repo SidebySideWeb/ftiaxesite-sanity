@@ -12,7 +12,6 @@ export interface SiteLanguage {
 
 const FALLBACK_LANGUAGES: readonly SiteLanguage[] = [
   { code: 'el', nativeName: 'Ελληνικά', default: true },
-  { code: 'en', nativeName: 'English', default: false },
 ];
 
 export function isSiteLocale(value: string | undefined): value is SiteLocale {

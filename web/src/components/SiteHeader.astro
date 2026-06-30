@@ -1,17 +1,13 @@
 ---
-import type { MenuItem, SiteLanguage, SiteSettings } from '../lib/cms';
-import { isSiteLocale, switchLocaleInPath, type SiteLocale } from '../lib/i18n';
+import type { MenuItem, SiteSettings } from '../lib/cms';
 
 interface Props {
   readonly menus: readonly MenuItem[];
   readonly settings: SiteSettings;
   readonly currentPath: string;
-  readonly locale: SiteLocale;
-  readonly languages: readonly SiteLanguage[];
 }
 
-const { menus, settings, currentPath, locale, languages } = Astro.props;
-const showLanguageSwitcher = languages.length > 1;
+const { menus, settings, currentPath } = Astro.props;
 ---
 
 <nav
@@ -41,37 +37,6 @@ const showLanguageSwitcher = languages.length > 1;
       }
     </div>
     <div class="flex items-center gap-4">
-      {
-        showLanguageSwitcher ? (
-          <div class="hidden items-center gap-2 lg:flex" aria-label="Language">
-            {
-              languages.map((language, index) => {
-                const targetLocale = isSiteLocale(language.code) ? language.code : locale;
-                const isActive = locale === targetLocale;
-                const href = switchLocaleInPath(currentPath, targetLocale);
-                return (
-                  <>
-                    {index > 0 ? <span class="text-outline-variant">|</span> : null}
-                    <a
-                      class:list={[
-                        'font-label-md text-label-md uppercase tracking-wide transition-colors',
-                        isActive ? 'font-semibold text-primary' : 'text-on-surface-variant hover:text-primary',
-                      ]}
-                      href={href}
-                      hreflang={language.code}
-                      lang={language.code}
-                    >
-                      {language.code}
-                    </a>
-                  </>
-                );
-              })
-            }
-          </div>
-        ) : settings.headerLanguageLabel ? (
-          <span class="hidden font-label-lg text-label-lg text-on-surface-variant lg:inline">{settings.headerLanguageLabel}</span>
-        ) : null
-      }
       <a
         class="hidden rounded-full bg-primary-container px-6 py-3 font-label-lg text-label-lg text-on-primary shadow-md transition-all hover:opacity-90 sm:block"
         href={settings.headerCtaUrl}

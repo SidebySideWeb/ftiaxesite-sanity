@@ -14,7 +14,7 @@ import SiteFooter from '../components/SiteFooter.astro';
 
 import SiteHeader from '../components/SiteHeader.astro';
 
-import { fetchLocalBusinessSchemaData, fetchSiteLanguages, fetchSiteMenus, fetchSiteSeoDefaults, fetchSiteSettings } from '../lib/cms';
+import { fetchLocalBusinessSchemaData, fetchSiteMenus, fetchSiteSeoDefaults, fetchSiteSettings } from '../lib/cms';
 
 import { buildBreadcrumbsFromPath, isHomepagePath } from '../lib/breadcrumbs';
 
@@ -25,10 +25,6 @@ import {
   localeHtmlLang,
 
   localizePath,
-
-  mergeLanguages,
-
-  switchLocaleInPath,
 
   type SiteLocale,
 
@@ -87,13 +83,11 @@ const currentPath = Astro.url.pathname.endsWith('/') ? Astro.url.pathname : `${A
 
 
 
-const [menus, siteSettings, languageRows, siteSeoDefaults, localBusinessSchema] = await Promise.all([
+const [menus, siteSettings, siteSeoDefaults, localBusinessSchema] = await Promise.all([
 
   fetchSiteMenus(locale),
 
   fetchSiteSettings(locale),
-
-  fetchSiteLanguages(),
 
   fetchSiteSeoDefaults(),
 
@@ -103,9 +97,7 @@ const [menus, siteSettings, languageRows, siteSeoDefaults, localBusinessSchema] 
 
 
 
-const languages = mergeLanguages(languageRows);
-
-const skipLabel = locale === 'en' ? 'Skip to content' : 'Μετάβαση στο περιεχόμενο';
+const skipLabel = 'Μετάβαση στο περιεχόμενο';
 
 const breadcrumbItems = isHomepagePath(currentPath)
 
@@ -119,16 +111,6 @@ const canonicalUrl = canonicalPath
   ? `${siteOrigin}${localizePath(canonicalPath, locale)}`
   : buildCanonicalUrl(Astro.url.pathname, siteOrigin);
 
-
-
-const alternateUrl =
-
-  siteOrigin && languages.length > 1
-
-    ? `${siteOrigin}${switchLocaleInPath(currentPath, locale === 'en' ? DEFAULT_LOCALE : 'en')}`
-
-    : undefined;
-
 ---
 
 
@@ -140,8 +122,6 @@ const alternateUrl =
   <head>
 
     <SeoHead
-
-      alternateUrl={alternateUrl}
 
       canonicalUrl={canonicalUrl}
 
@@ -208,10 +188,6 @@ const alternateUrl =
     <SiteHeader
 
       currentPath={currentPath}
-
-      languages={languages}
-
-      locale={locale}
 
       menus={menus.primary}
 

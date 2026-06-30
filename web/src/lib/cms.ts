@@ -190,10 +190,7 @@ export async function fetchFluentForm(): Promise<null> {
 }
 
 export async function fetchSiteLanguages(): Promise<readonly SiteLanguage[]> {
-  return [
-    {code: 'el', nativeName: 'Ελληνικά', default: true},
-    {code: 'en', nativeName: 'English', default: false},
-  ]
+  return [{code: 'el', nativeName: 'Ελληνικά', default: true}]
 }
 
 export async function fetchPageSeoData(
@@ -416,7 +413,19 @@ export async function fetchPageFields(slug: string, locale: SiteLocale = DEFAULT
   const docId = PAGE_DOC_IDS[slug]
   if (!docId) return {}
   const doc = await sanityClient.fetch<Record<string, unknown> | null>(`*[_id == $id][0]`, {id: docId})
-  return mapDocumentToFields(slug, doc, locale)
+  const fields = mapDocumentToFields(slug, doc, locale)
+
+  if (slug === 'contact') {
+    const settings = await sanityClient.fetch<{contactPhone?: string} | null>(
+      `*[_id == "siteSettings"][0]{contactPhone}`,
+    )
+    const phone = typeof settings?.contactPhone === 'string' ? settings.contactPhone.trim() : ''
+    if (phone) {
+      fields.fti_contact_phone = phone
+    }
+  }
+
+  return fields
 }
 
 const defaultSiteSettings: SiteSettings = {
@@ -424,7 +433,7 @@ const defaultSiteSettings: SiteSettings = {
   headerLogoUrl: '/',
   headerCtaLabel: 'Ζήτα Προσφορά',
   headerCtaUrl: '/quote/',
-  headerLanguageLabel: 'GR | EN',
+  headerLanguageLabel: '',
   footerBrandName: 'ftiaxesite.gr',
   footerDescription:
     'Σχεδιάζουμε και αναπτύσσουμε ιστοσελίδες που λειτουργούν ως εργαλεία ανάπτυξης για την επιχείρησή σας.',
