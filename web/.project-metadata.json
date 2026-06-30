@@ -1,0 +1,45 @@
+{
+  "projectName": "ftiaxesite/web",
+  "siteSlug": "ftiaxesite",
+  "astroAppName": "web",
+  "designType": "html",
+  "designSource": "C:\\Users\\dgero\\Documents\\Localhost-Project\\ftiaxesite\\app\\web\\stitch_ftiaxesite_studio_brand_identity",
+  "createdAt": "2026-06-26T20:31:34.111Z",
+  "wordpressUrl": "",
+  "vercelUrl": "",
+  "status": "features-integrated",
+  "phases": {
+    "design_analysis": {
+      "completed": true,
+      "date": "2026-06-26T20:38:02.081Z"
+    },
+    "wordpress_config": {
+      "completed": true,
+      "date": "2026-06-26T20:38:02.921Z"
+    },
+    "components_built": {
+      "completed": true,
+      "date": "2026-06-26T20:38:03.714Z"
+    },
+    "pages_built": {
+      "completed": true,
+      "date": "2026-06-26T20:38:04.532Z"
+    },
+    "wordpress_integrated": {
+      "completed": true,
+      "date": "2026-06-26T20:38:05.383Z"
+    },
+    "features_integrated": {
+      "completed": false,
+      "date": null
+    },
+    "seo_optimized": {
+      "completed": false,
+      "date": null
+    },
+    "deployed": {
+      "completed": false,
+      "date": null
+    }
+  }
+}

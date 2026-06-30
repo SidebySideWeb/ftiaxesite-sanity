@@ -1,0 +1,31 @@
+---
+export interface FaqSchemaItem {
+  readonly question: string
+  readonly answer: string
+}
+
+interface Props {
+  readonly faqItems: readonly FaqSchemaItem[]
+}
+
+const {faqItems} = Astro.props
+
+if (faqItems.length === 0) {
+  return null
+}
+
+const schema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqItems.map((item) => ({
+    '@type': 'Question',
+    name: item.question,
+    acceptedAnswer: {
+      '@type': 'Answer',
+      text: item.answer,
+    },
+  })),
+}
+---
+
+<script is:inline set:html={JSON.stringify(schema)} type="application/ld+json" />

@@ -1,0 +1,54 @@
+---
+import type {LocalBusinessSchemaData} from '../../lib/cms'
+
+interface Props {
+  readonly business: LocalBusinessSchemaData
+}
+
+const {business} = Astro.props
+
+const hasAddress =
+  business.streetAddress ||
+  business.addressLocality ||
+  business.postalCode ||
+  business.addressRegion ||
+  business.addressCountry
+
+const hasGeo = business.latitude != null && business.longitude != null
+
+const schema = {
+  '@context': 'https://schema.org',
+  '@type': 'ProfessionalService',
+  name: business.name,
+  url: business.url,
+  ...(business.imageUrl ? {image: business.imageUrl} : {}),
+  ...(business.telephone ? {telephone: business.telephone} : {}),
+  ...(business.email ? {email: business.email} : {}),
+  ...(hasAddress
+    ? {
+        address: {
+          '@type': 'PostalAddress',
+          ...(business.streetAddress ? {streetAddress: business.streetAddress} : {}),
+          ...(business.addressLocality ? {addressLocality: business.addressLocality} : {}),
+          ...(business.postalCode ? {postalCode: business.postalCode} : {}),
+          ...(business.addressRegion ? {addressRegion: business.addressRegion} : {}),
+          ...(business.addressCountry ? {addressCountry: business.addressCountry} : {}),
+        },
+      }
+    : {}),
+  areaServed: {'@type': 'Country', name: 'Greece'},
+  priceRange: '€€',
+  ...(business.sameAs.length > 0 ? {sameAs: business.sameAs} : {}),
+  ...(hasGeo
+    ? {
+        geo: {
+          '@type': 'GeoCoordinates',
+          latitude: business.latitude,
+          longitude: business.longitude,
+        },
+      }
+    : {}),
+}
+---
+
+<script is:inline set:html={JSON.stringify(schema)} type="application/ld+json" />

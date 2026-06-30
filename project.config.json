@@ -1,0 +1,24 @@
+{
+  "siteName": "ftiaxesite.gr",
+  "siteUrl": "https://ftiaxesite.gr",
+  "contactEmail": "info@ftiaxesite.gr",
+  "notificationEmailFrom": "notifications@ftiaxesite.gr",
+  "agencyName": "sidebysideweb.gr",
+  "agencyUrl": "https://sidebysideweb.gr",
+  "sanity": {
+    "projectId": "29vmuk87",
+    "dataset": "production",
+    "studioHost": "ftiaxesite",
+    "studioUrl": "https://ftiaxesite.sanity.studio"
+  },
+  "bookingsProxyUrl": "https://ftiaxesite.gr/api/bookings",
+  "defaultLocale": "el",
+  "routes": {
+    "services": "/services/",
+    "portfolio": "/portfolio/",
+    "about": "/about/",
+    "quote": "/quote/",
+    "contact": "/contact/",
+    "blog": "/blog/"
+  }
+}

@@ -1,0 +1,134 @@
+---
+import SiteLayout from '../../layouts/SiteLayout.astro';
+import { fetchCaseStudies, fetchPageFields, fetchPageSeoData, pageField } from '../../lib/cms';
+import { localizePath, resolvePageLocale } from '../../lib/i18n';
+
+const locale = resolvePageLocale(Astro.currentLocale);
+const fields = await fetchPageFields('portfolio', locale);
+const seoData = await fetchPageSeoData('portfolio', locale);
+const caseStudies = await fetchCaseStudies(20, locale);
+
+const featured = caseStudies.find((item) => item.featured) ?? caseStudies[0] ?? null;
+const gridItems = featured ? caseStudies.filter((item) => item.id !== featured.id) : caseStudies;
+---
+
+<SiteLayout
+  canonicalPath="/portfolio/"
+  description="Portfolio έργων web design και ανάπτυξης ιστοσελίδων από την ftiaxesite.gr."
+  locale={locale}
+  seoData={seoData}
+  title="Έργα"
+>
+  <div class="mx-auto max-w-container-max-width px-6 pb-section-gap-desktop pt-32 md:px-margin-desktop">
+    <header class="mb-20">
+      <h1 class="mb-4 font-headline-lg text-headline-lg-mobile text-on-surface md:text-headline-lg">
+        {pageField(fields, 'fti_portfolio_hero_title', 'Έργα που έχουμε υλοποιήσει')}
+      </h1>
+      <p class="max-w-2xl text-body-lg text-on-surface-variant">
+        {
+          pageField(
+            fields,
+            'fti_portfolio_hero_description',
+            'Πραγματικά projects, πραγματικές επιχειρήσεις. Ανακαλύψτε πώς βοηθάμε τις εταιρείες να αναβαθμίσουν την ψηφιακή τους παρουσία με τεχνική αρτιότητα.',
+          )
+        }
+      </p>
+    </header>
+
+    {
+      featured ? (
+        <section class="mb-section-gap-desktop">
+          <div class="soft-card-shadow flex flex-col items-stretch overflow-hidden rounded-xl border border-outline-variant/30 bg-surface-container-lowest md:rounded-lg lg:flex-row">
+            <div class="flex flex-1 flex-col justify-center p-8 md:p-12">
+              <span class="mb-6 inline-block w-fit rounded-full bg-primary-fixed px-3 py-1 font-semibold text-label-md text-on-primary-fixed">
+                {pageField(fields, 'fti_portfolio_featured_badge', featured.clientName || 'Featured Project')}
+              </span>
+              <h2 class="mb-6 font-headline-md text-headline-md text-on-surface">{featured.title}</h2>
+              <p class="mb-8 leading-relaxed text-body-md text-on-surface-variant">{featured.results || featured.excerpt}</p>
+              <div class="mb-10 flex flex-wrap gap-3">
+                {(featured.resultBadges.length > 0 ? featured.resultBadges : featured.techStack).map((badge) => (
+                  <div class="flex items-center gap-2 rounded-full border border-outline-variant/20 bg-surface-container px-4 py-2 text-body-sm text-on-surface-variant">
+                    <span class="material-symbols-outlined text-[18px]">check_circle</span>
+                    {badge}
+                  </div>
+                ))}
+              </div>
+              {featured.projectUrl ? (
+                <a class="inline-flex items-center gap-2 font-semibold text-primary group" href={featured.projectUrl} rel="noopener noreferrer" target="_blank">
+                  {pageField(fields, 'fti_portfolio_featured_link_label', featured.linkLabel)}
+                  <span class="material-symbols-outlined transition-transform group-hover:translate-x-1">arrow_forward</span>
+                </a>
+              ) : null}
+            </div>
+            <div class="flex flex-1 items-center justify-center bg-surface-container-low p-6 md:p-12">
+              <div class="browser-mockup w-full max-w-xl shadow-2xl transition-transform duration-500 hover:-translate-y-2">
+                <div class="browser-header">
+                  <div class="dot dot-red"></div>
+                  <div class="dot dot-yellow"></div>
+                  <div class="dot dot-green"></div>
+                </div>
+                <div class="aspect-video w-full bg-surface-container-highest">
+                  <img alt="" class="h-full w-full object-cover" loading="lazy" src={featured.screenshotUrl || featured.imageUrl || ''} />
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      ) : null
+    }
+
+    <section class="mb-section-gap-desktop">
+      <div class="mb-10 flex items-end justify-between">
+        <h3 class="font-headline-md text-headline-md">{pageField(fields, 'fti_portfolio_grid_title', 'Πρόσφατα Έργα')}</h3>
+        <div class="mx-8 mb-3 hidden h-[2px] flex-1 bg-outline-variant/20 md:block"></div>
+      </div>
+      <div class="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
+        {
+          gridItems.length > 0
+            ? gridItems.map((item) => (
+                <div class="group flex flex-col overflow-hidden rounded-lg border border-outline-variant/20 bg-surface-container-lowest transition-all duration-300 hover:border-primary/20 hover:soft-card-shadow">
+                  <a class="flex flex-1 flex-col" href={localizePath(`/portfolio/${item.slug}/`, locale)}>
+                  <div class="relative aspect-video overflow-hidden bg-surface-container">
+                    {item.imageUrl ? (
+                      <img alt="" class="h-full w-full object-cover opacity-80 transition-all duration-500 group-hover:opacity-100" loading="lazy" src={item.imageUrl} />
+                    ) : (
+                      <div class="flex h-full items-center justify-center bg-surface-container-high text-on-surface-variant">Σύντομα</div>
+                    )}
+                    {item.statusLabel ? (
+                      <div class="absolute right-4 top-4">
+                        <span class="rounded-full bg-surface-variant px-3 py-1 text-label-md text-on-surface-variant">{item.statusLabel}</span>
+                      </div>
+                    ) : null}
+                  </div>
+                  <div class="p-6">
+                    <span class="mb-2 block font-medium uppercase tracking-wider text-label-md text-primary">{item.clientName || 'Project'}</span>
+                    <h4 class="mb-2 font-headline-sm text-headline-sm transition-colors group-hover:text-primary">{item.title}</h4>
+                    <p class="text-body-sm text-on-surface-variant">{item.excerpt}</p>
+                  </div>
+                  </a>
+                </div>
+              ))
+            : [1, 2, 3].map(() => (
+                <div class="flex flex-col overflow-hidden rounded-lg border border-outline-variant/20 bg-surface-container-lowest p-6">
+                  <span class="mb-2 text-label-md text-primary">Σε εξέλιξη</span>
+                  <h4 class="mb-2 font-headline-sm text-headline-sm">Σύντομα...</h4>
+                  <p class="text-body-sm text-on-surface-variant">Ετοιμάζουμε την παρουσίαση αυτού του έργου.</p>
+                </div>
+              ))
+        }
+      </div>
+    </section>
+
+    <section class="rounded-lg bg-inverse-surface px-8 py-16 text-center md:px-16">
+      <h2 class="mb-4 font-headline-md text-headline-md text-inverse-on-surface">
+        {pageField(fields, 'fti_portfolio_cta_title', 'Έτοιμοι να ξεκινήσουμε;')}
+      </h2>
+      <p class="mx-auto mb-8 max-w-xl text-body-lg text-inverse-on-surface/80">
+        {pageField(fields, 'fti_portfolio_cta_description', 'Πείτε μας για το project σας και θα σας απαντήσουμε με μια προσαρμοσμένη πρόταση.')}
+      </p>
+      <a class="inline-block rounded-full bg-primary-container px-10 py-4 font-label-lg text-on-primary shadow-lg transition-all hover:scale-105" href={pageField(fields, 'fti_portfolio_cta_button_url', '/quote/')}>
+        {pageField(fields, 'fti_portfolio_cta_button_label', 'Ζήτα Προσφορά')}
+      </a>
+    </section>
+  </div>
+</SiteLayout>

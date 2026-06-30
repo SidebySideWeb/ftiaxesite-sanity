@@ -1,0 +1,24 @@
+{
+  "siteName": "{{SITE_NAME}}",
+  "siteUrl": "https://{{DOMAIN}}",
+  "contactEmail": "info@{{DOMAIN}}",
+  "notificationEmailFrom": "notifications@{{DOMAIN}}",
+  "agencyName": "sidebysideweb.gr",
+  "agencyUrl": "https://sidebysideweb.gr",
+  "sanity": {
+    "projectId": "{{SANITY_PROJECT_ID}}",
+    "dataset": "production",
+    "studioHost": "{{STUDIO_HOST}}",
+    "studioUrl": "https://{{STUDIO_HOST}}.sanity.studio"
+  },
+  "bookingsProxyUrl": "https://{{DOMAIN}}/api/bookings",
+  "defaultLocale": "el",
+  "routes": {
+    "services": "/services/",
+    "portfolio": "/portfolio/",
+    "about": "/about/",
+    "quote": "/quote/",
+    "contact": "/contact/",
+    "blog": "/blog/"
+  }
+}

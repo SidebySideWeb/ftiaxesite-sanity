@@ -1,0 +1,237 @@
+---
+
+import '../styles/global.css';
+
+
+
+import SeoHead from '../components/SeoHead.astro';
+
+import BreadcrumbSchema from '../components/schema/BreadcrumbSchema.astro';
+
+import LocalBusinessSchema from '../components/schema/LocalBusinessSchema.astro';
+
+import SiteFooter from '../components/SiteFooter.astro';
+
+import SiteHeader from '../components/SiteHeader.astro';
+
+import { fetchLocalBusinessSchemaData, fetchSiteLanguages, fetchSiteMenus, fetchSiteSeoDefaults, fetchSiteSettings } from '../lib/cms';
+
+import { buildBreadcrumbsFromPath, isHomepagePath } from '../lib/breadcrumbs';
+
+import {
+
+  DEFAULT_LOCALE,
+
+  localeHtmlLang,
+
+  localizePath,
+
+  mergeLanguages,
+
+  switchLocaleInPath,
+
+  type SiteLocale,
+
+} from '../lib/i18n';
+
+import type { SeoFieldsData } from '../lib/seo';
+
+
+
+interface Props {
+
+  readonly title: string;
+
+  readonly description: string;
+
+  readonly canonicalPath?: string;
+
+  readonly ogImageUrl?: string | null;
+
+  readonly locale?: SiteLocale;
+
+  /** sanity-plugin-seofields object for the active locale (`seo` or `seoEn`). */
+
+  readonly seoData?: SeoFieldsData | null;
+
+  readonly ogType?: 'website' | 'article';
+
+}
+
+
+
+const {
+
+  title,
+
+  description,
+
+  canonicalPath,
+
+  ogImageUrl,
+
+  locale = DEFAULT_LOCALE,
+
+  seoData,
+
+  ogType = 'website',
+
+} = Astro.props;
+
+
+
+const siteOrigin = Astro.site?.href.replace(/\/$/, '') ?? '';
+
+const currentPath = Astro.url.pathname.endsWith('/') ? Astro.url.pathname : `${Astro.url.pathname}/`;
+
+
+
+const [menus, siteSettings, languageRows, siteSeoDefaults, localBusinessSchema] = await Promise.all([
+
+  fetchSiteMenus(locale),
+
+  fetchSiteSettings(locale),
+
+  fetchSiteLanguages(),
+
+  fetchSiteSeoDefaults(),
+
+  fetchLocalBusinessSchemaData(siteOrigin || 'https://ftiaxesite.gr'),
+
+]);
+
+
+
+const languages = mergeLanguages(languageRows);
+
+const skipLabel = locale === 'en' ? 'Skip to content' : 'Μετάβαση στο περιεχόμενο';
+
+const breadcrumbItems = isHomepagePath(currentPath)
+
+  ? []
+
+  : buildBreadcrumbsFromPath(currentPath, siteOrigin || 'https://ftiaxesite.gr', title);
+
+
+
+const canonicalUrl =
+
+  canonicalPath && siteOrigin
+
+    ? `${siteOrigin}${localizePath(canonicalPath, locale)}`
+
+    : new URL(Astro.url.pathname, Astro.site).href;
+
+
+
+const alternateUrl =
+
+  siteOrigin && languages.length > 1
+
+    ? `${siteOrigin}${switchLocaleInPath(currentPath, locale === 'en' ? DEFAULT_LOCALE : 'en')}`
+
+    : undefined;
+
+---
+
+
+
+<!doctype html>
+
+<html class="h-full" lang={localeHtmlLang(locale)}>
+
+  <head>
+
+    <SeoHead
+
+      alternateUrl={alternateUrl}
+
+      canonicalUrl={canonicalUrl}
+
+      fallbackDescription={description}
+
+      fallbackOgImage={ogImageUrl}
+
+      fallbackTitle={title}
+
+      locale={locale}
+
+      ogType={ogType}
+
+      seoData={seoData}
+
+      siteDefaults={siteSeoDefaults}
+
+    />
+
+    <link href="https://fonts.googleapis.com" rel="preconnect" />
+
+    <link crossorigin href="https://fonts.gstatic.com" rel="preconnect" />
+
+    <link
+
+      href="https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap"
+
+      rel="stylesheet"
+
+    />
+
+    <link
+
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+
+      rel="stylesheet"
+
+    />
+
+    <link href="/favicon.svg" rel="icon" type="image/svg+xml" />
+
+    <LocalBusinessSchema business={localBusinessSchema} />
+
+    {breadcrumbItems.length > 0 ? <BreadcrumbSchema items={breadcrumbItems} /> : null}
+
+    <slot name="schema" />
+
+  </head>
+
+  <body class="min-h-full">
+
+    <a
+
+      class="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:rounded-md focus:bg-white focus:px-3 focus:py-2 focus:text-sm focus:font-semibold focus:text-on-surface focus:shadow-lg"
+
+      href="#main-content"
+
+    >
+
+      {skipLabel}
+
+    </a>
+
+    <SiteHeader
+
+      currentPath={currentPath}
+
+      languages={languages}
+
+      locale={locale}
+
+      menus={menus.primary}
+
+      settings={siteSettings}
+
+    />
+
+    <main class="flex-1 pt-20" id="main-content">
+
+      <slot />
+
+    </main>
+
+    <SiteFooter companyMenus={menus.legal} servicesMenus={menus.footer} settings={siteSettings} />
+
+  </body>
+
+</html>
+
+

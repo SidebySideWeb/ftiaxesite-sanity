@@ -1,0 +1,117 @@
+---
+interface Props {
+  readonly title: string;
+  readonly description: string;
+  readonly canonicalPath?: string;
+  readonly ogImageUrl?: string | null;
+}
+
+const { title, description, canonicalPath, ogImageUrl } = Astro.props;
+
+const siteUrl = (import.meta.env.SITE_URL ?? '').replace(/\/$/, '');
+const siteName = import.meta.env.SITE_NAME ?? 'Astro + WordPress';
+
+const gtmId = (import.meta.env.PUBLIC_GTM_ID ?? '').trim();
+const ga4Id = (import.meta.env.PUBLIC_GA4_MEASUREMENT_ID ?? '').trim();
+
+const canonicalUrl = ((): string | undefined => {
+  if (siteUrl.length === 0) {
+    return undefined;
+  }
+  if (!canonicalPath) {
+    return undefined;
+  }
+  const normalizedPath = canonicalPath.startsWith('/') ? canonicalPath : `/${canonicalPath}`;
+  return `${siteUrl}${normalizedPath}`;
+})();
+
+const pageTitle = `${title} · ${siteName}`;
+---
+
+<!doctype html>
+<html class="h-full" lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1" name="viewport" />
+    <meta content={description} name="description" />
+    <meta content={siteName} name="author" />
+    <title>{pageTitle}</title>
+    {gtmId ? (
+      <script is:inline define:vars={{ gtmId }}>
+        (function (w, d, s, l, i) {
+          w[l] = w[l] || [];
+          w[l].push({ 'gtm.start': new Date().getTime(), event: 'gtm.js' });
+          var f = d.getElementsByTagName(s)[0],
+            j = d.createElement(s),
+            dl = l !== 'dataLayer' ? '&l=' + l : '';
+          j.async = true;
+          j.src = 'https://www.googletagmanager.com/gtm.js?id=' + i + dl;
+          f.parentNode.insertBefore(j, f);
+        })(window, document, 'script', 'dataLayer', gtmId);
+      </script>
+    ) : null}
+    {ga4Id && !gtmId ? (
+      <>
+        <script async src={`https://www.googletagmanager.com/gtag/js?id=${encodeURIComponent(ga4Id)}`}></script>
+        <script is:inline define:vars={{ ga4Id }}>
+          window.dataLayer = window.dataLayer || [];
+          function gtag() {
+            dataLayer.push(arguments);
+          }
+          gtag('js', new Date());
+          gtag('config', ga4Id);
+        </script>
+      </>
+    ) : null}
+    {canonicalUrl ? <link href={canonicalUrl} rel="canonical" /> : null}
+    <meta content={pageTitle} property="og:title" />
+    <meta content={description} property="og:description" />
+    <meta content="website" property="og:type" />
+    {canonicalUrl ? <meta content={canonicalUrl} property="og:url" /> : null}
+    {ogImageUrl ? <meta content={ogImageUrl} property="og:image" /> : null}
+    <meta content="summary_large_image" name="twitter:card" />
+    <meta content={pageTitle} name="twitter:title" />
+    <meta content={description} name="twitter:description" />
+    {ogImageUrl ? <meta content={ogImageUrl} name="twitter:image" /> : null}
+    <link href="/favicon.svg" rel="icon" type="image/svg+xml" />
+  </head>
+  <body class="min-h-full bg-slate-50 text-slate-900 antialiased">
+    {gtmId ? (
+      <noscript>
+        <iframe
+          class="pointer-events-none fixed h-0 w-0 overflow-hidden opacity-0"
+          height="0"
+          src={`https://www.googletagmanager.com/ns.html?id=${encodeURIComponent(gtmId)}`}
+          title="Google Tag Manager"
+          width="0"
+        ></iframe>
+      </noscript>
+    ) : null}
+    <a
+      class="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:rounded-md focus:bg-white focus:px-3 focus:py-2 focus:text-sm focus:font-semibold focus:text-slate-900 focus:shadow-lg"
+      href="#main-content"
+    >
+      Skip to content
+    </a>
+    <div class="flex min-h-full flex-col">
+      <header class="border-b border-slate-200 bg-white">
+        <div class="mx-auto flex w-full max-w-6xl flex-col gap-4 px-4 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-6 lg:px-8">
+          <a class="text-lg font-semibold tracking-tight text-slate-900" href="/">{siteName}</a>
+          <nav aria-label="Primary" class="flex flex-wrap gap-x-6 gap-y-2 text-sm font-medium">
+            <a class="text-slate-700 hover:text-slate-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-600" href="/">Home</a>
+            <a class="text-slate-700 hover:text-slate-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-600" href="/blog/">Blog</a>
+          </nav>
+        </div>
+      </header>
+      <main class="flex-1" id="main-content">
+        <slot />
+      </main>
+      <footer class="border-t border-slate-200 bg-white">
+        <div class="mx-auto flex w-full max-w-6xl flex-col gap-2 px-4 py-8 text-sm text-slate-600 sm:px-6 lg:px-8">
+          <p class="font-medium text-slate-800">{siteName}</p>
+          <p>Powered by Astro and a headless WordPress CMS.</p>
+        </div>
+      </footer>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,110 @@
+---
+import QuoteForm from '../../../components/QuoteForm.astro';
+import SiteLayout from '../../../layouts/SiteLayout.astro';
+import { fetchPageFields, fetchPageSeoData, pageField } from '../../../lib/cms';
+import { resolvePageLocale } from '../../../lib/i18n';
+
+const locale = resolvePageLocale(Astro.currentLocale);
+const fields = await fetchPageFields('quote', locale);
+const seoData = await fetchPageSeoData('quote', locale);
+
+const pricingTiers = [
+  {
+    label: pageField(fields, 'fti_quote_pricing_1_label', 'Απλό site παρουσίασης'),
+    price: pageField(fields, 'fti_quote_pricing_1_price', 'από €500'),
+  },
+  {
+    label: pageField(fields, 'fti_quote_pricing_2_label', 'Site με διαχείριση περιεχομένου (WordPress)'),
+    price: pageField(fields, 'fti_quote_pricing_2_price', 'από €1.200'),
+  },
+  {
+    label: pageField(fields, 'fti_quote_pricing_3_label', 'Σύνθετο site / e-shop / κρατήσεις'),
+    price: pageField(fields, 'fti_quote_pricing_3_price', 'από €1.800'),
+  },
+];
+
+const processSteps = [
+  pageField(fields, 'fti_quote_process_step_1', 'Λαμβάνουμε το αίτημά σου και το μελετάμε'),
+  pageField(fields, 'fti_quote_process_step_2', 'Σου στέλνουμε μια αρχική πρόταση & εκτίμηση κόστους'),
+  pageField(fields, 'fti_quote_process_step_3', 'Αν προχωρήσουμε, ξεκινάμε με ένα σύντομο call'),
+];
+
+const submitNote = pageField(
+  fields,
+  'fti_quote_form_submit_note',
+  'Καμία δέσμευση. Θα λάβεις μια αρχική εκτίμηση εντός 24 ωρών.',
+);
+---
+
+<SiteLayout
+  canonicalPath="/quote/"
+  description="Ζητήστε προσφορά για την ιστοσελίδα της επιχείρησής σας. Απάντηση εντός 24 ωρών."
+  locale={locale}
+  seoData={seoData}
+  title="Ζήτα Προσφορά"
+>
+  <div class="mx-auto max-w-container-max-width px-margin-mobile py-12 md:px-margin-desktop md:py-24">
+    <section class="mb-16 max-w-3xl text-center md:mb-20 md:text-left">
+      <h1 class="mb-6 font-headline-lg text-headline-lg-mobile leading-tight text-on-surface md:text-headline-lg">
+        {pageField(fields, 'fti_quote_hero_title', 'Πες μας για το project σου')}
+      </h1>
+      <p class="font-body-lg text-body-lg leading-relaxed text-on-surface-variant">
+        {
+          pageField(
+            fields,
+            'fti_quote_hero_description',
+            'Κάθε προσφορά φτιάχνεται στα μέτρα της επιχείρησής σου. Συμπλήρωσε τη φόρμα — θα σου απαντήσουμε εντός 24 ωρών με μια αρχική εκτίμηση.',
+          )
+        }
+      </p>
+    </section>
+
+    <div class="grid grid-cols-1 gap-12 lg:grid-cols-[35%_65%]">
+      <aside class="order-2 space-y-8 lg:order-1">
+        <div class="sticky top-32 rounded-lg border border-outline-variant/30 bg-surface-container-low p-8 md:p-10">
+          <h2 class="mb-6 flex items-center gap-3 font-headline-sm text-headline-sm">
+            <span class="material-symbols-outlined text-primary">info</span>
+            {pageField(fields, 'fti_quote_pricing_title', 'Για να έχεις μια ιδέα:')}
+          </h2>
+          <ul class="mb-8 space-y-6">
+            {
+              pricingTiers.map((tier, index) => (
+                <li class:list={['flex items-start justify-between', index < pricingTiers.length - 1 ? 'border-b border-outline-variant/20 pb-4' : 'pb-4']}>
+                  <span class="font-body-md text-on-surface">{tier.label}</span>
+                  <span class="whitespace-nowrap font-label-lg text-primary">{tier.price}</span>
+                </li>
+              ))
+            }
+          </ul>
+          <p class="mb-10 font-body-sm text-body-sm italic text-on-surface-variant">
+            {pageField(fields, 'fti_quote_pricing_note', 'Η τελική τιμή εξαρτάται από τις ανάγκες σου — αριθμό σελίδων, λειτουργίες, χρονοδιάγραμμα.')}
+          </p>
+          <div>
+            <h3 class="mb-6 font-label-lg uppercase tracking-wider text-on-surface">
+              {pageField(fields, 'fti_quote_process_title', 'Τι γίνεται μετά;')}
+            </h3>
+            <div class="relative space-y-8 border-l-2 border-outline-variant/30 pl-8">
+              {
+                processSteps.map((step, index) => (
+                  <div class="relative">
+                    <div class:list={['absolute -left-[41px] top-0 h-4 w-4 rounded-full ring-4 ring-surface-container-low', index === 0 ? 'bg-primary' : 'bg-outline']}></div>
+                    <p class="font-body-md text-on-surface">{step}</p>
+                  </div>
+                ))
+              }
+            </div>
+          </div>
+        </div>
+      </aside>
+
+      <section class="order-1 lg:order-2">
+        <div class="rounded-lg border border-outline-variant/30 bg-surface-container-lowest p-8 shadow-sm md:p-12">
+          <h2 class="mb-8 font-headline-md text-headline-md">
+            {pageField(fields, 'fti_quote_form_title', 'Στείλε μας τα στοιχεία σου')}
+          </h2>
+          <QuoteForm submitNote={submitNote} />
+        </div>
+      </section>
+    </div>
+  </div>
+</SiteLayout>

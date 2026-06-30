@@ -1,0 +1,27 @@
+---
+interface Props {
+  readonly serviceType: string
+  readonly audienceType: string
+  readonly description: string
+}
+
+const {serviceType, audienceType, description} = Astro.props
+
+const schema = {
+  '@context': 'https://schema.org',
+  '@type': 'Service',
+  serviceType,
+  provider: {
+    '@type': 'ProfessionalService',
+    name: 'ftiaxesite.gr',
+  },
+  areaServed: 'GR',
+  audience: {
+    '@type': 'BusinessAudience',
+    audienceType,
+  },
+  description,
+}
+---
+
+<script is:inline set:html={JSON.stringify(schema)} type="application/ld+json" />

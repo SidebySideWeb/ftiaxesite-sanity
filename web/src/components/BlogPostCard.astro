@@ -1,0 +1,52 @@
+---
+import type { BlogPost } from '../types';
+import { localizePath, type SiteLocale } from '../lib/i18n';
+
+interface Props {
+  readonly blogPost: BlogPost;
+  readonly locale?: SiteLocale;
+}
+
+const { blogPost, locale = 'el' } = Astro.props;
+
+const publishedLabel = new Intl.DateTimeFormat(locale === 'en' ? 'en' : 'el', {
+  year: 'numeric',
+  month: 'short',
+  day: '2-digit',
+}).format(new Date(blogPost.publishedAt));
+
+const articleHref = localizePath(`/blog/${blogPost.slug}/`, locale);
+const readLabel = locale === 'en' ? 'Read article' : 'Διάβασε το άρθρο';
+const noImageLabel = locale === 'en' ? 'No image' : 'Χωρίς εικόνα';
+---
+
+<article
+  class="flex h-full flex-col overflow-hidden rounded-lg border border-outline-variant/30 bg-surface-container-lowest shadow-sm transition hover:-translate-y-0.5 hover:shadow-md"
+>
+  <a class="block focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary" href={articleHref}>
+    <div class="aspect-[16/9] w-full overflow-hidden bg-surface-container">
+      {
+        blogPost.featuredImageUrl ? (
+          <img
+            alt={blogPost.featuredImageAlt ?? blogPost.title}
+            class="h-full w-full object-cover"
+            height={675}
+            loading="lazy"
+            src={blogPost.featuredImageUrl}
+            width={1200}
+          />
+        ) : (
+          <div class="flex h-full w-full items-center justify-center text-sm font-medium text-on-surface-variant">
+            {noImageLabel}
+          </div>
+        )
+      }
+    </div>
+    <div class="flex flex-1 flex-col gap-3 p-5">
+      <p class="font-label-md uppercase tracking-wide text-on-surface-variant">{publishedLabel}</p>
+      <h2 class="text-balance font-headline-sm text-headline-sm leading-snug text-on-surface">{blogPost.title}</h2>
+      <p class="line-clamp-3 text-body-sm text-on-surface-variant">{blogPost.excerptPlainText}</p>
+      <span class="mt-auto text-sm font-semibold text-primary">{readLabel}</span>
+    </div>
+  </a>
+</article>

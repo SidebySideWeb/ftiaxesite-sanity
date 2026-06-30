@@ -1,0 +1,98 @@
+---
+import type { MenuItem, SiteLanguage, SiteSettings } from '../lib/cms';
+import { isSiteLocale, switchLocaleInPath, type SiteLocale } from '../lib/i18n';
+
+interface Props {
+  readonly menus: readonly MenuItem[];
+  readonly settings: SiteSettings;
+  readonly currentPath: string;
+  readonly locale: SiteLocale;
+  readonly languages: readonly SiteLanguage[];
+}
+
+const { menus, settings, currentPath, locale, languages } = Astro.props;
+const showLanguageSwitcher = languages.length > 1;
+---
+
+<nav
+  class="fixed top-0 z-50 w-full border-b border-outline-variant/30 bg-surface/80 shadow-sm transition-all duration-300 ease-in-out glass-nav"
+  data-site-nav
+>
+  <div class="mx-auto flex h-20 max-w-container-max-width items-center justify-between px-margin-mobile md:px-margin-desktop">
+    <a class="font-headline-sm text-headline-sm text-primary" href={settings.headerLogoUrl}>
+      {settings.headerLogoText}
+    </a>
+    <div class="hidden items-center gap-8 md:flex">
+      {
+        menus.map((item) => {
+          const isActive = currentPath === item.href || (item.href !== '/' && currentPath.startsWith(item.href));
+          return (
+            <a
+              class:list={[
+                'font-label-lg text-label-lg transition-opacity hover:opacity-80',
+                isActive ? 'border-b-2 border-primary text-primary' : 'text-on-surface-variant hover:text-primary',
+              ]}
+              href={item.href}
+            >
+              {item.title}
+            </a>
+          );
+        })
+      }
+    </div>
+    <div class="flex items-center gap-4">
+      {
+        showLanguageSwitcher ? (
+          <div class="hidden items-center gap-2 lg:flex" aria-label="Language">
+            {
+              languages.map((language, index) => {
+                const targetLocale = isSiteLocale(language.code) ? language.code : locale;
+                const isActive = locale === targetLocale;
+                const href = switchLocaleInPath(currentPath, targetLocale);
+                return (
+                  <>
+                    {index > 0 ? <span class="text-outline-variant">|</span> : null}
+                    <a
+                      class:list={[
+                        'font-label-md text-label-md uppercase tracking-wide transition-colors',
+                        isActive ? 'font-semibold text-primary' : 'text-on-surface-variant hover:text-primary',
+                      ]}
+                      href={href}
+                      hreflang={language.code}
+                      lang={language.code}
+                    >
+                      {language.code}
+                    </a>
+                  </>
+                );
+              })
+            }
+          </div>
+        ) : settings.headerLanguageLabel ? (
+          <span class="hidden font-label-lg text-label-lg text-on-surface-variant lg:inline">{settings.headerLanguageLabel}</span>
+        ) : null
+      }
+      <a
+        class="hidden rounded-full bg-primary-container px-6 py-3 font-label-lg text-label-lg text-on-primary shadow-md transition-all hover:opacity-90 sm:block"
+        href={settings.headerCtaUrl}
+      >
+        {settings.headerCtaLabel}
+      </a>
+    </div>
+  </div>
+</nav>
+
+<script>
+  const nav = document.querySelector('[data-site-nav]');
+  if (nav) {
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 50) {
+        nav.classList.add('h-16', 'shadow-md');
+        nav.classList.remove('h-20', 'shadow-sm');
+      } else {
+        nav.classList.remove('h-16', 'shadow-md');
+        nav.classList.add('h-20', 'shadow-sm');
+      }
+    });
+  }
+</script>

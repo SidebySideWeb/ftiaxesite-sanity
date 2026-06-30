@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+
+<html class="light" lang="el"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Ζήτα Προσφορά | ftiaxesite.gr</title>
+<!-- Fonts: GFS Didot for refined Greek aesthetic -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=GFS+Didot&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            display: inline-block;
+            vertical-align: middle;
+        }
+        
+        /* Custom scrollbar for better aesthetics */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f9f9f7;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #767772;
+            border-radius: 8px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #1a1a1a;
+        }
+
+        /* Glassmorphism utility */
+        .glass-nav {
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "primary": "#1a1a1a",
+                      "on-primary": "#ffffff",
+                      "primary-container": "#1a1a1a",
+                      "on-primary-container": "#ffffff",
+                      "secondary": "#474745",
+                      "on-secondary": "#ffffff",
+                      "secondary-container": "#dadad8",
+                      "on-secondary-container": "#1a1a1a",
+                      "tertiary": "#474745",
+                      "on-tertiary": "#ffffff",
+                      "surface": "#f9f9f7",
+                      "on-surface": "#1a1a1a",
+                      "surface-variant": "#e2e2e0",
+                      "on-surface-variant": "#474745",
+                      "outline": "#767772",
+                      "outline-variant": "#c6c6c4",
+                      "background": "#f9f9f7",
+                      "on-background": "#1a1a1a",
+                      "error": "#b3261e",
+                      "on-error": "#ffffff",
+                      "surface-container-lowest": "#ffffff",
+                      "surface-container-low": "#f4f4f2",
+                      "surface-container": "#eeeeec",
+                      "surface-container-high": "#e8e8e6",
+                      "surface-container-highest": "#e2e2e0",
+                      "surface-bright": "#f9f9f7",
+                      "surface-dim": "#dadad8"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.5rem",
+                      "lg": "1rem",
+                      "xl": "1.5rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "base": "8px",
+                      "section-gap-mobile": "64px",
+                      "margin-mobile": "16px",
+                      "margin-desktop": "48px",
+                      "container-max-width": "1200px",
+                      "section-gap-desktop": "96px",
+                      "gutter": "24px"
+              },
+              "fontFamily": {
+                      "body-sm": ["GFS Didot", "serif"],
+                      "label-lg": ["GFS Didot", "serif"],
+                      "headline-sm": ["GFS Didot", "serif"],
+                      "headline-lg": ["GFS Didot", "serif"],
+                      "headline-md": ["GFS Didot", "serif"],
+                      "headline-lg-mobile": ["GFS Didot", "serif"],
+                      "display-lg-mobile": ["GFS Didot", "serif"],
+                      "label-md": ["GFS Didot", "serif"],
+                      "display-lg": ["GFS Didot", "serif"],
+                      "body-md": ["GFS Didot", "serif"],
+                      "body-lg": ["GFS Didot", "serif"]
+              },
+              "fontSize": {
+                      "body-sm": ["14px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                      "label-lg": ["14px", {"lineHeight": "1.2", "letterSpacing": "0.02em", "fontWeight": "600"}],
+                      "headline-sm": ["20px", {"lineHeight": "1.4", "fontWeight": "600"}],
+                      "headline-lg": ["40px", {"lineHeight": "1.2", "fontWeight": "600"}],
+                      "headline-md": ["32px", {"lineHeight": "1.3", "fontWeight": "600"}],
+                      "headline-lg-mobile": ["28px", {"lineHeight": "1.3", "fontWeight": "600"}],
+                      "display-lg-mobile": ["36px", {"lineHeight": "1.2", "fontWeight": "700"}],
+                      "label-md": ["12px", {"lineHeight": "1.2", "fontWeight": "500"}],
+                      "display-lg": ["56px", {"lineHeight": "1.1", "fontWeight": "700"}],
+                      "body-md": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                      "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}]
+              }
+            },
+          },
+        }
+    </script>
+</head>
+<body class="bg-background text-on-surface selection:bg-primary selection:text-on-primary font-body-md">
+<!-- TopNavBar -->
+<header class="bg-surface/90 backdrop-blur-xl sticky top-0 z-50 border-b border-outline-variant/30 shadow-sm">
+<nav class="flex justify-between items-center px-margin-desktop py-5 max-w-container-max-width mx-auto w-full">
+<a class="font-headline-sm text-headline-sm font-bold text-primary" href="/">ftiaxesite.gr</a>
+<div class="hidden md:flex items-center space-x-8 font-label-lg">
+<a class="text-on-surface-variant hover:text-primary transition-colors" href="#">Υπηρεσίες</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors" href="#">Έργα</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors" href="#">Πώς Δουλεύουμε</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors" href="#">Blog</a>
+<a class="text-on-surface-variant hover:text-primary transition-colors" href="#">Επικοινωνία</a>
+</div>
+<div class="flex items-center gap-4">
+<span class="hidden lg:inline text-on-surface-variant font-label-md">GR | EN</span>
+<a class="bg-primary text-on-primary px-6 py-2.5 rounded-full font-label-lg hover:opacity-90 transition-all active:scale-95 shadow-sm" href="#">
+                    Ζήτα Προσφορά
+                </a>
+</div>
+</nav>
+</header>
+<main class="max-w-container-max-width mx-auto px-margin-mobile md:px-margin-desktop py-12 md:py-24">
+<!-- Hero Section -->
+<section class="mb-16 md:mb-20 text-center md:text-left max-w-3xl">
+<h1 class="font-headline-lg text-headline-lg-mobile md:text-headline-lg text-on-surface mb-6 leading-tight">Πες μας για το project σου</h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant leading-relaxed">
+                Κάθε προσφορά φτιάχνεται στα μέτρα της επιχείρησής σου. Συμπλήρωσε τη φόρμα — θα σου απαντήσουμε εντός 24 ωρών με μια αρχική εκτίμηση.
+            </p>
+</section>
+<!-- Layout Grid -->
+<div class="grid grid-cols-1 lg:grid-cols-[35%_65%] gap-12">
+<!-- Left Column (Reference) -->
+<aside class="space-y-8 order-2 lg:order-1">
+<div class="bg-surface-container-low p-8 md:p-10 rounded-lg border border-outline-variant/30 sticky top-32">
+<h2 class="font-headline-sm text-headline-sm mb-6 flex items-center gap-3">
+<span class="material-symbols-outlined text-primary">info</span>
+                        Για να έχεις μια ιδέα:
+                    </h2>
+<ul class="space-y-6 mb-8">
+<li class="flex justify-between items-start border-b border-outline-variant/20 pb-4">
+<span class="font-body-md text-on-surface">Απλό site παρουσίασης</span>
+<span class="font-label-lg text-primary whitespace-nowrap">από €500</span>
+</li>
+<li class="flex justify-between items-start border-b border-outline-variant/20 pb-4">
+<span class="font-body-md text-on-surface">Site με διαχείριση περιεχομένου (WordPress)</span>
+<span class="font-label-lg text-primary whitespace-nowrap">από €1.200</span>
+</li>
+<li class="flex justify-between items-start pb-4">
+<span class="font-body-md text-on-surface">Σύνθετο site / e-shop / κρατήσεις</span>
+<span class="font-label-lg text-primary whitespace-nowrap">από €1.800</span>
+</li>
+</ul>
+<p class="font-body-sm text-body-sm text-on-surface-variant italic mb-10">
+                        Η τελική τιμή εξαρτάται από τις ανάγκες σου — αριθμό σελίδων, λειτουργίες, χρονοδιάγραμμα.
+                    </p>
+<div>
+<h3 class="font-label-lg text-on-surface uppercase tracking-wider mb-6">Τι γίνεται μετά;</h3>
+<div class="relative space-y-8 pl-8 border-l-2 border-outline-variant/30">
+<!-- Step 1 -->
+<div class="relative">
+<div class="absolute -left-[41px] top-0 w-4 h-4 rounded-full bg-primary ring-4 ring-surface-container-low"></div>
+<p class="font-body-md text-on-surface">Λαμβάνουμε το αίτημά σου και το μελετάμε</p>
+</div>
+<!-- Step 2 -->
+<div class="relative">
+<div class="absolute -left-[41px] top-0 w-4 h-4 rounded-full bg-outline ring-4 ring-surface-container-low"></div>
+<p class="font-body-md text-on-surface">Σου στέλνουμε μια αρχική πρόταση &amp; εκτίμηση κόστους</p>
+</div>
+<!-- Step 3 -->
+<div class="relative">
+<div class="absolute -left-[41px] top-0 w-4 h-4 rounded-full bg-outline ring-4 ring-surface-container-low"></div>
+<p class="font-body-md text-on-surface">Αν προχωρήσουμε, ξεκινάμε με ένα σύντομο call</p>
+</div>
+</div>
+</div>
+</div>
+</aside>
+<!-- Right Column (Form) -->
+<section class="order-1 lg:order-2">
+<div class="bg-surface-container-lowest p-8 md:p-12 rounded-lg shadow-sm border border-outline-variant/30">
+<h2 class="font-headline-md text-headline-md mb-8">Στείλε μας τα στοιχεία σου</h2>
+<form action="#" class="space-y-6" method="POST">
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<!-- Name -->
+<div class="space-y-2">
+<label class="font-label-md text-on-surface-variant" for="name">Όνοματεπώνυμο *</label>
+<input class="w-full bg-surface-container-low px-4 py-3 rounded-DEFAULT border-outline-variant focus:border-primary focus:ring-1 focus:ring-primary transition-all outline-none text-body-md" id="name" placeholder="π.χ. Γιάννης Παπαδόπουλος" required="" type="text"/>
+</div>
+<!-- Email -->
+<div class="space-y-2">
+<label class="font-label-md text-on-surface-variant" for="email">Email *</label>
+<input class="w-full bg-surface-container-low px-4 py-3 rounded-DEFAULT border-outline-variant focus:border-primary focus:ring-1 focus:ring-primary transition-all outline-none text-body-md" id="email" placeholder="name@company.gr" required="" type="email"/>
+</div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<!-- Business -->
+<div class="space-y-2">
+<label class="font-label-md text-on-surface-variant" for="business">Επωνυμία Επιχείρησης (προαιρετικά)</label>
+<input class="w-full bg-surface-container-low px-4 py-3 rounded-DEFAULT border-outline-variant focus:border-primary focus:ring-1 focus:ring-primary transition-all outline-none text-body-md" id="business" placeholder="Η εταιρεία σας" type="text"/>
+</div>
+<!-- Site Type -->
+<div class="space-y-2">
+<label class="font-label-md text-on-surface-variant" for="site-type">Τύπος Project *</label>
+<select class="w-full bg-surface-container-low px-4 py-3 rounded-DEFAULT border-outline-variant focus:border-primary focus:ring-1 focus:ring-primary transition-all outline-none text-body-md appearance-none" id="site-type" required="">
+<option disabled="" selected="" value="">Επιλέξτε κατηγορία</option>
+<option value="landing">Απλό site παρουσίασης</option>
+<option value="cms">Site με διαχείριση (WordPress)</option>
+<option value="eshop">E-shop / Σύνθετη εφαρμογή</option>
+<option value="other">Άλλο</option>
+</select>
+</div>
+</div>
+<!-- Existing Site Toggle -->
+<div class="space-y-4 pt-2">
+<div class="flex items-center gap-3">
+<label class="relative inline-flex items-center cursor-pointer">
+<input class="sr-only peer" id="has-site-toggle" onchange="document.getElementById('site-url-container').classList.toggle('hidden')" type="checkbox"/>
+<div class="w-11 h-6 bg-outline-variant/50 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+</label>
+<span class="font-body-md text-on-surface">Έχω ήδη ιστοσελίδα και θέλω ανανέωση</span>
+</div>
+<div class="hidden animate-in fade-in slide-in-from-top-2 duration-300" id="site-url-container">
+<input class="w-full bg-surface-container-low px-4 py-3 rounded-DEFAULT border-outline-variant focus:border-primary focus:ring-1 focus:ring-primary transition-all outline-none text-body-md" id="site-url" placeholder="https://www.mysite.gr" type="url"/>
+</div>
+</div>
+<!-- Description -->
+<div class="space-y-2">
+<label class="font-label-md text-on-surface-variant" for="description">Περιγραφή Project *</label>
+<textarea class="w-full bg-surface-container-low px-4 py-3 rounded-DEFAULT border-outline-variant focus:border-primary focus:ring-1 focus:ring-primary transition-all outline-none text-body-md resize-none" id="description" placeholder="Περιγράψτε μας τι έχετε στο μυαλό σας..." required="" rows="5"></textarea>
+</div>
+<!-- Deadline -->
+<div class="space-y-2">
+<label class="font-label-md text-on-surface-variant" for="deadline">Επιθυμητό Χρονοδιάγραμμα *</label>
+<select class="w-full bg-surface-container-low px-4 py-3 rounded-DEFAULT border-outline-variant focus:border-primary focus:ring-1 focus:ring-primary transition-all outline-none text-body-md appearance-none" id="deadline" required="">
+<option disabled="" selected="" value="">Πότε το χρειάζεστε;</option>
+<option value="asap">Άμεσα (εντός 1 μήνα)</option>
+<option value="normal">Σύντομα (1-3 μήνες)</option>
+<option value="flexible">Ευέλικτο (πάνω από 3 μήνες)</option>
+</select>
+</div>
+<!-- Submit -->
+<div class="pt-4 text-center">
+<button class="w-full bg-primary text-on-primary py-4 rounded-full font-label-lg text-lg shadow-sm hover:shadow-md hover:translate-y-[-1px] active:scale-95 transition-all duration-300" type="submit">
+                                Στείλε το αίτημα
+                            </button>
+<p class="mt-4 font-body-sm text-body-sm text-on-surface-variant">
+                                Καμία δέσμευση. Θα λάβεις μια αρχική εκτίμηση εντός 24 ωρών.
+                            </p>
+</div>
+</form>
+</div>
+</section>
+</div>
+</main>
+<!-- Closing/Action Section -->
+<section class="mt-section-gap-desktop bg-primary py-24 px-margin-mobile">
+<div class="max-w-4xl mx-auto text-center text-on-primary">
+<h2 class="font-headline-lg text-headline-lg-mobile md:text-headline-lg mb-8">Έχεις απορίες πριν ξεκινήσουμε;</h2>
+<p class="font-body-lg text-body-lg opacity-80 mb-12">
+                Αν προτιμάς μια πιο άμεση επαφή, μπορείς να μας καλέσεις στο <a class="underline decoration-1 underline-offset-4" href="tel:+302100000000">+30 210 000 0000</a> ή να μας στείλεις ένα email.
+            </p>
+<div class="flex flex-wrap justify-center gap-6">
+<a class="px-8 py-3 rounded-full border border-on-primary/30 hover:bg-on-primary hover:text-primary transition-colors font-label-lg" href="#">
+                    Συχνές Ερωτήσεις
+                </a>
+<a class="px-8 py-3 rounded-full border border-on-primary/30 hover:bg-on-primary hover:text-primary transition-colors font-label-lg" href="#">
+                    Δείτε τα Έργα μας
+                </a>
+</div>
+</div>
+</section>
+<!-- Footer -->
+<footer class="bg-surface-container-lowest full-width border-t border-outline-variant/30">
+<div class="grid grid-cols-1 md:grid-cols-4 gap-gutter px-margin-desktop py-section-gap-mobile max-w-container-max-width mx-auto">
+<div class="space-y-4">
+<a class="font-headline-sm text-headline-sm font-bold text-on-surface" href="/">ftiaxesite.gr</a>
+<p class="font-body-sm text-body-sm text-on-surface-variant max-w-xs">
+                    Υψηλής αισθητικής και τεχνικής αρτιότητας ιστοσελίδες για σύγχρονες επιχειρήσεις.
+                </p>
+</div>
+<div class="space-y-4">
+<h4 class="font-label-lg text-primary uppercase">Πλοήγηση</h4>
+<ul class="space-y-2 font-body-sm">
+<li><a class="text-on-surface-variant hover:text-primary hover:translate-x-1 transition-all inline-block" href="#">Υπηρεσίες</a></li>
+<li><a class="text-on-surface-variant hover:text-primary hover:translate-x-1 transition-all inline-block" href="#">Έργα</a></li>
+<li><a class="text-on-surface-variant hover:text-primary hover:translate-x-1 transition-all inline-block" href="#">Blog</a></li>
+</ul>
+</div>
+<div class="space-y-4">
+<h4 class="font-label-lg text-primary uppercase">Εταιρεία</h4>
+<ul class="space-y-2 font-body-sm">
+<li><a class="text-on-surface-variant hover:text-primary hover:translate-x-1 transition-all inline-block" href="#">Πώς Δουλεύουμε</a></li>
+<li><a class="text-on-surface-variant hover:text-primary hover:translate-x-1 transition-all inline-block" href="#">Επικοινωνία</a></li>
+<li><a class="text-on-surface-variant hover:text-primary hover:translate-x-1 transition-all inline-block" href="#">sidebysideweb.gr</a></li>
+</ul>
+</div>
+<div class="space-y-4">
+<h4 class="font-label-lg text-primary uppercase">Social</h4>
+<div class="flex gap-4">
+<a class="w-10 h-10 rounded-full bg-surface-container-low flex items-center justify-center text-on-surface-variant hover:bg-primary hover:text-on-primary transition-all" href="#">
+<span class="material-symbols-outlined">share</span>
+</a>
+<a class="w-10 h-10 rounded-full bg-surface-container-low flex items-center justify-center text-on-surface-variant hover:bg-primary hover:text-on-primary transition-all" href="#">
+<span class="material-symbols-outlined">public</span>
+</a>
+</div>
+</div>
+</div>
+<div class="max-w-container-max-width mx-auto px-margin-desktop py-8 border-t border-outline-variant/10 text-center">
+<p class="font-body-sm text-body-sm text-on-surface-variant opacity-70">© 2024 ftiaxesite.gr. Professional Web Design &amp; Development.</p>
+</div>
+</footer>
+<script>
+        // Simple form interaction
+        document.querySelector('form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const btn = e.target.querySelector('button');
+            const originalText = btn.innerHTML;
+            btn.innerHTML = '<span class="flex items-center justify-center gap-2">Στέλνουμε... <span class="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></span></span>';
+            btn.disabled = true;
+            
+            // Mock success
+            setTimeout(() => {
+                btn.innerHTML = 'Επιτυχής Αποστολή!';
+                btn.classList.replace('bg-primary', 'bg-green-700');
+                
+                setTimeout(() => {
+                    btn.innerHTML = originalText;
+                    btn.classList.replace('bg-green-700', 'bg-primary');
+                    btn.disabled = false;
+                    e.target.reset();
+                    document.getElementById('site-url-container').classList.add('hidden');
+                }, 3000);
+            }, 1500);
+        });
+
+        // Hover effect for reference cards
+        const listItems = document.querySelectorAll('aside ul li');
+        listItems.forEach(item => {
+            item.addEventListener('mouseenter', () => {
+                item.querySelector('.text-primary').style.transform = 'scale(1.05)';
+                item.querySelector('.text-primary').style.transition = 'transform 0.2s ease';
+            });
+            item.addEventListener('mouseleave', () => {
+                item.querySelector('.text-primary').style.transform = 'scale(1)';
+            });
+        });
+    </script>
+</body></html>

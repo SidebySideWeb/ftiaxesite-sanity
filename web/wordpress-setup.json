@@ -1,0 +1,121 @@
+{
+  "version": 1,
+  "projectName": "ftiaxesite/web",
+  "generatedAt": "2026-06-26T00:00:00.000Z",
+  "plugins": {
+    "required": [
+      { "slug": "advanced-custom-fields", "name": "Advanced Custom Fields", "purpose": "Editable page heroes, service/portfolio fields" },
+      { "slug": "acf-to-rest-api", "name": "ACF to REST API", "purpose": "Expose ACF fields to Astro via REST" },
+      { "slug": "seo-by-rank-math", "name": "Rank Math SEO", "purpose": "SEO metadata for headless frontend" },
+      { "slug": "fluentform", "name": "Fluent Forms", "purpose": "Quote request / contact forms (already installed)" },
+      { "slug": "safe-svg", "name": "Safe SVG", "purpose": "SVG uploads for portfolio logos" }
+    ],
+    "optional": []
+  },
+  "cpt_prefix": "fti",
+  "custom_post_types": [
+    {
+      "slug": "fti_service",
+      "label": "Υπηρεσίες",
+      "rewrite": "services",
+      "supports": ["title", "editor", "thumbnail", "excerpt", "revisions"],
+      "taxonomies": ["fti_service_category"]
+    },
+    {
+      "slug": "fti_case_study",
+      "label": "Έργα",
+      "rewrite": "portfolio",
+      "supports": ["title", "editor", "thumbnail", "excerpt", "revisions"],
+      "taxonomies": ["fti_industry", "fti_tech_stack"]
+    }
+  ],
+  "taxonomies": [
+    {
+      "slug": "fti_service_category",
+      "label": "Κατηγορίες Υπηρεσιών",
+      "object_type": "fti_service",
+      "hierarchical": true
+    },
+    {
+      "slug": "fti_industry",
+      "label": "Κλάδοι",
+      "object_type": "fti_case_study",
+      "hierarchical": true
+    },
+    {
+      "slug": "fti_tech_stack",
+      "label": "Τεχνολογίες",
+      "object_type": "fti_case_study",
+      "hierarchical": false
+    }
+  ],
+  "pages": [
+    { "slug": "home", "title": "Αρχική", "template": "home" },
+    { "slug": "services", "title": "Υπηρεσίες", "template": "services" },
+    { "slug": "portfolio", "title": "Έργα", "template": "portfolio" },
+    { "slug": "quote", "title": "Ζήτα Προσφορά", "template": "quote" },
+    { "slug": "blog", "title": "Blog", "template": "blog" },
+    { "slug": "about", "title": "Σχετικά", "template": "about" },
+    { "slug": "contact", "title": "Επικοινωνία", "template": "contact" }
+  ],
+  "acf_field_groups": [
+    {
+      "key": "group_fti_page_hero",
+      "title": "Page Hero",
+      "location": "page",
+      "fields": [
+        { "name": "eyebrow", "type": "text", "label": "Eyebrow" },
+        { "name": "hero_title", "type": "text", "label": "Hero Title" },
+        { "name": "hero_description", "type": "textarea", "label": "Hero Description" },
+        { "name": "primary_cta_label", "type": "text", "label": "Primary CTA Label" },
+        { "name": "primary_cta_url", "type": "url", "label": "Primary CTA URL" },
+        { "name": "secondary_cta_label", "type": "text", "label": "Secondary CTA Label" },
+        { "name": "secondary_cta_url", "type": "url", "label": "Secondary CTA URL" },
+        { "name": "hero_image", "type": "image", "label": "Hero Image" }
+      ]
+    },
+    {
+      "key": "group_fti_service",
+      "title": "Service Fields",
+      "location": "fti_service",
+      "fields": [
+        { "name": "icon", "type": "text", "label": "Material Icon Name" },
+        { "name": "short_description", "type": "textarea", "label": "Short Description" },
+        { "name": "features", "type": "textarea", "label": "Features (one per line)" },
+        { "name": "starting_price", "type": "text", "label": "Starting Price Label" }
+      ]
+    },
+    {
+      "key": "group_fti_case_study",
+      "title": "Case Study Fields",
+      "location": "fti_case_study",
+      "fields": [
+        { "name": "client_name", "type": "text", "label": "Client Name" },
+        { "name": "project_url", "type": "url", "label": "Project URL" },
+        { "name": "tech_stack", "type": "textarea", "label": "Tech Stack (one per line)" },
+        { "name": "results", "type": "textarea", "label": "Results Summary" }
+      ]
+    }
+  ],
+  "menus": {
+    "locations": [
+      { "slug": "primary", "label": "Primary Menu", "items": ["home", "services", "portfolio", "quote", "about", "contact", "blog"] },
+      { "slug": "footer", "label": "Footer Menu", "items": ["services", "portfolio", "quote", "contact"] },
+      { "slug": "legal", "label": "Legal Menu", "items": [] }
+    ]
+  },
+  "forms": [
+    {
+      "name": "Quote Request",
+      "slug": "quote-request",
+      "page": "quote",
+      "fields": ["name", "email", "phone", "company", "project_type", "budget", "message"]
+    }
+  ],
+  "rest_api": {
+    "expose_acf": true,
+    "custom_routes": ["/wp-json/fti/v1/menus"],
+    "cors_origins": ["http://localhost:4321", "https://ftiaxesite.gr"]
+  },
+  "notes": "Greek-language web agency site. Stitch designs: home, services, portfolio, quote. Fluent Forms for quote page."
+}

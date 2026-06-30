@@ -1,0 +1,245 @@
+{
+  "projectName": "ftiaxesite/web",
+  "generatedAt": "2026-06-26T20:32:42.244Z",
+  "pages": [
+    {
+      "name": "ftiaxesite.gr_gfs_didot_1",
+      "source_file": "code.html",
+      "source_relative": "ftiaxesite.gr_gfs_didot_1/code.html",
+      "path": "/ftiaxesite.gr_gfs_didot_1/",
+      "sections": [
+        "navigation",
+        "sections",
+        "main",
+        "footer",
+        "hero",
+        "cta",
+        "services-grid"
+      ],
+      "hasForms": false,
+      "hasBooking": false,
+      "hasShop": false
+    },
+    {
+      "name": "ftiaxesite.gr_gfs_didot_2",
+      "source_file": "code.html",
+      "source_relative": "ftiaxesite.gr_gfs_didot_2/code.html",
+      "path": "/ftiaxesite.gr_gfs_didot_2/",
+      "sections": [
+        "navigation",
+        "sections",
+        "main",
+        "footer",
+        "hero",
+        "cta",
+        "services-grid"
+      ],
+      "hasForms": false,
+      "hasBooking": true,
+      "hasShop": true
+    },
+    {
+      "name": "ftiaxesite.gr_gfs_didot_3",
+      "source_file": "code.html",
+      "source_relative": "ftiaxesite.gr_gfs_didot_3/code.html",
+      "path": "/ftiaxesite.gr_gfs_didot_3/",
+      "sections": [
+        "header",
+        "navigation",
+        "sections",
+        "main",
+        "footer",
+        "hero"
+      ],
+      "hasForms": true,
+      "hasBooking": false,
+      "hasShop": true
+    },
+    {
+      "name": "portfolio_ftiaxesite.gr_gfs_didot",
+      "source_file": "code.html",
+      "source_relative": "portfolio_ftiaxesite.gr_gfs_didot/code.html",
+      "path": "/portfolio_ftiaxesite.gr_gfs_didot/",
+      "sections": [
+        "header",
+        "navigation",
+        "sections",
+        "main",
+        "footer",
+        "hero",
+        "cta",
+        "services-grid"
+      ],
+      "hasForms": false,
+      "hasBooking": false,
+      "hasShop": false
+    },
+    {
+      "name": "stitch_ftiaxesite_studio_brand_identity",
+      "source_file": "code.html",
+      "source_relative": "stitch_ftiaxesite_studio_brand_identity/ftiaxesite.gr_gfs_didot_1/code.html",
+      "path": "/stitch_ftiaxesite_studio_brand_identity/",
+      "sections": [
+        "navigation",
+        "sections",
+        "main",
+        "footer",
+        "hero",
+        "cta",
+        "services-grid"
+      ],
+      "hasForms": false,
+      "hasBooking": false,
+      "hasShop": false
+    }
+  ],
+  "components_detected": [
+    {
+      "type": "card",
+      "occurrences": 16,
+      "likely_content_type": "service",
+      "fields_detected": [
+        "title",
+        "description",
+        "icon",
+        "link"
+      ]
+    },
+    {
+      "type": "list",
+      "occurrences": 25,
+      "likely_content_type": "post",
+      "fields_detected": [
+        "title",
+        "excerpt",
+        "link"
+      ]
+    },
+    {
+      "type": "button",
+      "occurrences": 23,
+      "likely_content_type": "cta",
+      "fields_detected": [
+        "label",
+        "href"
+      ]
+    },
+    {
+      "type": "image",
+      "occurrences": 12,
+      "likely_content_type": "media",
+      "fields_detected": [
+        "src",
+        "alt"
+      ]
+    }
+  ],
+  "forms": [],
+  "navigation": {
+    "primary": [
+      "Portfolio",
+      "Services",
+      "Process",
+      "About",
+      "How we work",
+      "Blog",
+      "Contact",
+      "ftiaxesite.gr",
+      "Υπηρεσίες",
+      "Έργα",
+      "Πώς Δουλεύουμε",
+      "Επικοινωνία",
+      "Ζήτα Προσφορά"
+    ],
+    "footer": [
+      "alternate_email",
+      "call",
+      "location_on",
+      "Custom Web Design",
+      "Astro Development",
+      "WordPress Management",
+      "SEO Strategy",
+      "LinkedIn",
+      "Terms of Service",
+      "Privacy Policy",
+      "Contact",
+      "Cookie Policy",
+      "Portfolio",
+      "How we work",
+      "Contact Us",
+      "ftiaxesite.gr",
+      "Υπηρεσίες",
+      "Έργα",
+      "Blog",
+      "Πώς Δουλεύουμε",
+      "Επικοινωνία",
+      "sidebysideweb.gr",
+      "share",
+      "public",
+      "Προσωπικά Δεδομένα"
+    ]
+  },
+  "color_palette": [
+    "#2563EB",
+    "#FFFFFF",
+    "#004AC6",
+    "#FFDAD6",
+    "#FFB596",
+    "#DADAD8",
+    "#003EA8",
+    "#E1E1DF",
+    "#F9F9F7",
+    "#1A1A1A",
+    "#943700",
+    "#B4C5FF",
+    "#FFB95F",
+    "#00174B",
+    "#DBE1FF",
+    "#BA1A1A",
+    "#FFEDE6",
+    "#F0F0FB",
+    "#FEA619",
+    "#FFDBCD",
+    "#ECECE9",
+    "#4A4A48",
+    "#7D2D00",
+    "#0053DB",
+    "#E7E7F3",
+    "#2E3039",
+    "#FAF8FF",
+    "#E1E2ED",
+    "#2A1700",
+    "#93000A",
+    "#737686",
+    "#EDEDF9",
+    "#653E00",
+    "#EEEFFF",
+    "#191B23",
+    "#C3C6D7",
+    "#D9D9E5",
+    "#684000",
+    "#F3F3FE",
+    "#767772",
+    "#474745",
+    "#E2E2E0",
+    "#C6C6C4",
+    "#B3261E",
+    "#F4F4F2",
+    "#EEEEEC",
+    "#E8E8E6",
+    "#FFDDB8",
+    "#360F00",
+    "#BC4800"
+  ],
+  "fonts_detected": [
+    "GFS Didot"
+  ],
+  "interactive_elements": {
+    "buttons": 23,
+    "links": 75,
+    "modals": false
+  },
+  "image_requirements": {
+    "raster_assets": 12
+  }
+}

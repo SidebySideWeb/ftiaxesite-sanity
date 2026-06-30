@@ -1,0 +1,209 @@
+---
+import FAQPageSchema from '../../components/schema/FAQPageSchema.astro';
+import ServiceSchema from '../../components/schema/ServiceSchema.astro';
+import SiteLayout from '../../layouts/SiteLayout.astro';
+import { fetchPageFields, fetchServices, fetchServicesFaqItems, fetchPageSeoData, pageField, pageFieldLines } from '../../lib/cms';
+import { resolvePageLocale } from '../../lib/i18n';
+
+const locale = resolvePageLocale(Astro.currentLocale);
+const fields = await fetchPageFields('services', locale);
+const seoData = await fetchPageSeoData('services', locale);
+const services = await fetchServices(20, locale);
+const faqSchemaItems = await fetchServicesFaqItems(locale);
+
+const fallbackServices = [
+  {
+    title: 'Απλό Site Παρουσίασης',
+    description:
+      'Ένα landing page ή μικρό site με λίγες ενότητες, χτισμένο με Astro για μέγιστη ταχύτητα. Περιλαμβάνει φιλοξενία, φόρμα επικοινωνίας και βασικό SEO setup.',
+    idealFor: 'νέες επιχειρήσεις, ελεύθερους επαγγελματίες, καμπάνιες και προσωρινές ανάγκες.',
+    price: 'Ενδεικτικά από €500',
+    image:
+      'https://lh3.googleusercontent.com/aida-public/AB6AXuCsmq01qC47afFZXZvKpNtLcDA9uux8Jd59hSQE4OTE3jTPMGWrDrEny7P3dHM0a6QowhTre5x9_sTq6ESk0WERWD4qvNMo3ZFWoxu28Zors7LLlCXk1ZrJE2FqZq7lcIljXSkR7yG3Hu_JZiuDp_qoSU6Y6X7yL3L_Ud00hdVWIfxRWEfXkMfKL3V8XyErNMaLOBPc7fMXM2hXWqpa3-34kZIOMH5OTBi8ZVYa9-cAyCEJYgX5dqsjt4p_AO-hF5QQUHE2bYOBrAQ',
+    footnote: '',
+    ctaLabel: 'Ζήτα Προσφορά για αυτό',
+    ctaUrl: '/quote/',
+    reverse: false,
+  },
+  {
+    title: 'Site με Διαχείριση Περιεχομένου',
+    description:
+      'Astro frontend με WordPress backend. Διαχειρίζεσαι μόνος σου περιεχόμενο, blog, και έως 10 σελίδες. Περιλαμβάνει εκπαίδευση χρήσης.',
+    idealFor:
+      'επιχειρήσεις που θέλουν να ενημερώνουν μόνες τους το περιεχόμενό τους, χωρίς να εξαρτώνται από εμάς για κάθε αλλαγή.',
+    price: 'Ενδεικτικά από €1.200',
+    image:
+      'https://lh3.googleusercontent.com/aida-public/AB6AXuDZGP0jsnZBdpXTCXRBlgPhwYkrCsexls7JIItC8kv1vBn0JSJMyhLtHc3OEBz8yr0dS0084_-o8FNLZJrft1kZdUfDtrRvQu6t234ztYBTUFn6Jqy7BGJRi70sCoKH0x9FWWhkpk6xKa9mWNcmC12DBumFvpPGUQPY3922zngSlsQZgWBcbN5mhWvphT7cAfrMLtJHzv7EcUZg74qrn0OAjWW0nQLPvhlWUygn4cq_-xdJmv-Y2Ix-7A-a46eaAh1QtzVXDbGO5RY',
+    footnote: '',
+    ctaLabel: 'Ζήτα Προσφορά για αυτό',
+    ctaUrl: '/quote/',
+    reverse: true,
+  },
+  {
+    title: 'Σύνθετο Site / E-shop / Κρατήσεις',
+    description:
+      'WooCommerce ή σύστημα κρατήσεων, πληρωμές online, και custom λειτουργίες προσαρμοσμένες στις ανάγκες της επιχείρησής σου.',
+    idealFor: 'e-shops, καταλύματα, υπηρεσίες με ραντεβού.',
+    price: 'Ενδεικτικά από €1.800',
+    image:
+      'https://lh3.googleusercontent.com/aida-public/AB6AXuBGzIQOLwrEPx_4wHAfvDOtMV0YljBfO_H5g0PHwMqU2OAR-7GOdmdEJ2qvycwvz8kAe7jax40PNoCulAVN7qq3uB6xuOoheGqlUb1LzB1-SN9E3qXwcgHQx2lOtLO9I_vR76SCdTmmcbg1ichpN4A4vpMDdS6HFKWEeKmEluO-5FLe5LDw5jfDmmXujhldvr7NQs8mqMk5IbjyheuOWjzs_C2nIft7OG3k8B_ZKCV-G5movoIOhUdjk7OSmeRMImyBMcalGVcM0fY',
+    footnote: '',
+    ctaLabel: 'Ζήτα Προσφορά για αυτό',
+    ctaUrl: '/quote/',
+    reverse: false,
+  },
+];
+
+const displayServices =
+  services.length > 0
+    ? services.map((service, index) => ({
+        title: service.title,
+        description: service.summary || service.excerpt || service.content.replace(/<[^>]+>/g, ''),
+        idealFor: service.idealFor,
+        price: service.priceFrom || 'Κατόπιν συζήτησης',
+        image: service.imageUrl || fallbackServices[0].image,
+        footnote: service.footnote,
+        ctaLabel: service.ctaLabel,
+        ctaUrl: service.ctaUrl,
+        reverse: index % 2 === 1,
+      }))
+    : fallbackServices;
+
+const faqItems = [1, 2, 3, 4, 5]
+  .map((index) => ({
+    question: pageField(fields, `fti_services_faq_${index}_question`),
+    answer: pageField(fields, `fti_services_faq_${index}_answer`),
+  }))
+  .filter((item) => item.question.length > 0 && item.answer.length > 0);
+
+const addonsItems = pageFieldLines(fields, 'fti_services_addons_items');
+---
+
+<SiteLayout
+  canonicalPath="/services/"
+  description="Υπηρεσίες web design και ανάπτυξης ιστοσελίδων με Astro και WordPress για επιχειρήσεις στην Ελλάδα."
+  locale={locale}
+  seoData={seoData}
+  title="Υπηρεσίες"
+>
+  <FAQPageSchema slot="schema" faqItems={faqSchemaItems} />
+  {
+    displayServices.slice(0, 3).map((service) => (
+      <ServiceSchema
+        slot="schema"
+        audienceType={service.idealFor || service.title}
+        description={service.description}
+        serviceType={service.title}
+      />
+    ))
+  }
+  <section class="relative flex h-[450px] items-center overflow-hidden">
+    <div class="relative z-10 mx-auto max-w-container-max-width px-margin-desktop">
+      <div class="max-w-3xl">
+        <span class="mb-6 inline-block rounded-full bg-surface-container-high px-3 py-1 font-label-lg text-label-lg tracking-wider text-primary">
+          {pageField(fields, 'fti_services_hero_eyebrow', 'ΥΠΗΡΕΣΙΕΣ')}
+        </span>
+        <h1 class="mb-6 font-headline-lg text-headline-lg text-on-surface md:font-display-lg md:text-display-lg">
+          {pageField(fields, 'fti_services_hero_title', 'Βρες το σωστό site για την επιχείρησή σου')}
+        </h1>
+        <p class="font-body-lg text-body-lg text-on-surface-variant">
+          {
+            pageField(
+              fields,
+              'fti_services_hero_description',
+              'Κάθε επιχείρηση έχει διαφορετικές ανάγκες. Δες τις κατηγορίες — η τελική τιμή διαμορφώνεται ανάλογα με το τι χρειάζεσαι.',
+            )
+          }
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="space-y-section-gap-desktop py-section-gap-desktop">
+    {
+      displayServices.map((service) => (
+        <div class:list={[service.reverse ? '' : 'bg-[#FAFAF9]']}>
+          <div class="mx-auto grid max-w-container-max-width items-center gap-16 px-margin-desktop py-section-gap-mobile md:grid-cols-2 md:py-24">
+            <div class:list={['group relative', service.reverse ? '' : 'order-2 md:order-1']}>
+              <div class="absolute -inset-4 rounded-xl bg-primary/5 blur-2xl transition-all group-hover:bg-primary/10"></div>
+              <img alt="" class="relative aspect-video w-full rounded-lg border border-outline-variant/20 object-cover shadow-xl" loading="lazy" src={service.image} />
+            </div>
+            <div class:list={['space-y-6', service.reverse ? '' : 'order-1 md:order-2']}>
+              <h2 class="font-headline-md text-headline-md text-on-surface">{service.title}</h2>
+              <p class="font-body-lg text-body-lg text-on-surface-variant">{service.description}</p>
+              {service.idealFor ? (
+                <div class="rounded-xl border border-outline-variant/30 bg-surface p-4">
+                  <span class="mb-1 block font-label-lg text-label-lg text-primary">Ιδανικό για:</span>
+                  <p class="font-body-md text-body-md italic text-on-surface-variant">{service.idealFor}</p>
+                </div>
+              ) : null}
+              <div class="flex items-center justify-between pt-4">
+                <span class="font-body-md text-body-md text-outline">{service.price}</span>
+                <a class="rounded-full bg-primary px-8 py-3 font-medium text-on-primary shadow-md transition-all hover:shadow-lg active:scale-95" href={service.ctaUrl}>
+                  {service.ctaLabel}
+                </a>
+              </div>
+              {service.footnote ? <p class="font-body-sm text-body-sm italic text-outline">{service.footnote}</p> : null}
+            </div>
+          </div>
+        </div>
+      ))
+    }
+  </section>
+
+  <section class="mx-auto max-w-container-max-width px-margin-desktop py-section-gap-desktop text-center">
+    <h2 class="mb-12 font-headline-sm text-headline-sm text-on-surface">
+      {pageField(fields, 'fti_services_addons_title', 'Πρόσθετες υπηρεσίες κατόπιν συμφωνίας')}
+    </h2>
+    <div class="flex flex-wrap items-center justify-center gap-y-4 font-body-md text-body-md text-on-surface-variant">
+      {
+        (addonsItems.length > 0
+          ? addonsItems
+          : ['SEO βελτιστοποίηση', 'Copywriting', 'Εκπαίδευση χρήσης', 'Μηνιαία συντήρηση', 'Analytics setup']
+        ).map((item, index, list) => (
+          <>
+            <span class="px-4">{item}</span>
+            {index < list.length - 1 ? <span class="hidden h-1.5 w-1.5 rounded-full bg-outline-variant md:inline-block"></span> : null}
+          </>
+        ))
+      }
+    </div>
+  </section>
+
+  {
+    faqItems.length > 0 ? (
+      <section class="bg-surface-container-low py-section-gap-desktop">
+        <div class="mx-auto max-w-3xl px-margin-mobile">
+          <h2 class="mb-16 text-center font-headline-lg text-headline-lg">
+            {pageField(fields, 'fti_services_faq_title', 'Συχνές Ερωτήσεις')}
+          </h2>
+          <div class="space-y-4">
+            {faqItems.map((item) => (
+              <details class="overflow-hidden rounded-lg border border-outline-variant/30 bg-surface">
+                <summary class="cursor-pointer p-6 font-body-lg text-body-lg font-semibold text-on-surface">{item.question}</summary>
+                <div class="px-6 pb-6 font-body-md text-body-md text-on-surface-variant">{item.answer}</div>
+              </details>
+            ))}
+          </div>
+        </div>
+      </section>
+    ) : null
+  }
+
+  <section class="relative overflow-hidden bg-inverse-surface py-section-gap-desktop">
+    <div class="relative z-10 mx-auto max-w-container-max-width px-margin-desktop text-center">
+      <h2 class="mb-6 font-headline-lg text-headline-lg text-surface">
+        {pageField(fields, 'fti_services_cta_title', 'Δεν ξέρεις τι χρειάζεσαι ακριβώς;')}
+      </h2>
+      <p class="mx-auto mb-12 max-w-xl font-body-lg text-body-lg text-surface-variant">
+        {pageField(fields, 'fti_services_cta_description', 'Πες μας λίγα λόγια για την επιχείρησή σου και θα σε καθοδηγήσουμε στην καλύτερη επιλογή.')}
+      </p>
+      <a
+        class="inline-block rounded-full bg-secondary-container px-12 py-5 text-lg font-bold text-on-secondary-container shadow-xl transition-transform hover:scale-105 active:scale-95"
+        href={pageField(fields, 'fti_services_cta_button_url', '/quote/')}
+      >
+        {pageField(fields, 'fti_services_cta_button_label', 'Ζήτα Προσφορά')}
+      </a>
+    </div>
+  </section>
+</SiteLayout>

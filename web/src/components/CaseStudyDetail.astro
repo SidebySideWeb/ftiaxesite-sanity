@@ -1,0 +1,149 @@
+---
+import {PortableText} from 'astro-portabletext'
+import type {CaseStudyPageData} from '../lib/cms'
+import type {SiteLocale} from '../lib/i18n'
+
+interface Props {
+  readonly caseStudy: CaseStudyPageData
+  readonly locale: SiteLocale
+}
+
+const {caseStudy, locale} = Astro.props
+
+const dateLocale = locale === 'en' ? 'en' : 'el'
+const challengeLabel = locale === 'en' ? 'The challenge' : 'Η πρόκληση'
+const solutionLabel = locale === 'en' ? 'The solution' : 'Η λύση'
+const resultsLabel = locale === 'en' ? 'The results' : 'Τα αποτελέσματα'
+const backLabel = locale === 'en' ? 'Back to portfolio' : 'Πίσω στα έργα'
+const backHref = locale === 'en' ? '/en/portfolio/' : '/portfolio/'
+---
+
+<article class="mx-auto max-w-container-max-width px-6 pb-section-gap-desktop pt-32 md:px-margin-desktop">
+  <nav aria-label="Breadcrumb" class="mb-8">
+    <a class="inline-flex items-center gap-2 text-body-sm text-on-surface-variant transition-colors hover:text-primary" href={backHref}>
+      <span class="material-symbols-outlined text-[18px]">arrow_back</span>
+      {backLabel}
+    </a>
+  </nav>
+
+  <header class="mb-12 max-w-3xl">
+    {
+      caseStudy.categoryBadge ? (
+        <p class="mb-4 font-medium uppercase tracking-wider text-label-md text-primary">{caseStudy.categoryBadge}</p>
+      ) : null
+    }
+    <h1 class="mb-6 font-headline-lg text-headline-lg-mobile text-on-surface md:text-headline-lg">{caseStudy.title}</h1>
+    {caseStudy.summary ? <p class="text-body-lg text-on-surface-variant">{caseStudy.summary}</p> : null}
+    {
+      caseStudy.publishedDate ? (
+        <p class="mt-4 font-label-md text-on-surface-variant">
+          {
+            new Intl.DateTimeFormat(dateLocale, {
+              year: 'numeric',
+              month: 'long',
+              day: '2-digit',
+            }).format(new Date(caseStudy.publishedDate))
+          }
+        </p>
+      ) : null
+    }
+  </header>
+
+  {
+    caseStudy.imageUrl ? (
+      <div class="mb-12 overflow-hidden rounded-lg border border-outline-variant/30 bg-surface-container">
+        <img
+          alt={caseStudy.imageAlt ?? caseStudy.title}
+          class="h-auto w-full object-cover"
+          height={675}
+          loading="eager"
+          src={caseStudy.imageUrl}
+          width={1200}
+        />
+      </div>
+    ) : null
+  }
+
+  {
+    caseStudy.techStack.length > 0 ? (
+      <div class="mb-12 flex flex-wrap gap-3">
+        {caseStudy.techStack.map((tech) => (
+          <span class="rounded-full border border-outline-variant/20 bg-surface-container px-4 py-2 text-body-sm text-on-surface-variant">
+            {tech}
+          </span>
+        ))}
+      </div>
+    ) : null
+  }
+
+  {
+    caseStudy.challengeBlocks ? (
+      <section class="mb-12 max-w-3xl">
+        <h2 class="mb-4 font-headline-md text-headline-md text-on-surface">{challengeLabel}</h2>
+        <div class="prose prose-neutral max-w-none">
+          <PortableText value={caseStudy.challengeBlocks} />
+        </div>
+        {
+          caseStudy.beforeMetrics.length > 0 ? (
+            <ul class="mt-6 space-y-2 text-body-md text-error">
+              {caseStudy.beforeMetrics.map((metric) => (
+                <li>{metric}</li>
+              ))}
+            </ul>
+          ) : null
+        }
+      </section>
+    ) : null
+  }
+
+  {
+    caseStudy.solutionBlocks ? (
+      <section class="mb-12 max-w-3xl">
+        <h2 class="mb-4 font-headline-md text-headline-md text-on-surface">{solutionLabel}</h2>
+        <div class="prose prose-neutral max-w-none">
+          <PortableText value={caseStudy.solutionBlocks} />
+        </div>
+        {
+          caseStudy.solutionSteps.length > 0 ? (
+            <ol class="mt-6 list-decimal space-y-2 pl-5 text-body-md text-on-surface-variant">
+              {caseStudy.solutionSteps.map((step) => (
+                <li>{step}</li>
+              ))}
+            </ol>
+          ) : null
+        }
+      </section>
+    ) : null
+  }
+
+  {
+    caseStudy.resultsBlocks ? (
+      <section class="mb-12 max-w-3xl">
+        <h2 class="mb-4 font-headline-md text-headline-md text-on-surface">{resultsLabel}</h2>
+        <div class="prose prose-neutral max-w-none">
+          <PortableText value={caseStudy.resultsBlocks} />
+        </div>
+        {
+          caseStudy.afterMetrics.length > 0 ? (
+            <ul class="mt-6 space-y-2 text-body-md text-primary">
+              {caseStudy.afterMetrics.map((metric) => (
+                <li>{metric}</li>
+              ))}
+            </ul>
+          ) : null
+        }
+      </section>
+    ) : null
+  }
+
+  {
+    caseStudy.clientTestimonialQuote ? (
+      <blockquote class="max-w-3xl rounded-lg border border-outline-variant/30 bg-surface-container-low px-8 py-6">
+        <p class="text-body-lg italic text-on-surface">"{caseStudy.clientTestimonialQuote}"</p>
+        {caseStudy.clientTestimonialAuthor ? (
+          <footer class="mt-4 text-body-sm text-on-surface-variant">— {caseStudy.clientTestimonialAuthor}</footer>
+        ) : null}
+      </blockquote>
+    ) : null
+  }
+</article>

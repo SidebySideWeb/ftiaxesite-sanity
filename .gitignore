@@ -1,0 +1,25 @@
+# Dependencies
+node_modules/
+
+# Build outputs
+dist/
+.astro/
+.output/
+.vercel/
+
+# Environment (never commit secrets)
+.env
+.env.*
+!.env.example
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.cursor/
+
+# Logs
+*.log
+npm-debug.log*
+
+# Sanity Studio runtime
+studio-ftiaxesite/.sanity/

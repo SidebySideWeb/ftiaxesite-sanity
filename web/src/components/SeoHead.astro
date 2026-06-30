@@ -1,0 +1,104 @@
+---
+/**
+ * SEO <head> tags from sanity-plugin-seofields `seoFields` data.
+ *
+ * Pass the locale-specific object as `seoData`:
+ *   Greek pages  → document.seo
+ *   English pages → document.seoEn (falls back to seo when empty)
+ *
+ * hreflang alternate links stay separate — the plugin does not know about
+ * this project's bilingual routing.
+ */
+import type {SeoFieldsData, SiteSeoDefaults} from '../lib/seo'
+import {resolveSeoHead} from '../lib/seo'
+import {urlFor} from '../lib/sanity-helpers'
+
+interface Props {
+  readonly seoData?: SeoFieldsData | null
+  readonly fallbackTitle?: string
+  readonly fallbackDescription?: string
+  readonly fallbackOgImage?: string | null
+  readonly canonicalUrl?: string
+  readonly locale: 'el' | 'en'
+  readonly alternateUrl?: string
+  readonly siteDefaults: SiteSeoDefaults
+  readonly ogType?: 'website' | 'article'
+}
+
+const {
+  seoData,
+  fallbackTitle,
+  fallbackDescription,
+  fallbackOgImage,
+  canonicalUrl: canonicalUrlProp,
+  locale,
+  alternateUrl,
+  siteDefaults,
+  ogType = 'website',
+} = Astro.props
+
+const canonicalUrl =
+  canonicalUrlProp?.trim() ||
+  new URL(Astro.url.pathname, Astro.site).href
+
+const resolved = resolveSeoHead({
+  seoData,
+  fallbackTitle,
+  fallbackDescription,
+  fallbackOgImage,
+  canonicalUrl,
+  locale,
+  alternateUrl,
+  siteDefaults,
+  ogType,
+  imageUrlResolver: urlFor,
+})
+
+const hasAlternate = Boolean(alternateUrl?.trim())
+---
+
+<meta charset="utf-8" />
+<meta content="width=device-width, initial-scale=1" name="viewport" />
+<title>{resolved.documentTitle}</title>
+<meta content={resolved.description} name="description" />
+{resolved.keywords.length > 0 ? <meta content={resolved.keywords.join(', ')} name="keywords" /> : null}
+<link href={resolved.canonicalUrl} rel="canonical" />
+{resolved.robotsContent ? <meta content={resolved.robotsContent} name="robots" /> : null}
+{resolved.robotsContent ? <meta content={resolved.robotsContent} name="googlebot" /> : null}
+
+<meta content={resolved.ogType} property="og:type" />
+<meta content={resolved.ogUrl} property="og:url" />
+<meta content={resolved.ogTitle} property="og:title" />
+<meta content={resolved.ogDescription} property="og:description" />
+{resolved.ogSiteName ? <meta content={resolved.ogSiteName} property="og:site_name" /> : null}
+<meta content={resolved.ogLocale} property="og:locale" />
+{resolved.ogImage ? <meta content={resolved.ogImage} property="og:image" /> : null}
+
+<meta content={resolved.twitterCard} name="twitter:card" />
+{resolved.twitterSite ? <meta content={resolved.twitterSite} name="twitter:site" /> : null}
+{resolved.twitterCreator ? <meta content={resolved.twitterCreator} name="twitter:creator" /> : null}
+<meta content={resolved.twitterTitle} name="twitter:title" />
+<meta content={resolved.twitterDescription} name="twitter:description" />
+{resolved.twitterImage ? <meta content={resolved.twitterImage} name="twitter:image" /> : null}
+
+{
+  Object.entries(resolved.customMeta).map(([name, content]) => (
+    <meta content={content} name={name} />
+  ))
+}
+
+{
+  hasAlternate && resolved.alternateElUrl ? (
+    <link href={resolved.alternateElUrl} hreflang="el" rel="alternate" />
+  ) : null
+}
+{
+  hasAlternate && resolved.alternateEnUrl ? (
+    <link href={resolved.alternateEnUrl} hreflang="en" rel="alternate" />
+  ) : null
+}
+{
+  hasAlternate && resolved.xDefaultUrl ? (
+    <link href={resolved.xDefaultUrl} hreflang="x-default" rel="alternate" />
+  ) : null
+}

@@ -1,0 +1,178 @@
+---
+import BookCallButton from './BookCallButton'
+
+interface Props {
+  readonly submitNote?: string
+}
+
+const {submitNote = 'Καμία δέσμευση. Θα λάβεις μια αρχική εκτίμηση εντός 24 ωρών.'} = Astro.props
+
+const inputClass =
+  'w-full rounded-DEFAULT border border-outline-variant bg-surface-container-low px-4 py-3 text-body-md outline-none transition-all focus:border-primary focus:ring-1 focus:ring-primary'
+const labelClass = 'font-label-md text-on-surface-variant'
+---
+
+<div class="quote-form" data-quote-form>
+  <form class="space-y-6" data-quote-form-fields novalidate>
+    <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
+      <div class="space-y-2">
+        <label class={labelClass} for="quote-name">Όνοματεπώνυμο *</label>
+        <input class={inputClass} id="quote-name" name="name" required type="text" autocomplete="name" />
+      </div>
+      <div class="space-y-2">
+        <label class={labelClass} for="quote-email">Email *</label>
+        <input class={inputClass} id="quote-email" name="email" required type="email" autocomplete="email" />
+      </div>
+    </div>
+
+    <div class="space-y-2">
+      <label class={labelClass} for="quote-company">Επωνυμία Επιχείρησης (προαιρετικά)</label>
+      <input class={inputClass} id="quote-company" name="company" type="text" autocomplete="organization" />
+    </div>
+
+    <div class="space-y-2">
+      <label class={labelClass} for="quote-project-type">Τύπος Project *</label>
+      <select class={inputClass} id="quote-project-type" name="projectType" required>
+        <option disabled selected value="">Επιλέξτε κατηγορία</option>
+        <option value="Απλό site παρουσίασης">Απλό site παρουσίασης</option>
+        <option value="Site με διαχείριση (WordPress)">Site με διαχείριση (WordPress)</option>
+        <option value="E-shop / Σύνθετη εφαρμογή">E-shop / Σύνθετη εφαρμογή</option>
+        <option value="Άλλο">Άλλο</option>
+      </select>
+    </div>
+
+    <div class="space-y-3">
+      <label class="flex cursor-pointer items-start gap-3">
+        <input
+          class="mt-1 h-4 w-4 rounded border-outline-variant text-primary focus:ring-primary"
+          id="quote-has-website"
+          name="hasExistingWebsite"
+          type="checkbox"
+        />
+        <span class="font-body-md text-on-surface">Έχω ήδη ιστοσελίδα και θέλω ανανέωση</span>
+      </label>
+      <div class="hidden space-y-2" data-quote-existing-url-wrap>
+        <label class={labelClass} for="quote-existing-url">URL υπάρχουσας ιστοσελίδας</label>
+        <input
+          class={inputClass}
+          id="quote-existing-url"
+          name="existingWebsiteUrl"
+          placeholder="https://www.mysite.gr"
+          type="url"
+        />
+      </div>
+    </div>
+
+    <div class="space-y-2">
+      <label class={labelClass} for="quote-message">Περιγραφή Project *</label>
+      <textarea
+        class={`${inputClass} resize-none`}
+        id="quote-message"
+        name="message"
+        placeholder="Περιγράψτε μας τι έχετε στο μυαλό σας..."
+        required
+        rows="5"
+      ></textarea>
+    </div>
+
+    <div class="space-y-2">
+      <label class={labelClass} for="quote-timeline">Επιθυμητό Χρονοδιάγραμμα *</label>
+      <select class={inputClass} id="quote-timeline" name="timeline" required>
+        <option disabled selected value="">Πότε το χρειάζεστε;</option>
+        <option value="Άμεσα (εντός 1 μήνα)">Άμεσα (εντός 1 μήνα)</option>
+        <option value="Σύντομα (1-3 μήνες)">Σύντομα (1-3 μήνες)</option>
+        <option value="Ευέλικτο (πάνω από 3 μήνες)">Ευέλικτο (πάνω από 3 μήνες)</option>
+      </select>
+    </div>
+
+    <p class="hidden font-body-sm text-body-sm text-error" data-quote-form-error role="alert"></p>
+
+    <div class="pt-4 text-center">
+      <button
+        class="w-full rounded-full bg-primary py-4 font-label-lg text-lg text-on-primary shadow-sm transition-all duration-300 hover:translate-y-[-1px] hover:shadow-md active:scale-95 disabled:cursor-not-allowed disabled:opacity-60"
+        data-quote-submit
+        type="submit"
+      >
+        Στείλε το αίτημα
+      </button>
+      <p class="mt-4 font-body-sm text-body-sm text-on-surface-variant">{submitNote}</p>
+    </div>
+  </form>
+
+  <div class="hidden text-center" data-quote-form-success>
+    <div class="mx-auto mb-8 flex h-16 w-16 items-center justify-center rounded-full bg-primary-container/20">
+      <span class="material-symbols-outlined text-4xl text-primary">check_circle</span>
+    </div>
+    <h3 class="mb-4 font-headline-sm text-headline-sm text-on-surface">Ευχαριστούμε — λάβαμε το αίτημά σου!</h3>
+    <p class="mb-8 font-body-md text-on-surface-variant">{submitNote}</p>
+    <p class="mb-4 font-body-sm text-body-sm text-on-surface-variant">Θέλεις να μιλήσουμε πιο σύντομα;</p>
+    <BookCallButton client:load />
+  </div>
+</div>
+
+<script>
+  function initQuoteForm(root: HTMLElement): void {
+    const form = root.querySelector<HTMLFormElement>('[data-quote-form-fields]')
+    const successPanel = root.querySelector<HTMLElement>('[data-quote-form-success]')
+    const errorEl = root.querySelector<HTMLElement>('[data-quote-form-error]')
+    const submitBtn = root.querySelector<HTMLButtonElement>('[data-quote-submit]')
+    const hasWebsiteCheckbox = root.querySelector<HTMLInputElement>('#quote-has-website')
+    const existingUrlWrap = root.querySelector<HTMLElement>('[data-quote-existing-url-wrap]')
+
+    if (!form || !successPanel || !errorEl || !submitBtn) {
+      return
+    }
+
+    hasWebsiteCheckbox?.addEventListener('change', () => {
+      if (!existingUrlWrap) return
+      existingUrlWrap.classList.toggle('hidden', !hasWebsiteCheckbox.checked)
+    })
+
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault()
+      errorEl.classList.add('hidden')
+      errorEl.textContent = ''
+      submitBtn.disabled = true
+      submitBtn.textContent = 'Αποστολή…'
+
+      const formData = new FormData(form)
+      const payload = {
+        name: String(formData.get('name') ?? '').trim(),
+        email: String(formData.get('email') ?? '').trim(),
+        company: String(formData.get('company') ?? '').trim() || undefined,
+        projectType: String(formData.get('projectType') ?? '').trim(),
+        hasExistingWebsite: hasWebsiteCheckbox?.checked ?? false,
+        existingWebsiteUrl: String(formData.get('existingWebsiteUrl') ?? '').trim() || undefined,
+        message: String(formData.get('message') ?? '').trim(),
+        timeline: String(formData.get('timeline') ?? '').trim(),
+      }
+
+      try {
+        const response = await fetch('/api/quote-request/', {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json', Accept: 'application/json'},
+          body: JSON.stringify(payload),
+        })
+
+        const result = (await response.json()) as {success?: boolean; error?: string}
+
+        if (!response.ok || !result.success) {
+          throw new Error(result.error ?? 'Unable to save your submission.')
+        }
+
+        form.classList.add('hidden')
+        successPanel.classList.remove('hidden')
+        successPanel.scrollIntoView({behavior: 'smooth', block: 'nearest'})
+      } catch (error) {
+        errorEl.textContent =
+          error instanceof Error ? error.message : 'Δεν ήταν δυνατή η αποστολή. Δοκίμασε ξανά.'
+        errorEl.classList.remove('hidden')
+      } finally {
+        submitBtn.disabled = false
+        submitBtn.textContent = 'Στείλε το αίτημα'
+      }
+    })
+  }
+
+  document.querySelectorAll<HTMLElement>('[data-quote-form]').forEach(initQuoteForm)
+</script>

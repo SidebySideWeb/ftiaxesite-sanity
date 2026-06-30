@@ -1,0 +1,13 @@
+{
+  "name": "sanity-astro-starter",
+  "private": true,
+  "description": "Reusable Sanity Studio + Astro starter (ftiaxesite stack)",
+  "scripts": {
+    "new-project": "node scripts/new-project.mjs",
+    "seed": "npm run seed --prefix studio-ftiaxesite",
+    "dev:studio": "npm run dev --prefix studio-ftiaxesite",
+    "dev:web": "npm run dev --prefix web",
+    "build:web": "npm run build --prefix web",
+    "deploy:studio": "npm run deploy --prefix studio-ftiaxesite"
+  }
+}

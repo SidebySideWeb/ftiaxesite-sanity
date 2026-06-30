@@ -1,0 +1,94 @@
+---
+import { formatCopyright, type MenuItem, type SiteSettings } from '../lib/cms';
+
+interface Props {
+  readonly servicesMenus: readonly MenuItem[];
+  readonly companyMenus: readonly MenuItem[];
+  readonly settings: SiteSettings;
+}
+
+const { servicesMenus, companyMenus, settings } = Astro.props;
+const copyright = formatCopyright(settings.footerCopyright);
+---
+
+<footer class="w-full rounded-t-lg bg-inverse-surface py-section-gap-mobile md:py-section-gap-desktop">
+  <div class="mx-auto grid max-w-container-max-width grid-cols-1 gap-gutter px-margin-mobile md:grid-cols-4 md:px-margin-desktop">
+    <div class="col-span-1 md:col-span-2">
+      <div class="mb-6 font-headline-sm text-headline-sm text-surface-container-lowest">{settings.footerBrandName}</div>
+      <p class="mb-8 max-w-sm font-body-sm text-body-sm text-surface-variant/70">{settings.footerDescription}</p>
+      <div class="flex gap-4">
+        {
+          settings.footerSocialEmailUrl ? (
+            <a class="text-surface-variant/70 transition-colors hover:text-surface-container-lowest" href={settings.footerSocialEmailUrl}>
+              <span class="material-symbols-outlined">alternate_email</span>
+            </a>
+          ) : null
+        }
+        {
+          settings.footerSocialPhoneUrl ? (
+            <a class="text-surface-variant/70 transition-colors hover:text-surface-container-lowest" href={settings.footerSocialPhoneUrl}>
+              <span class="material-symbols-outlined">call</span>
+            </a>
+          ) : null
+        }
+        {
+          settings.footerSocialLocationUrl ? (
+            <a class="text-surface-variant/70 transition-colors hover:text-surface-container-lowest" href={settings.footerSocialLocationUrl}>
+              <span class="material-symbols-outlined">location_on</span>
+            </a>
+          ) : null
+        }
+      </div>
+    </div>
+    <div>
+      <h4 class="mb-6 font-label-lg text-label-lg uppercase tracking-wider text-surface-container-lowest">
+        {settings.footerServicesTitle}
+      </h4>
+      <ul class="space-y-4 font-body-sm text-body-sm">
+        {
+          servicesMenus.length > 0 ? (
+            servicesMenus.map((item) => (
+              <li>
+                <a class="text-surface-variant/70 transition-colors hover:text-surface-variant" href={item.href}>
+                  {item.title}
+                </a>
+              </li>
+            ))
+          ) : (
+            <li class="text-surface-variant/70">Assign links to the Footer menu in WordPress.</li>
+          )
+        }
+      </ul>
+    </div>
+    <div>
+      <h4 class="mb-6 font-label-lg text-label-lg uppercase tracking-wider text-surface-container-lowest">
+        {settings.footerCompanyTitle}
+      </h4>
+      <ul class="space-y-4 font-body-sm text-body-sm">
+        {
+          companyMenus.length > 0 ? (
+            companyMenus.map((item) => (
+              <li>
+                <a class="text-surface-variant/70 transition-colors hover:text-surface-variant" href={item.href}>
+                  {item.title}
+                </a>
+              </li>
+            ))
+          ) : (
+            <>
+              {settings.footerContactEmail ? <li class="text-surface-variant/70">{settings.footerContactEmail}</li> : null}
+              <li>
+                <a class="transition-colors hover:text-surface-variant" href={settings.footerContactCtaUrl}>
+                  {settings.footerContactCtaLabel}
+                </a>
+              </li>
+            </>
+          )
+        }
+      </ul>
+    </div>
+  </div>
+  <div class="mx-auto mt-20 max-w-container-max-width border-t border-surface-variant/10 px-margin-mobile pt-8 md:px-margin-desktop">
+    <p class="text-center font-body-sm text-body-sm text-surface-variant/50">{copyright}</p>
+  </div>
+</footer>

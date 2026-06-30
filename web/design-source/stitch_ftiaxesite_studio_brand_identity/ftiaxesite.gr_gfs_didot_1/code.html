@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+
+<html class="light" lang="el"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>ftiaxesite.gr | Ιστοσελίδες με μεράκι και τεχνική αρτιότητα</title>
+<!-- GFS Didot for refined Greek aesthetic -->
+<link href="https://fonts.googleapis.com/css2?family=GFS+Didot&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "primary-container": "#2563eb",
+                    "on-primary": "#ffffff",
+                    "primary": "#004ac6",
+                    "error-container": "#ffdad6",
+                    "tertiary-fixed-dim": "#ffb596",
+                    "on-tertiary": "#ffffff",
+                    "surface-dim": "#dadad8",
+                    "on-primary-fixed-variant": "#003ea8",
+                    "surface-container-highest": "#e1e1df",
+                    "surface": "#f9f9f7",
+                    "on-surface": "#1a1a1a",
+                    "background": "#f9f9f7",
+                    "tertiary": "#943700",
+                    "surface-bright": "#f9f9f7",
+                    "on-secondary": "#ffffff",
+                    "inverse-primary": "#b4c5ff",
+                    "secondary-fixed-dim": "#ffb95f",
+                    "on-primary-fixed": "#00174b",
+                    "primary-fixed": "#dbe1ff",
+                    "error": "#ba1a1a",
+                    "on-tertiary-container": "#ffede6",
+                    "inverse-on-surface": "#f0f0fb",
+                    "secondary-container": "#fea619",
+                    "tertiary-fixed": "#ffdbcd",
+                    "surface-container": "#ecece9",
+                    "surface-container-lowest": "#ffffff",
+                    "on-surface-variant": "#4a4a48",
+                    "primary-fixed-dim": "#b4c5ff",
+                    "on-background": "#1a1a1a",
+                    "on-tertiary-fixed-variant": "#7d2d00",
+                    "surface-tint": "#0053db",
+                    "outline": "#767674",
+                    "on-error-container": "#93000a",
+                    "on-tertiary-fixed": "#360f00",
+                    "secondary": "#855300",
+                    "surface-container-low": "#f4f4f2",
+                    "inverse-surface": "#2e2e2c",
+                    "on-secondary-fixed": "#2a1700",
+                    "on-error": "#ffffff",
+                    "surface-container-high": "#e7e7e4",
+                    "secondary-fixed": "#ffddb8",
+                    "on-secondary-fixed-variant": "#653e00",
+                    "on-secondary-container": "#684000",
+                    "tertiary-container": "#bc4800",
+                    "on-primary-container": "#eeefff",
+                    "outline-variant": "#c6c6c4",
+                    "surface-variant": "#e1e1df"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.5rem",
+                    "lg": "1rem",
+                    "xl": "1.5rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "margin-mobile": "16px",
+                    "margin-desktop": "48px",
+                    "gutter": "24px",
+                    "section-gap-desktop": "128px",
+                    "container-max-width": "1280px",
+                    "section-gap-mobile": "64px",
+                    "base": "8px"
+            },
+            "fontFamily": {
+                    "body-md": ["'GFS Didot'", "serif"],
+                    "headline-lg-mobile": ["'GFS Didot'", "serif"],
+                    "headline-sm": ["'GFS Didot'", "serif"],
+                    "label-md": ["'GFS Didot'", "serif"],
+                    "headline-lg": ["'GFS Didot'", "serif"],
+                    "body-sm": ["'GFS Didot'", "serif"],
+                    "label-lg": ["'GFS Didot'", "serif"],
+                    "display-lg-mobile": ["'GFS Didot'", "serif"],
+                    "body-lg": ["'GFS Didot'", "serif"],
+                    "display-lg": ["'GFS Didot'", "serif"],
+                    "headline-md": ["'GFS Didot'", "serif"]
+            },
+            "fontSize": {
+                    "body-md": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                    "headline-lg-mobile": ["32px", {"lineHeight": "1.3", "fontWeight": "400"}],
+                    "headline-sm": ["24px", {"lineHeight": "1.4", "fontWeight": "400"}],
+                    "label-md": ["12px", {"lineHeight": "1.2", "fontWeight": "400"}],
+                    "headline-lg": ["48px", {"lineHeight": "1.2", "fontWeight": "400"}],
+                    "body-sm": ["14px", {"lineHeight": "1.5", "fontWeight": "400"}],
+                    "label-lg": ["14px", {"lineHeight": "1.2", "letterSpacing": "0.05em", "fontWeight": "400"}],
+                    "display-lg-mobile": ["40px", {"lineHeight": "1.2", "letterSpacing": "-0.01em", "fontWeight": "400"}],
+                    "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                    "display-lg": ["64px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "400"}],
+                    "headline-md": ["32px", {"lineHeight": "1.3", "fontWeight": "400"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body {
+            background-color: #f9f9f7;
+            color: #1a1a1a;
+            scroll-behavior: smooth;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .glass-nav {
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+        /* Custom adjustment for GFS Didot readability */
+        h1, h2, h3, h4, .font-bold {
+            font-weight: 400 !important; /* GFS Didot usually looks best at regular weight */
+        }
+    </style>
+</head>
+<body class="font-body-md text-body-md">
+<!-- TopNavBar -->
+<nav class="fixed top-0 w-full z-50 bg-surface/80 glass-nav border-b border-outline-variant/30 shadow-sm transition-all duration-300 ease-in-out">
+<div class="flex justify-between items-center px-margin-mobile md:px-margin-desktop h-20 max-w-container-max-width mx-auto">
+<div class="font-headline-sm text-headline-sm text-primary">ftiaxesite.gr</div>
+<div class="hidden md:flex items-center gap-8">
+<a class="text-primary border-b-2 border-primary font-label-lg text-label-lg transition-opacity hover:opacity-80" href="#">Portfolio</a>
+<a class="text-on-surface-variant hover:text-primary font-label-lg text-label-lg transition-opacity hover:opacity-80" href="#">Services</a>
+<a class="text-on-surface-variant hover:text-primary font-label-lg text-label-lg transition-opacity hover:opacity-80" href="#">Process</a>
+<a class="text-on-surface-variant hover:text-primary font-label-lg text-label-lg transition-opacity hover:opacity-80" href="#">About</a>
+</div>
+<div class="flex items-center gap-4">
+<button class="hidden sm:block text-on-surface-variant font-label-lg text-label-lg px-4 py-2 hover:opacity-80 transition-opacity">EN/GR</button>
+<button class="bg-primary-container text-on-primary font-label-lg text-label-lg px-6 py-3 rounded-full hover:opacity-90 transition-all shadow-md">Start a Project</button>
+</div>
+</div>
+</nav>
+<main class="pt-20">
+<!-- Hero Section -->
+<section class="px-margin-mobile md:px-margin-desktop py-section-gap-mobile md:py-section-gap-desktop max-w-container-max-width mx-auto overflow-hidden">
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-gutter items-center">
+<div class="space-y-8">
+<div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-secondary-fixed text-on-secondary-fixed font-label-lg text-label-lg">
+<span class="material-symbols-outlined text-[18px]">verified</span>
+                        Εξειδικευμένοι στην Ελλάδα
+                    </div>
+<h1 class="font-display-lg-mobile md:font-display-lg text-display-lg-mobile md:text-display-lg text-on-surface tracking-tight">
+                        Ιστοσελίδες με <span class="text-primary">μεράκι</span> και τεχνική αρτιότητα
+                    </h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-xl">
+                        Σχεδιάζουμε και αναπτύσσουμε custom ιστοσελίδες για μικρομεσαίες επιχειρήσεις που θέλουν να ξεχωρίσουν στην ψηφιακή εποχή.
+                    </p>
+<div class="flex flex-col sm:flex-row gap-4">
+<button class="bg-primary-container text-on-primary font-label-lg text-label-lg px-8 py-4 rounded-full shadow-lg hover:translate-y-[-2px] transition-all">
+                            Ξεκινήστε το έργο σας
+                        </button>
+<button class="border border-outline-variant text-on-surface font-label-lg text-label-lg px-8 py-4 rounded-full hover:bg-surface-container transition-all">
+                            Δείτε το Portfolio
+                        </button>
+</div>
+</div>
+<div class="relative mt-12 lg:mt-0">
+<div class="aspect-square rounded-xl overflow-hidden shadow-2xl relative z-10">
+<img class="w-full h-full object-cover" data-alt="A clean, minimalist workspace with a high-end desktop monitor showing a sleek website design. The lighting is warm and natural, coming from a nearby window, illuminating a designer's wooden desk with a notebook, a coffee cup, and high-quality peripherals. The atmosphere is professional, focused, and calm, using a palette of soft whites, light woods, and deep primary blue accents to match the corporate identity." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBl8vg9URUb2UOq3oTy5M1Js7fM4eysXbQAVXEgSzd77tbqNFfwbE5qctnA20WA7FH20gcc9vszj5SusHGW9n08o09WUZAQzzHa1IHubdRDe0MLU6WBFtjKXXAViJWJXl383nBfqzJAs83I-yFLrRievgHMuIwK1Hph7SxBl6-zjqFoMHQvtsju2LRC60awxFViwzpONoWl0jdHfG6Mxr3if3uyRDPQUS6olvo1UXnymYaFF99tM0tViU9JzBC0K11jgrJCuXh_ayY"/>
+</div>
+<div class="absolute -top-6 -right-6 w-32 h-32 bg-secondary-container rounded-full opacity-20 blur-3xl -z-0"></div>
+<div class="absolute -bottom-6 -left-6 w-48 h-48 bg-primary-container rounded-full opacity-10 blur-3xl -z-0"></div>
+<!-- Trust Badge Floating -->
+<div class="absolute bottom-8 right-8 bg-surface-container-lowest p-6 rounded-lg shadow-xl z-20 border border-outline-variant/30 hidden md:block">
+<div class="flex items-center gap-4">
+<div class="text-primary text-4xl">10+</div>
+<div class="text-on-surface-variant text-sm font-label-md">Χρόνια Εμπειρίας<br/>στον Σχεδιασμό</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Trust Indicators / Partners -->
+<section class="bg-surface-container-low py-12 border-y border-outline-variant/20">
+<div class="px-margin-mobile md:px-margin-desktop max-w-container-max-width mx-auto">
+<p class="text-center font-label-lg text-label-lg text-outline uppercase tracking-widest mb-8">Εμπιστεύονται την τεχνογνωσία μας</p>
+<div class="flex flex-wrap justify-center items-center gap-12 md:gap-24 opacity-60 grayscale hover:grayscale-0 transition-all">
+<div class="font-headline-sm text-headline-sm">ALPHA TECH</div>
+<div class="font-headline-sm text-headline-sm">RETAIL GREECE</div>
+<div class="font-headline-sm text-headline-sm">MED LOGISTICS</div>
+<div class="font-headline-sm text-headline-sm">CONSTRUCTION SA</div>
+</div>
+</div>
+</section>
+<!-- The "Astro + WordPress" Advantage -->
+<section class="px-margin-mobile md:px-margin-desktop py-section-gap-mobile md:py-section-gap-desktop max-w-container-max-width mx-auto">
+<div class="text-center mb-16">
+<h2 class="font-headline-lg-mobile md:font-headline-lg text-headline-lg-mobile md:text-headline-lg mb-4">Γιατί Astro + WordPress;</h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-2xl mx-auto">Ο συνδυασμός της ταχύτητας του Astro με την ευκολία διαχείρισης του WordPress δημιουργεί το απόλυτο εργαλείο για την επιχείρησή σας.</p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-gutter">
+<!-- Advantage Card 1 -->
+<div class="bg-surface-container-lowest p-8 rounded-lg border border-outline-variant/30 shadow-sm hover:shadow-md transition-all group">
+<div class="w-16 h-16 bg-primary-fixed rounded-full flex items-center justify-center mb-6 group-hover:bg-primary group-hover:text-on-primary transition-colors">
+<span class="material-symbols-outlined text-3xl">bolt</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm mb-4">Αστραπιαία Ταχύτητα</h3>
+<p class="text-on-surface-variant">Οι ιστοσελίδες μας φορτώνουν σε λιγότερο από 1 δευτερόλεπτο, βελτιώνοντας το SEO και την εμπειρία του χρήστη.</p>
+</div>
+<!-- Advantage Card 2 -->
+<div class="bg-surface-container-lowest p-8 rounded-lg border border-outline-variant/30 shadow-sm hover:shadow-md transition-all group">
+<div class="w-16 h-16 bg-primary-fixed rounded-full flex items-center justify-center mb-6 group-hover:bg-primary group-hover:text-on-primary transition-colors">
+<span class="material-symbols-outlined text-3xl">security</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm mb-4">Απόλυτη Ασφάλεια</h3>
+<p class="text-on-surface-variant">Με την αρχιτεκτονική Headless, η βάση δεδομένων σας παραμένει κρυφή και απρόσβλητη από εξωτερικές επιθέσεις.</p>
+</div>
+<!-- Advantage Card 3 -->
+<div class="bg-surface-container-lowest p-8 rounded-lg border border-outline-variant/30 shadow-sm hover:shadow-md transition-all group">
+<div class="w-16 h-16 bg-primary-fixed rounded-full flex items-center justify-center mb-6 group-hover:bg-primary group-hover:text-on-primary transition-colors">
+<span class="material-symbols-outlined text-3xl">edit_note</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm mb-4">Εύκολη Διαχείριση</h3>
+<p class="text-on-surface-variant">Συνεχίστε να χρησιμοποιείτε το οικείο περιβάλλον του WordPress για να αλλάζετε κείμενα και εικόνες χωρίς τεχνικές γνώσεις.</p>
+</div>
+</div>
+</section>
+<!-- Featured Projects (Portfolio Preview) -->
+<section class="bg-surface-container-high px-margin-mobile md:px-margin-desktop py-section-gap-mobile md:py-section-gap-desktop">
+<div class="max-w-container-max-width mx-auto">
+<div class="flex flex-col md:flex-row justify-between items-end mb-12 gap-4">
+<div>
+<h2 class="font-headline-lg-mobile md:font-headline-lg text-headline-lg-mobile md:text-headline-lg mb-2">Πρόσφατα Έργα</h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant">Δείτε πώς βοηθήσαμε άλλες επιχειρήσεις να αναπτυχθούν.</p>
+</div>
+<a class="text-primary font-label-lg text-label-lg flex items-center gap-2 group" href="#">
+                        Δείτε όλο το Portfolio 
+                        <span class="material-symbols-outlined group-hover:translate-x-1 transition-transform">arrow_forward</span>
+</a>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+<!-- Project 1 -->
+<div class="group cursor-pointer">
+<div class="aspect-video rounded-lg overflow-hidden mb-6 relative">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="A sophisticated e-commerce website for a high-end Greek artisanal pottery brand. The UI displays beautiful ceramic products on a clean, cream-colored background with elegant serif typography. The lighting is studio-quality, emphasizing textures and shadows. The aesthetic is contemporary Mediterranean, professional and luxurious, utilizing a primary palette of terracotta, deep blue, and pristine white." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAqalq0w6c89kGS5P89AhvhoMzC7iSanVbiiMZDF9EecoTknaPw7AB-l0sW_Q5o1QmzRLlKtBckAkw58QDUpCSc4u2_3tF2DO5aS4sQ7zwIinzFsfIVwEl7OqIXYp1d3H4Ad8gWEG4NTbtd5bBuFu8F7RDl5DtDQvLByiW0V58FalRb8czrInvOJJaC-nwdDKffJ9OIjl2kANC2lzkZlLmcp7n3b5w8har2E4zcPnIMoechswz95Nh3AajSlSoUDzK15JGFbe7-Oeo"/>
+<div class="absolute inset-0 bg-primary/20 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+</div>
+<div class="flex justify-between items-start">
+<div>
+<h4 class="font-headline-sm text-headline-sm mb-1">Artisan Ceramics</h4>
+<p class="text-on-surface-variant">E-commerce Design &amp; Development</p>
+</div>
+<div class="flex gap-2">
+<span class="bg-surface px-3 py-1 rounded-full text-xs font-label-md border border-outline-variant/30">ASTRO</span>
+<span class="bg-surface px-3 py-1 rounded-full text-xs font-label-md border border-outline-variant/30">STRIPE</span>
+</div>
+</div>
+</div>
+<!-- Project 2 -->
+<div class="group cursor-pointer">
+<div class="aspect-video rounded-lg overflow-hidden mb-6 relative">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="A modern, high-tech corporate website for an architectural firm. The site features full-width hero images of minimalist glass buildings, sharp clean lines, and a dark-mode inspired navigation system. The visual style is sleek and precise, with technical grid overlays and blueprints visible in the background elements. Palette includes charcoal greys, electric blue accents, and crisp white text." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDAYXbonoPcYwCb_3s-bDbwnQ_iECv3MGGPfxzBKzX7YKp3JsmUWDf7g-iY5afe_eDL0tXCfkb1WshVleDQCwiyr2BBBq6CfcAEyZ6sS-fFC5RrGmy5bD1_Uv1-ZLRQHprF-0B2wXRJiDQ9BQY3x62J8RJxrRfUS_W2VWQDvPXb0QuHcfbDO7Tmu91RD0NXSQ9_CUknAz6NrcnsHvtzHwBEcddSbPntv_u4aidvxsuuw9KyKwEoJwFLr7oOn_6Qq6uxztl_DEpbVUA"/>
+<div class="absolute inset-0 bg-primary/20 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+</div>
+<div class="flex justify-between items-start">
+<div>
+<h4 class="font-headline-sm text-headline-sm mb-1">Arch Studio X</h4>
+<p class="text-on-surface-variant">Corporate Brand Identity &amp; Web</p>
+</div>
+<div class="flex gap-2">
+<span class="bg-surface px-3 py-1 rounded-full text-xs font-label-md border border-outline-variant/30">NEXT.JS</span>
+<span class="bg-surface px-3 py-1 rounded-full text-xs font-label-md border border-outline-variant/30">GSAP</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Process Overview -->
+<section class="px-margin-mobile md:px-margin-desktop py-section-gap-mobile md:py-section-gap-desktop max-w-container-max-width mx-auto">
+<div class="bg-inverse-surface text-on-primary-container rounded-lg p-12 md:p-20 relative overflow-hidden">
+<div class="relative z-10 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+<div>
+<h2 class="font-headline-lg-mobile md:font-headline-lg text-headline-lg-mobile md:text-headline-lg mb-6 text-surface-container-lowest">Από τη στρατηγική στην υλοποίηση</h2>
+<p class="font-body-lg text-body-lg text-surface-variant mb-12">Ακολουθούμε μια δομημένη διαδικασία που εξασφαλίζει ότι το αποτέλεσμα θα είναι ανώτερο των προσδοκιών σας.</p>
+<div class="space-y-8">
+<div class="flex gap-6">
+<div class="flex-shrink-0 w-12 h-12 bg-primary-container text-on-primary flex items-center justify-center rounded-full">1</div>
+<div>
+<h4 class="font-headline-sm text-headline-sm text-surface-container-lowest mb-2">Στρατηγική &amp; Έρευνα</h4>
+<p class="text-surface-variant">Αναλύουμε τον ανταγωνισμό και το κοινό σας για να θέσουμε τις σωστές βάσεις.</p>
+</div>
+</div>
+<div class="flex gap-6">
+<div class="flex-shrink-0 w-12 h-12 bg-primary-container text-on-primary flex items-center justify-center rounded-full">2</div>
+<div>
+<h4 class="font-headline-sm text-headline-sm text-surface-container-lowest mb-2">Σχεδιασμός UI/UX</h4>
+<p class="text-surface-variant">Δημιουργούμε μοναδικά designs που αντικατοπτρίζουν την ταυτότητα του brand σας.</p>
+</div>
+</div>
+<div class="flex gap-6">
+<div class="flex-shrink-0 w-12 h-12 bg-primary-container text-on-primary flex items-center justify-center rounded-full">3</div>
+<div>
+<h4 class="font-headline-sm text-headline-sm text-surface-container-lowest mb-2">Υλοποίηση &amp; Test</h4>
+<p class="text-surface-variant">Αναπτύσσουμε την ιστοσελίδα με καθαρό κώδικα και πραγματοποιούμε εξαντλητικά tests.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="hidden lg:block relative h-full">
+<img class="rounded-lg shadow-2xl object-cover h-[500px] w-full" data-alt="A top-down architectural view of a digital workflow on a large desk. Multiple screens show wireframes, code editors with vibrant syntax highlighting, and color palettes. A high-end smartphone displays a mobile-responsive version of the same design. The overall look is technical, orderly, and modern, using a color theme of charcoal, steel blue, and warm wood tones to convey expert craftsmanship." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD6a0BiictEJCih-JY7LqJM9dPI0pMnWL73R7aai_IDsIKyJKDNGTTj3Y7DdfZDv0_v3kMyHAx-fIJdssRG8O38sSJOt5rib2dCra3RrmGwxwCoTQVeeTxlVi014EAaCEX33B6asQH7rEct9aBmc0Z4s-T6A09M2g2hhbw_qmwiN-VTq43m0GrlwmaPp-7_tX4_Lsln6Jd3XLFJadXle919lcAlDCKt1LMfBJhWCcyODVklk2t8XQmOSE3FPTIpQbyy5WRY51EdkZ8"/>
+</div>
+</div>
+</div>
+</section>
+<!-- Final CTA Section -->
+<section class="px-margin-mobile md:px-margin-desktop py-section-gap-mobile md:py-section-gap-desktop max-w-container-max-width mx-auto text-center">
+<div class="max-w-3xl mx-auto space-y-8">
+<h2 class="font-headline-lg-mobile md:font-headline-lg text-headline-lg-mobile md:text-headline-lg">Είστε έτοιμοι για το επόμενο βήμα;</h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant">Ελάτε να συζητήσουμε τις ανάγκες σας και να βρούμε την καλύτερη λύση για την ψηφιακή σας παρουσία.</p>
+<div class="pt-8">
+<button class="bg-secondary-container text-on-secondary-container font-headline-sm text-headline-sm px-12 py-6 rounded-full shadow-2xl hover:scale-105 transition-all">
+                        Ξεκινήστε το έργο σας
+                    </button>
+<p class="mt-4 text-on-surface-variant font-label-md text-label-md">Δωρεάν συμβουλευτική και προσφορά εντός 24 ωρών.</p>
+</div>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="w-full rounded-t-lg bg-inverse-surface dark:bg-surface-container-lowest py-section-gap-mobile md:py-section-gap-desktop">
+<div class="max-w-container-max-width mx-auto px-margin-mobile md:px-margin-desktop grid grid-cols-1 md:grid-cols-4 gap-gutter">
+<div class="col-span-1 md:col-span-2">
+<div class="font-headline-sm text-headline-sm text-surface-container-lowest mb-6">ftiaxesite.gr</div>
+<p class="text-surface-variant/70 max-w-sm mb-8 font-body-sm text-body-sm">
+                    Ειδικευόμαστε στη δημιουργία ιστοσελίδων που συνδυάζουν την υψηλή αισθητική με την τεχνική αρτιότητα. 
+                    Στόχος μας η επιτυχία της επιχείρησής σας.
+                </p>
+<div class="flex gap-4">
+<a class="text-surface-variant/70 hover:text-surface-container-lowest transition-colors" href="#"><span class="material-symbols-outlined">alternate_email</span></a>
+<a class="text-surface-variant/70 hover:text-surface-container-lowest transition-colors" href="#"><span class="material-symbols-outlined">call</span></a>
+<a class="text-surface-variant/70 hover:text-surface-container-lowest transition-colors" href="#"><span class="material-symbols-outlined">location_on</span></a>
+</div>
+</div>
+<div>
+<h4 class="font-label-lg text-label-lg text-surface-container-lowest mb-6 uppercase tracking-wider">Υπηρεσίες</h4>
+<ul class="space-y-4 font-body-sm text-body-sm">
+<li><a class="text-surface-variant/70 hover:text-surface-variant transition-colors" href="#">Custom Web Design</a></li>
+<li><a class="text-surface-variant/70 hover:text-surface-variant transition-colors" href="#">Astro Development</a></li>
+<li><a class="text-surface-variant/70 hover:text-surface-variant transition-colors" href="#">WordPress Management</a></li>
+<li><a class="text-surface-variant/70 hover:text-surface-variant transition-colors" href="#">SEO Strategy</a></li>
+</ul>
+</div>
+<div>
+<h4 class="font-label-lg text-label-lg text-surface-container-lowest mb-6 uppercase tracking-wider">Εταιρεία</h4>
+<ul class="space-y-4 font-body-sm text-body-sm">
+<li><a class="text-surface-variant/70 hover:text-surface-variant transition-colors" href="#">LinkedIn</a></li>
+<li><a class="text-surface-variant/70 hover:text-surface-variant transition-colors" href="#">Terms of Service</a></li>
+<li><a class="text-surface-variant/70 hover:text-surface-variant transition-colors" href="#">Privacy Policy</a></li>
+<li><a class="text-surface-variant/70 hover:text-surface-variant transition-colors" href="#">Contact</a></li>
+</ul>
+</div>
+</div>
+<div class="max-w-container-max-width mx-auto px-margin-mobile md:px-margin-desktop mt-20 pt-8 border-t border-surface-variant/10">
+<p class="font-body-sm text-body-sm text-surface-variant/50 text-center">
+                © 2024 ftiaxesite.gr. Built with Technical Craftsmanship.
+            </p>
+</div>
+</footer>
+<script>
+        // Simple scroll animation for the Navbar
+        window.addEventListener('scroll', () => {
+            const nav = document.querySelector('nav');
+            if (window.scrollY > 50) {
+                nav.classList.add('h-16', 'shadow-md');
+                nav.classList.remove('h-20', 'shadow-sm');
+            } else {
+                nav.classList.remove('h-16', 'shadow-md');
+                nav.classList.add('h-20', 'shadow-sm');
+            }
+        });
+
+        // Intersection Observer for fade-in effects
+        const observerOptions = {
+            threshold: 0.1
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('opacity-100', 'translate-y-0');
+                    entry.target.classList.remove('opacity-0', 'translate-y-10');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('section > div').forEach(el => {
+            el.classList.add('transition-all', 'duration-700', 'opacity-0', 'translate-y-10');
+            observer.observe(el);
+        });
+    </script>
+</body></html>
