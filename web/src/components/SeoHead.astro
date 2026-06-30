@@ -12,6 +12,7 @@
 import type {SeoFieldsData, SiteSeoDefaults} from '../lib/seo'
 import {resolveSeoHead} from '../lib/seo'
 import {urlFor} from '../lib/sanity-helpers'
+import {buildCanonicalUrl, resolveSiteOrigin} from '../lib/site-url'
 
 interface Props {
   readonly seoData?: SeoFieldsData | null
@@ -37,9 +38,9 @@ const {
   ogType = 'website',
 } = Astro.props
 
+const siteOrigin = resolveSiteOrigin(Astro.site)
 const canonicalUrl =
-  canonicalUrlProp?.trim() ||
-  new URL(Astro.url.pathname, Astro.site).href
+  canonicalUrlProp?.trim() || buildCanonicalUrl(Astro.url.pathname, siteOrigin)
 
 const resolved = resolveSeoHead({
   seoData,

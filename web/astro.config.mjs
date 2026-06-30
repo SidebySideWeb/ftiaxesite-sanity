@@ -5,18 +5,26 @@ import react from '@astrojs/react'
 import sanity from '@sanity/astro'
 import {defineConfig, envField} from 'astro/config'
 import {loadEnv} from 'vite'
+import {resolveSiteUrlFromEnv} from './src/lib/site-url.ts'
 
 const env = loadEnv(process.env.NODE_ENV ?? 'development', process.cwd(), '')
-const siteUrl = env.SITE_URL ?? 'https://ftiaxesite.gr'
+const siteUrl = resolveSiteUrlFromEnv(env.SITE_URL)
 const sanityProjectId = env.PUBLIC_SANITY_PROJECT_ID ?? '29vmuk87'
 const sanityDataset = env.PUBLIC_SANITY_DATASET ?? 'production'
 const sanityStudioUrl = env.SANITY_STUDIO_URL ?? 'https://ftiaxesite.sanity.studio'
 
 export default defineConfig({
   site: siteUrl,
+  output: 'server',
   adapter: vercel(),
   env: {
     schema: {
+      SITE_URL: envField.string({
+        context: 'server',
+        access: 'public',
+        optional: true,
+        default: siteUrl,
+      }),
       PUBLIC_SANITY_PROJECT_ID: envField.string({
         context: 'client',
         access: 'public',

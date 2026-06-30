@@ -35,6 +35,7 @@ import {
 } from '../lib/i18n';
 
 import type { SeoFieldsData } from '../lib/seo';
+import { buildCanonicalUrl, resolveSiteOrigin } from '../lib/site-url';
 
 
 
@@ -80,7 +81,7 @@ const {
 
 
 
-const siteOrigin = Astro.site?.href.replace(/\/$/, '') ?? '';
+const siteOrigin = resolveSiteOrigin(Astro.site);
 
 const currentPath = Astro.url.pathname.endsWith('/') ? Astro.url.pathname : `${Astro.url.pathname}/`;
 
@@ -96,7 +97,7 @@ const [menus, siteSettings, languageRows, siteSeoDefaults, localBusinessSchema] 
 
   fetchSiteSeoDefaults(),
 
-  fetchLocalBusinessSchemaData(siteOrigin || 'https://ftiaxesite.gr'),
+  fetchLocalBusinessSchemaData(siteOrigin),
 
 ]);
 
@@ -110,17 +111,13 @@ const breadcrumbItems = isHomepagePath(currentPath)
 
   ? []
 
-  : buildBreadcrumbsFromPath(currentPath, siteOrigin || 'https://ftiaxesite.gr', title);
+  : buildBreadcrumbsFromPath(currentPath, siteOrigin, title);
 
 
 
-const canonicalUrl =
-
-  canonicalPath && siteOrigin
-
-    ? `${siteOrigin}${localizePath(canonicalPath, locale)}`
-
-    : new URL(Astro.url.pathname, Astro.site).href;
+const canonicalUrl = canonicalPath
+  ? `${siteOrigin}${localizePath(canonicalPath, locale)}`
+  : buildCanonicalUrl(Astro.url.pathname, siteOrigin);
 
 
 
