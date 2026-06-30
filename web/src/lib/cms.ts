@@ -145,6 +145,57 @@ function nextMenuId(): number {
   return menuId++
 }
 
+type FooterColumnDoc = {
+  readonly columnTitle?: {el?: string; en?: string}
+  readonly links?: readonly Record<string, unknown>[]
+}
+
+function footerColumnTitle(column: FooterColumnDoc | undefined, locale: SiteLocale): string {
+  if (!column) return ''
+  return pickLocale(column.columnTitle, locale)
+}
+
+function findFooterColumn(
+  columns: readonly FooterColumnDoc[],
+  pattern: RegExp,
+  locale: SiteLocale,
+): FooterColumnDoc | undefined {
+  return columns.find((column) => pattern.test(footerColumnTitle(column, locale)))
+}
+
+function mapFooterColumnLinks(column: FooterColumnDoc | undefined, locale: SiteLocale): MenuItem[] {
+  const links = column?.links ?? []
+  return links.flatMap((link) => {
+    const title = pickLocale(link.label as {el?: string; en?: string}, locale)
+    const url = typeof link.url === 'string' ? link.url : ''
+    if (!title || !url) return []
+    return [{id: nextMenuId(), title, href: normalizeMenuHref(url, locale)}]
+  })
+}
+
+function resolveFooterColumns(
+  columns: readonly FooterColumnDoc[],
+  locale: SiteLocale,
+): {navigation: FooterColumnDoc | undefined; company: FooterColumnDoc | undefined} {
+  if (columns.length === 0) {
+    return {navigation: undefined, company: undefined}
+  }
+
+  const company = findFooterColumn(columns, /εταιρεί|company/i, locale)
+  const navigation =
+    findFooterColumn(columns, /πλοήγηση|navigation|υπηρεσίες/i, locale) ??
+    columns.find((column) => column !== company)
+
+  const resolvedCompany =
+    company ??
+    columns.find(
+      (column) =>
+        column !== navigation && !/social/i.test(footerColumnTitle(column, locale)),
+    )
+
+  return {navigation, company: resolvedCompany}
+}
+
 export function normalizeMenuHref(rawUrl: string, locale: SiteLocale = DEFAULT_LOCALE): string {
   const trimmed = rawUrl.trim()
   if (trimmed.length === 0) {
@@ -540,6 +591,9 @@ export async function fetchSiteSettings(locale: SiteLocale = DEFAULT_LOCALE): Pr
   const doc = await sanityClient.fetch<Record<string, unknown> | null>(`*[_id == "siteSettings"][0]`)
   if (!doc) return defaultSiteSettings
 
+  const footerColumns = (doc.footerColumns as FooterColumnDoc[] | undefined) ?? []
+  const {navigation: navFooterColumn, company: companyFooterColumn} = resolveFooterColumns(footerColumns, locale)
+
   return {
     headerLogoText: String(doc.siteName ?? defaultSiteSettings.headerLogoText),
     headerLogoUrl: '/',
@@ -551,8 +605,10 @@ export async function fetchSiteSettings(locale: SiteLocale = DEFAULT_LOCALE): Pr
     footerSocialEmailUrl: doc.contactEmail ? `mailto:${doc.contactEmail}` : defaultSiteSettings.footerSocialEmailUrl,
     footerSocialPhoneUrl: doc.contactPhone ? `tel:${String(doc.contactPhone).replace(/\s/g, '')}` : '',
     footerSocialLocationUrl: doc.contactAddress ? `https://maps.google.com/?q=${encodeURIComponent(String(doc.contactAddress))}` : '',
-    footerServicesTitle: defaultSiteSettings.footerServicesTitle,
-    footerCompanyTitle: defaultSiteSettings.footerCompanyTitle,
+    footerServicesTitle:
+      footerColumnTitle(navFooterColumn, locale) || defaultSiteSettings.footerServicesTitle,
+    footerCompanyTitle:
+      footerColumnTitle(companyFooterColumn, locale) || defaultSiteSettings.footerCompanyTitle,
     footerContactEmail: String(doc.contactEmail ?? defaultSiteSettings.footerContactEmail),
     footerContactCtaLabel: pickLocale(doc.navCtaLabel as {el?: string; en?: string}, locale) || defaultSiteSettings.footerContactCtaLabel,
     footerContactCtaUrl: normalizeMenuHref(String(doc.navCtaUrl ?? '/zita-prosfora'), locale),
@@ -564,7 +620,8 @@ export async function fetchSiteMenus(locale: SiteLocale = DEFAULT_LOCALE): Promi
   menuId = 1
   const doc = await sanityClient.fetch<Record<string, unknown> | null>(`*[_id == "siteSettings"][0]`)
   const navLinks = (doc?.navLinks as Array<Record<string, unknown>> | undefined) ?? []
-  const footerColumns = (doc?.footerColumns as Array<Record<string, unknown>> | undefined) ?? []
+  const footerColumns = (doc?.footerColumns as FooterColumnDoc[] | undefined) ?? []
+  const {navigation: navFooterColumn, company: companyFooterColumn} = resolveFooterColumns(footerColumns, locale)
 
   const primary: MenuItem[] = navLinks.flatMap((link) => {
     const title = pickLocale(link.label as {el?: string; en?: string}, locale)
@@ -573,15 +630,8 @@ export async function fetchSiteMenus(locale: SiteLocale = DEFAULT_LOCALE): Promi
     return [{id: nextMenuId(), title, href: normalizeMenuHref(url, locale)}]
   })
 
-  const footer: MenuItem[] = footerColumns.flatMap((column) => {
-    const links = (column.links as Array<Record<string, unknown>> | undefined) ?? []
-    return links.flatMap((link) => {
-      const title = pickLocale(link.label as {el?: string; en?: string}, locale)
-      const url = typeof link.url === 'string' ? link.url : ''
-      if (!title || !url) return []
-      return [{id: nextMenuId(), title, href: normalizeMenuHref(url, locale)}]
-    })
-  })
+  const footer = mapFooterColumnLinks(navFooterColumn, locale)
+  const legal = mapFooterColumnLinks(companyFooterColumn, locale)
 
   if (primary.length === 0) {
     return {
@@ -596,7 +646,7 @@ export async function fetchSiteMenus(locale: SiteLocale = DEFAULT_LOCALE): Promi
     }
   }
 
-  return {primary, footer, legal: []}
+  return {primary, footer, legal}
 }
 
 function mapCaseStudy(doc: Record<string, unknown>, locale: SiteLocale): CaseStudyItem {
