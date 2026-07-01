@@ -55,8 +55,7 @@ const mobileMenuId = 'site-mobile-nav';
         aria-label="Άνοιγμα κύριου μενού"
         data-mobile-nav-toggle
       >
-        <span class="material-symbols-outlined text-[26px]" data-mobile-nav-icon-open>menu</span>
-        <span class="material-symbols-outlined hidden text-[26px]" data-mobile-nav-icon-close>close</span>
+        <span class="material-symbols-outlined text-[26px]">menu</span>
       </button>
     </div>
   </div>
@@ -66,8 +65,18 @@ const mobileMenuId = 'site-mobile-nav';
     id={mobileMenuId}
     data-mobile-nav-panel
   >
-    <div class="mx-auto max-w-container-max-width px-margin-mobile py-4">
-      <ul class="flex flex-col gap-1">
+    <div class="mx-auto max-w-container-max-width px-margin-mobile">
+      <div class="flex justify-end py-3">
+        <button
+          type="button"
+          class="inline-flex h-11 w-11 items-center justify-center rounded-full border border-outline-variant/40 text-on-surface-variant transition-colors hover:bg-surface-container"
+          aria-label="Κλείσιμο κύριου μενού"
+          data-mobile-nav-close
+        >
+          <span class="material-symbols-outlined text-[26px]">close</span>
+        </button>
+      </div>
+      <ul class="flex flex-col gap-1 pb-4">
         {
           menus.map((item) => {
             const isActive = currentPath === item.href || (item.href !== '/' && currentPath.startsWith(item.href));
@@ -98,25 +107,25 @@ const mobileMenuId = 'site-mobile-nav';
   (function () {
     var nav = document.querySelector('[data-site-nav]');
     var toggle = document.querySelector('[data-mobile-nav-toggle]');
+    var closeBtn = document.querySelector('[data-mobile-nav-close]');
     var panel = document.querySelector('[data-mobile-nav-panel]');
-    var iconOpen = document.querySelector('[data-mobile-nav-icon-open]');
-    var iconClose = document.querySelector('[data-mobile-nav-icon-close]');
     var mobileLinks = document.querySelectorAll('[data-mobile-nav-link]');
 
     function setMobileNavOpen(open) {
-      if (!toggle || !panel || !iconOpen || !iconClose) return;
+      if (!toggle || !panel) return;
 
       toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
-      toggle.setAttribute('aria-label', open ? 'Κλείσιμο κύριου μενού' : 'Άνοιγμα κύριου μενού');
+      toggle.classList.toggle('hidden', open);
       panel.classList.toggle('hidden', !open);
-      iconOpen.classList.toggle('hidden', open);
-      iconClose.classList.toggle('hidden', !open);
       document.body.classList.toggle('overflow-hidden', open);
     }
 
     toggle?.addEventListener('click', function () {
-      var isOpen = toggle.getAttribute('aria-expanded') === 'true';
-      setMobileNavOpen(!isOpen);
+      setMobileNavOpen(true);
+    });
+
+    closeBtn?.addEventListener('click', function () {
+      setMobileNavOpen(false);
     });
 
     mobileLinks.forEach(function (link) {
