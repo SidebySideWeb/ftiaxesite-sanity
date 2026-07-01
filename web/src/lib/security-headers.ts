@@ -92,15 +92,25 @@ export function buildStaticAssetCacheHeaders(): Record<string, string> {
 }
 
 /** Vercel `headers` config — cache rules must appear before the catch-all security rule. */
+/** Lets Sanity Studio (cross-site) read the Cal.com bookings proxy response. */
+export function buildBookingsApiHeaders(): Record<string, string> {
+  return {
+    'Cross-Origin-Resource-Policy': 'cross-origin',
+  }
+}
+
 export function buildVercelHeadersConfig() {
   const cacheHeaders = toHeaderEntries(buildStaticAssetCacheHeaders())
   const securityHeaders = toHeaderEntries(buildSecurityHeaders())
+  const bookingsApiHeaders = toHeaderEntries(buildBookingsApiHeaders())
 
   return {
     headers: [
       {source: '/_astro/(.*)', headers: cacheHeaders},
       {source: '/images/(.*)', headers: cacheHeaders},
       {source: '/fonts/(.*)', headers: cacheHeaders},
+      {source: '/api/bookings', headers: bookingsApiHeaders},
+      {source: '/api/bookings/', headers: bookingsApiHeaders},
       {source: '/(.*)', headers: securityHeaders},
     ],
   }

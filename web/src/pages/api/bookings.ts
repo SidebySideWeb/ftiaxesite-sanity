@@ -3,9 +3,12 @@ import {fetchUpcomingBookings} from '../../lib/cal-com-bookings'
 
 export const prerender = false
 
+const STUDIO_ORIGIN = import.meta.env.SANITY_STUDIO_URL ?? 'https://ftiaxesite.sanity.studio'
+
 const corsHeaders = {
-  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Origin': STUDIO_ORIGIN,
   'Access-Control-Allow-Methods': 'GET, OPTIONS',
+  Vary: 'Origin',
 }
 
 function jsonResponse(body: Record<string, unknown>, status: number): Response {

@@ -11,7 +11,7 @@
     "studioHost": "ftiaxesite",
     "studioUrl": "https://ftiaxesite.sanity.studio"
   },
-  "bookingsProxyUrl": "https://ftiaxesite.gr/api/bookings",
+  "bookingsProxyUrl": "https://www.ftiaxesite.gr/api/bookings/",
   "defaultLocale": "el",
   "routes": {
     "services": "/services/",

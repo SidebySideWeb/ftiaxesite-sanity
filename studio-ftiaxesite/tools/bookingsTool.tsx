@@ -33,7 +33,9 @@ import {CalendarIcon} from '@sanity/icons'
  * option — see sanity.config.ts) to that endpoint's public URL.
  */
 
-const BOOKINGS_PROXY_URL = 'https://ftiaxesite.gr/api/bookings'
+// Must match production canonical host (www) and trailing slash — bare ftiaxesite.gr
+// redirects without CORS headers, which breaks browser fetch from Studio.
+const BOOKINGS_PROXY_URL = 'https://www.ftiaxesite.gr/api/bookings/'
 
 interface Booking {
   id: string
