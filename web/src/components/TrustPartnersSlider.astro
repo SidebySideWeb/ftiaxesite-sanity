@@ -6,10 +6,12 @@ interface Props {
 
 const { partners, durationSeconds = 32 } = Astro.props;
 
-const items =
-  partners.length > 0
-    ? partners
-    : ['ALPHA TECH', 'RETAIL GREECE', 'MED LOGISTICS', 'CONSTRUCTION SA'];
+const fallback = ['ALPHA TECH', 'RETAIL GREECE', 'MED LOGISTICS', 'CONSTRUCTION SA'];
+const source = partners.length > 0 ? partners : fallback;
+
+// Repeat items so the track always overflows on narrow viewports.
+const items = [...source, ...source, ...source];
+const groups = [0, 1] as const;
 ---
 
 <div
@@ -20,7 +22,7 @@ const items =
   <div class="trust-partners-ticker__viewport">
     <div class="trust-partners-ticker__track">
       {
-        [0, 1].map((copy) => (
+        groups.map((copy) => (
           <ul
             class="trust-partners-ticker__group"
             aria-hidden={copy === 1 ? true : undefined}
@@ -40,28 +42,36 @@ const items =
 </div>
 
 <style>
+  .trust-partners-ticker {
+    width: 100%;
+  }
+
   .trust-partners-ticker__viewport {
     overflow: hidden;
-    mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
-    -webkit-mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
+    width: 100%;
+    mask-image: linear-gradient(to right, transparent, black 6%, black 94%, transparent);
+    -webkit-mask-image: linear-gradient(to right, transparent, black 6%, black 94%, transparent);
   }
 
   .trust-partners-ticker__track {
     display: flex;
     width: max-content;
+    will-change: transform;
     animation: trust-partners-scroll var(--trust-ticker-duration, 32s) linear infinite;
   }
 
-  .trust-partners-ticker:hover .trust-partners-ticker__track {
-    animation-play-state: paused;
+  @media (hover: hover) and (pointer: fine) {
+    .trust-partners-ticker:hover .trust-partners-ticker__track {
+      animation-play-state: paused;
+    }
   }
 
   .trust-partners-ticker__group {
     display: flex;
     flex-shrink: 0;
     align-items: center;
-    gap: 2rem;
-    padding-right: 2rem;
+    gap: 1.25rem;
+    padding-right: 1.25rem;
     list-style: none;
     margin: 0;
   }
@@ -82,9 +92,9 @@ const items =
     white-space: nowrap;
     border-radius: 0.375rem;
     background-color: #f4f4f2;
-    padding: 0.5rem 1.5rem;
+    padding: 0.5rem 1.25rem;
     font-family: 'Noto Serif', Georgia, serif;
-    font-size: 1rem;
+    font-size: 0.9375rem;
     font-weight: 600;
     line-height: 1.4;
     color: #1a1a1a;
@@ -99,10 +109,10 @@ const items =
 
   @keyframes trust-partners-scroll {
     from {
-      transform: translateX(0);
+      transform: translate3d(0, 0, 0);
     }
     to {
-      transform: translateX(-50%);
+      transform: translate3d(-50%, 0, 0);
     }
   }
 
@@ -118,6 +128,7 @@ const items =
       width: 100%;
       animation: none;
       gap: 1rem;
+      will-change: auto;
     }
 
     .trust-partners-ticker__group {
