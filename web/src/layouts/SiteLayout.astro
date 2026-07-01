@@ -5,6 +5,7 @@ import '../styles/global.css';
 
 
 import SeoHead from '../components/SeoHead.astro';
+import Analytics from '../components/Analytics.astro';
 
 import BreadcrumbSchema from '../components/schema/BreadcrumbSchema.astro';
 
@@ -121,6 +122,8 @@ const canonicalUrl = canonicalPath
 
   <head>
 
+    <Analytics placement="head" />
+
     <SeoHead
 
       canonicalUrl={canonicalUrl}
@@ -173,6 +176,8 @@ const canonicalUrl = canonicalPath
   </head>
 
   <body class="min-h-full">
+
+    <Analytics placement="body" />
 
     <a
 

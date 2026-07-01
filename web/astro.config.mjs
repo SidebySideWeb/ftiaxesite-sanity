@@ -37,6 +37,18 @@ export default defineConfig({
         optional: true,
         default: sanityDataset,
       }),
+      PUBLIC_GTM_ID: envField.string({
+        context: 'client',
+        access: 'public',
+        optional: true,
+        default: env.PUBLIC_GTM_ID ?? '',
+      }),
+      PUBLIC_GA4_MEASUREMENT_ID: envField.string({
+        context: 'client',
+        access: 'public',
+        optional: true,
+        default: env.PUBLIC_GA4_MEASUREMENT_ID ?? '',
+      }),
       SANITY_WRITE_TOKEN: envField.string({context: 'server', access: 'secret', optional: true}),
       RESEND_API_KEY: envField.string({context: 'server', access: 'secret', optional: true}),
       ADMIN_NOTIFICATION_EMAIL: envField.string({context: 'server', access: 'secret', optional: true}),
