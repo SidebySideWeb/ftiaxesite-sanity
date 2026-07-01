@@ -27,7 +27,7 @@ const ga4Id = (import.meta.env.PUBLIC_GA4_MEASUREMENT_ID ?? '').trim();
 }
 
 {
-  placement === 'head' && ga4Id && !gtmId ? (
+  placement === 'head' && ga4Id ? (
     <>
       <script async src={`https://www.googletagmanager.com/gtag/js?id=${encodeURIComponent(ga4Id)}`}></script>
       <script is:inline define:vars={{ ga4Id }}>
