@@ -27,7 +27,7 @@ const ga4Id = (import.meta.env.PUBLIC_GA4_MEASUREMENT_ID ?? '').trim();
 }
 
 {
-  placement === 'head' && ga4Id ? (
+  placement === 'head' && ga4Id && !gtmId ? (
     <>
       <script async src={`https://www.googletagmanager.com/gtag/js?id=${encodeURIComponent(ga4Id)}`}></script>
       <script is:inline define:vars={{ ga4Id }}>
@@ -44,14 +44,22 @@ const ga4Id = (import.meta.env.PUBLIC_GA4_MEASUREMENT_ID ?? '').trim();
 
 {
   placement === 'body' && gtmId ? (
-    <noscript>
-      <iframe
-        height="0"
-        src={`https://www.googletagmanager.com/ns.html?id=${encodeURIComponent(gtmId)}`}
-        style="display:none;visibility:hidden"
-        title="Google Tag Manager"
-        width="0"
-      ></iframe>
-    </noscript>
+    <>
+      <noscript>
+        <iframe
+          height="0"
+          src={`https://www.googletagmanager.com/ns.html?id=${encodeURIComponent(gtmId)}`}
+          style="display:none;visibility:hidden"
+          title="Google Tag Manager"
+          width="0"
+        ></iframe>
+      </noscript>
+      <script is:inline>
+        document.addEventListener('astro:page-load', () => {
+          window.dataLayer = window.dataLayer || [];
+          window.dataLayer.push({ event: 'pageview', page: window.location.pathname });
+        });
+      </script>
+    </>
   ) : null
 }
