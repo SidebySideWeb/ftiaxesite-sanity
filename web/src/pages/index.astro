@@ -3,6 +3,7 @@ import SiteLayout from '../layouts/SiteLayout.astro';
 import TrustPartnersSlider from '../components/TrustPartnersSlider.astro';
 import { fetchCaseStudies, fetchPageFields, fetchPageSeoData, pageField, pageFieldLines } from '../lib/cms';
 import { resolvePageLocale } from '../lib/i18n';
+import { PLACEHOLDER_IMAGES, resolvePublicImageUrl } from '../lib/placeholder-images';
 
 const locale = resolvePageLocale(Astro.currentLocale);
 const fields = await fetchPageFields('home', locale);
@@ -20,9 +21,7 @@ const heroDescription = pageField(
   'Σχεδιάζουμε και αναπτύσσουμε custom ιστοσελίδες για μικρομεσαίες επιχειρήσεις που θέλουν να ξεχωρίσουν στην ψηφιακή εποχή.',
 );
 const heroEyebrow = pageField(fields, 'fti_home_hero_eyebrow', 'Εξειδικευμένοι στην Ελλάδα');
-const heroImage =
-  pageField(fields, 'fti_home_hero_image') ||
-  'https://lh3.googleusercontent.com/aida-public/AB6AXuBl8vg9URUb2UOq3oTy5M1Js7fM4eysXbQAVXEgSzd77tbqNFfwbE5qctnA20WA7FH20gcc9vszj5SusHGW9n08o09WUZAQzzHa1IHubdRDe0MLU6WBFtjKXXAViJWJXl383nBfqzJAs83I-yFLrRievgHMuIwK1Hph7SxBl6-zjqFoMHQvtsju2LRC60awxFViwzpONoWl0jdHfG6Mxr3if3uyRDPQUS6olvo1UXnymYaFF99tM0tViU9JzBC0K11jgrJCuXh_ayY';
+const heroImage = resolvePublicImageUrl(pageField(fields, 'fti_home_hero_image'), PLACEHOLDER_IMAGES.homeHero);
 
 const trustTitle = pageField(fields, 'fti_home_trust_title', 'Εμπιστεύονται την τεχνογνωσία μας');
 const trustPartners = pageFieldLines(fields, 'fti_home_trust_partners');
@@ -85,15 +84,13 @@ const fallbackProjects = [
   {
     title: 'Artisan Ceramics',
     subtitle: 'E-commerce Design & Development',
-    image:
-      'https://lh3.googleusercontent.com/aida-public/AB6AXuAqalq0w6c89kGS5P89AhvhoMzC7iSanVbiiMZDF9EecoTknaPw7AB-l0sW_Q5o1QmzRLlKtBckAkw58QDUpCSc4u2_3tF2DO5aS4sQ7zwIinzFsfIVwEl7OqIXYp1d3H4Ad8gWEG4NTbtd5bBuFu8F7RDl5DtDQvLByiW0V58FalRb8czrInvOJJaC-nwdDKffJ9OIjl2kANC2lzkZlLmcp7n3b5w8har2E4zcPnIMoechswz95Nh3AajSlSoUDzK15JGFbe7-Oeo',
+    image: PLACEHOLDER_IMAGES.portfolio1,
     tags: ['ASTRO', 'STRIPE'],
   },
   {
     title: 'Arch Studio X',
     subtitle: 'Corporate Brand Identity & Web',
-    image:
-      'https://lh3.googleusercontent.com/aida-public/AB6AXuDAYXbonoPcYwCb_3s-bDbwnQ_iECv3MGGPfxzBKzX7YKp3JsmUWDf7g-iY5afe_eDL0tXCfkb1WshVleDQCwiyr2BBBq6CfcAEyZ6sS-fFC5RrGmy5bD1_Uv1-ZLRQHprF-0B2wXRJiDQ9BQY3x62J8RJxrRfUS_W2VWQDvPXb0QuHcfbDO7Tmu91RD0NXSQ9_CUknAz6NrcnsHvtzHwBEcddSbPntv_u4aidvxsuuw9KyKwEoJwFLr7oOn_6Qq6uxztl_DEpbVUA',
+    image: PLACEHOLDER_IMAGES.portfolio2,
     tags: ['NEXT.JS', 'GSAP'],
   },
 ];
@@ -103,7 +100,7 @@ const displayProjects =
     ? caseStudies.map((item) => ({
         title: item.title,
         subtitle: item.excerpt || item.clientName,
-        image: item.imageUrl || fallbackProjects[0].image,
+        image: resolvePublicImageUrl(item.imageUrl, PLACEHOLDER_IMAGES.portfolio1),
         tags: item.techStack.length > 0 ? item.techStack : ['ASTRO', 'WORDPRESS'],
       }))
     : fallbackProjects;

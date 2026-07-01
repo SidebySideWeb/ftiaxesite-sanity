@@ -4,6 +4,7 @@ import ServiceSchema from '../../../components/schema/ServiceSchema.astro';
 import SiteLayout from '../../../layouts/SiteLayout.astro';
 import { fetchPageFields, fetchServices, fetchServicesFaqItems, fetchPageSeoData, pageField, pageFieldLines } from '../../../lib/cms';
 import { resolvePageLocale } from '../../../lib/i18n';
+import { PLACEHOLDER_IMAGES } from '../../../lib/placeholder-images';
 
 const locale = resolvePageLocale(Astro.currentLocale);
 const fields = await fetchPageFields('services', locale);
@@ -18,8 +19,7 @@ const fallbackServices = [
       'Ένα landing page ή μικρό site με λίγες ενότητες, χτισμένο με Astro για μέγιστη ταχύτητα. Περιλαμβάνει φιλοξενία, φόρμα επικοινωνίας και βασικό SEO setup.',
     idealFor: 'νέες επιχειρήσεις, ελεύθερους επαγγελματίες, καμπάνιες και προσωρινές ανάγκες.',
     price: 'Ενδεικτικά από €500',
-    image:
-      'https://lh3.googleusercontent.com/aida-public/AB6AXuCsmq01qC47afFZXZvKpNtLcDA9uux8Jd59hSQE4OTE3jTPMGWrDrEny7P3dHM0a6QowhTre5x9_sTq6ESk0WERWD4qvNMo3ZFWoxu28Zors7LLlCXk1ZrJE2FqZq7lcIljXSkR7yG3Hu_JZiuDp_qoSU6Y6X7yL3L_Ud00hdVWIfxRWEfXkMfKL3V8XyErNMaLOBPc7fMXM2hXWqpa3-34kZIOMH5OTBi8ZVYa9-cAyCEJYgX5dqsjt4p_AO-hF5QQUHE2bYOBrAQ',
+    image: PLACEHOLDER_IMAGES.service1,
     footnote: '',
     ctaLabel: 'Ζήτα Προσφορά για αυτό',
     ctaUrl: '/quote/',
@@ -32,8 +32,7 @@ const fallbackServices = [
     idealFor:
       'επιχειρήσεις που θέλουν να ενημερώνουν μόνες τους το περιεχόμενό τους, χωρίς να εξαρτώνται από εμάς για κάθε αλλαγή.',
     price: 'Ενδεικτικά από €1.200',
-    image:
-      'https://lh3.googleusercontent.com/aida-public/AB6AXuDZGP0jsnZBdpXTCXRBlgPhwYkrCsexls7JIItC8kv1vBn0JSJMyhLtHc3OEBz8yr0dS0084_-o8FNLZJrft1kZdUfDtrRvQu6t234ztYBTUFn6Jqy7BGJRi70sCoKH0x9FWWhkpk6xKa9mWNcmC12DBumFvpPGUQPY3922zngSlsQZgWBcbN5mhWvphT7cAfrMLtJHzv7EcUZg74qrn0OAjWW0nQLPvhlWUygn4cq_-xdJmv-Y2Ix-7A-a46eaAh1QtzVXDbGO5RY',
+    image: PLACEHOLDER_IMAGES.service2,
     footnote: '',
     ctaLabel: 'Ζήτα Προσφορά για αυτό',
     ctaUrl: '/quote/',
@@ -45,8 +44,7 @@ const fallbackServices = [
       'WooCommerce ή σύστημα κρατήσεων, πληρωμές online, και custom λειτουργίες προσαρμοσμένες στις ανάγκες της επιχείρησής σου.',
     idealFor: 'e-shops, καταλύματα, υπηρεσίες με ραντεβού.',
     price: 'Ενδεικτικά από €1.800',
-    image:
-      'https://lh3.googleusercontent.com/aida-public/AB6AXuBGzIQOLwrEPx_4wHAfvDOtMV0YljBfO_H5g0PHwMqU2OAR-7GOdmdEJ2qvycwvz8kAe7jax40PNoCulAVN7qq3uB6xuOoheGqlUb1LzB1-SN9E3qXwcgHQx2lOtLO9I_vR76SCdTmmcbg1ichpN4A4vpMDdS6HFKWEeKmEluO-5FLe5LDw5jfDmmXujhldvr7NQs8mqMk5IbjyheuOWjzs_C2nIft7OG3k8B_ZKCV-G5movoIOhUdjk7OSmeRMImyBMcalGVcM0fY',
+    image: PLACEHOLDER_IMAGES.service3,
     footnote: '',
     ctaLabel: 'Ζήτα Προσφορά για αυτό',
     ctaUrl: '/quote/',
