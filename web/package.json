@@ -13,7 +13,6 @@
     "@astrojs/sitemap": "^3.7.3",
     "@astrojs/tailwind": "^5.1.5",
     "@astrojs/vercel": "^8.2.11",
-    "@calcom/embed-react": "^1.5.3",
     "@fontsource-variable/noto-sans": "^5.2.10",
     "@fontsource-variable/noto-serif": "^5.2.9",
     "@sanity/astro": "^3.4.1",

@@ -1,5 +1,5 @@
 ---
-import BookCallButton from './BookCallButton'
+import CalBookingLink from './CalBookingLink.astro'
 
 interface Props {
   readonly submitNote?: string
@@ -106,7 +106,7 @@ const labelClass = 'font-label-md text-on-surface-variant'
     <h3 class="mb-4 font-headline-sm text-headline-sm text-on-surface">Ευχαριστούμε — λάβαμε το αίτημά σου!</h3>
     <p class="mb-8 font-body-md text-on-surface-variant">{submitNote}</p>
     <p class="mb-4 font-body-sm text-body-sm text-on-surface-variant">Θέλεις να μιλήσουμε πιο σύντομα;</p>
-    <BookCallButton client:visible />
+    <CalBookingLink />
   </div>
 </div>
 
