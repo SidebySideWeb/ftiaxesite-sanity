@@ -19,3 +19,14 @@ export function resolvePublicImageUrl(url: string | null | undefined, fallback: 
   }
   return url
 }
+
+/** CMS image helper — returns fallback (or null) when URL is missing or blocked. */
+export function sanitizeCmsImageUrl(
+  url: string | null | undefined,
+  fallback: string | null = null,
+): string | null {
+  if (!url?.trim() || isGoogleHostedImageUrl(url)) {
+    return fallback
+  }
+  return url
+}

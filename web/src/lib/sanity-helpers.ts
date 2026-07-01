@@ -22,7 +22,7 @@ const {projectId, dataset} = sanityClient.config()
 
 export function urlFor(source: SanityImageSource | null | undefined, width?: number): string | null {
   if (!source || !projectId || !dataset) return null
-  let builder = createImageUrlBuilder({projectId, dataset}).image(source)
+  let builder = createImageUrlBuilder({projectId, dataset}).image(source).auto('format').quality(80)
   if (width) builder = builder.width(width)
   return builder.url()
 }

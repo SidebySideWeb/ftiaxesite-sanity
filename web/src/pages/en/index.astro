@@ -1,6 +1,7 @@
 ---
 import SiteLayout from '../../layouts/SiteLayout.astro';
 import TrustPartnersSlider from '../../components/TrustPartnersSlider.astro';
+import ResponsiveImage from '../../components/ResponsiveImage.astro';
 import { fetchCaseStudies, fetchPageFields, fetchPageSeoData, pageField, pageFieldLines } from '../../lib/cms';
 import { resolvePageLocale } from '../../lib/i18n';
 import { PLACEHOLDER_IMAGES, resolvePublicImageUrl } from '../../lib/placeholder-images';
@@ -139,7 +140,7 @@ const displayProjects =
       </div>
       <div class="relative mt-12 lg:mt-0">
         <div class="relative z-10 aspect-square overflow-hidden rounded-xl shadow-2xl">
-          <img alt="" class="h-full w-full object-cover" loading="eager" src={heroImage} />
+          <ResponsiveImage alt="" class="h-full w-full object-cover" loading="eager" preset="heroSquare" src={heroImage} />
         </div>
         <div class="absolute -right-6 -top-6 -z-0 h-32 w-32 rounded-full bg-secondary-container opacity-20 blur-3xl"></div>
         <div class="absolute -bottom-6 -left-6 -z-0 h-48 w-48 rounded-full bg-primary-container opacity-10 blur-3xl"></div>
@@ -207,10 +208,11 @@ const displayProjects =
           displayProjects.map((project) => (
             <div class="group cursor-pointer">
               <div class="relative mb-6 aspect-video overflow-hidden rounded-lg">
-                <img
+                <ResponsiveImage
                   alt=""
                   class="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
                   loading="lazy"
+                  preset="portfolioCard"
                   src={project.image}
                 />
                 <div class="absolute inset-0 bg-primary/20 opacity-0 transition-opacity group-hover:opacity-100"></div>
@@ -259,7 +261,13 @@ const displayProjects =
             </div>
             {processImage ? (
               <div class="hidden lg:block">
-                <img alt="" class="h-[500px] w-full rounded-lg object-cover shadow-2xl" loading="lazy" src={processImage} />
+                <ResponsiveImage
+                  alt=""
+                  class="h-[500px] w-full rounded-lg object-cover shadow-2xl"
+                  loading="lazy"
+                  preset="processWide"
+                  src={processImage}
+                />
               </div>
             ) : null}
           </div>

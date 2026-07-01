@@ -94,55 +94,69 @@ const mobileMenuId = 'site-mobile-nav';
   </div>
 </nav>
 
-<script>
-  const nav = document.querySelector('[data-site-nav]');
-  const toggle = document.querySelector('[data-mobile-nav-toggle]');
-  const panel = document.querySelector('[data-mobile-nav-panel]');
-  const iconOpen = document.querySelector('[data-mobile-nav-icon-open]');
-  const iconClose = document.querySelector('[data-mobile-nav-icon-close]');
-  const mobileLinks = document.querySelectorAll('[data-mobile-nav-link]');
+<script is:inline>
+  (function () {
+    var nav = document.querySelector('[data-site-nav]');
+    var toggle = document.querySelector('[data-mobile-nav-toggle]');
+    var panel = document.querySelector('[data-mobile-nav-panel]');
+    var iconOpen = document.querySelector('[data-mobile-nav-icon-open]');
+    var iconClose = document.querySelector('[data-mobile-nav-icon-close]');
+    var mobileLinks = document.querySelectorAll('[data-mobile-nav-link]');
 
-  function setMobileNavOpen(open: boolean) {
-    if (!toggle || !panel || !iconOpen || !iconClose) return;
+    function setMobileNavOpen(open) {
+      if (!toggle || !panel || !iconOpen || !iconClose) return;
 
-    toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
-    toggle.setAttribute('aria-label', open ? 'Κλείσιμο κύριου μενού' : 'Άνοιγμα κύριου μενού');
-    panel.classList.toggle('hidden', !open);
-    iconOpen.classList.toggle('hidden', open);
-    iconClose.classList.toggle('hidden', !open);
-    document.body.classList.toggle('overflow-hidden', open);
-  }
-
-  toggle?.addEventListener('click', () => {
-    const isOpen = toggle.getAttribute('aria-expanded') === 'true';
-    setMobileNavOpen(!isOpen);
-  });
-
-  mobileLinks.forEach((link) => {
-    link.addEventListener('click', () => setMobileNavOpen(false));
-  });
-
-  document.addEventListener('keydown', (event) => {
-    if (event.key === 'Escape') {
-      setMobileNavOpen(false);
+      toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+      toggle.setAttribute('aria-label', open ? 'Κλείσιμο κύριου μενού' : 'Άνοιγμα κύριου μενού');
+      panel.classList.toggle('hidden', !open);
+      iconOpen.classList.toggle('hidden', open);
+      iconClose.classList.toggle('hidden', !open);
+      document.body.classList.toggle('overflow-hidden', open);
     }
-  });
 
-  window.addEventListener('resize', () => {
-    if (window.matchMedia('(min-width: 768px)').matches) {
-      setMobileNavOpen(false);
-    }
-  });
+    toggle?.addEventListener('click', function () {
+      var isOpen = toggle.getAttribute('aria-expanded') === 'true';
+      setMobileNavOpen(!isOpen);
+    });
 
-  if (nav) {
-    window.addEventListener('scroll', () => {
-      if (window.scrollY > 50) {
-        nav.classList.add('h-16', 'shadow-md');
-        nav.classList.remove('h-20', 'shadow-sm');
-      } else {
-        nav.classList.remove('h-16', 'shadow-md');
-        nav.classList.add('h-20', 'shadow-sm');
+    mobileLinks.forEach(function (link) {
+      link.addEventListener('click', function () {
+        setMobileNavOpen(false);
+      });
+    });
+
+    document.addEventListener('keydown', function (event) {
+      if (event.key === 'Escape') {
+        setMobileNavOpen(false);
       }
     });
-  }
+
+    window.addEventListener('resize', function () {
+      if (window.matchMedia('(min-width: 768px)').matches) {
+        setMobileNavOpen(false);
+      }
+    });
+
+    if (nav) {
+      var scrollTicking = false;
+      window.addEventListener(
+        'scroll',
+        function () {
+          if (scrollTicking) return;
+          scrollTicking = true;
+          requestAnimationFrame(function () {
+            if (window.scrollY > 50) {
+              nav.classList.add('h-16', 'shadow-md');
+              nav.classList.remove('h-20', 'shadow-sm');
+            } else {
+              nav.classList.remove('h-16', 'shadow-md');
+              nav.classList.add('h-20', 'shadow-sm');
+            }
+            scrollTicking = false;
+          });
+        },
+        { passive: true },
+      );
+    }
+  })();
 </script>

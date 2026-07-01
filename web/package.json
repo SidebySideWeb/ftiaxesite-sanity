@@ -5,7 +5,7 @@
   "private": true,
   "scripts": {
     "dev": "astro dev",
-    "build": "astro build",
+    "build": "node scripts/generate-vercel-json.mjs && node scripts/prepare-fonts.mjs && node scripts/optimize-images.mjs && astro build",
     "preview": "astro preview"
   },
   "dependencies": {
@@ -14,12 +14,15 @@
     "@astrojs/tailwind": "^5.1.5",
     "@astrojs/vercel": "^8.2.11",
     "@calcom/embed-react": "^1.5.3",
+    "@fontsource-variable/noto-sans": "^5.2.10",
+    "@fontsource-variable/noto-serif": "^5.2.9",
     "@sanity/astro": "^3.4.1",
     "@sanity/client": "^7.23.0",
     "@sanity/image-url": "^2.1.1",
     "@tailwindcss/typography": "^0.5.20",
     "astro": "^5.18.1",
     "astro-portabletext": "^0.13.0",
+    "material-symbols": "^0.45.5",
     "react": "^19.2.7",
     "react-dom": "^19.2.7",
     "react-is": "^19.2.7",
@@ -28,5 +31,9 @@
     "styled-components": "^6.4.3",
     "tailwindcss": "^3.4.17",
     "typescript": "^5.8.3"
+  },
+  "devDependencies": {
+    "sharp": "^0.35.2",
+    "subset-font": "^2.5.0"
   }
 }

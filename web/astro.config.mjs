@@ -17,6 +17,9 @@ export default defineConfig({
   site: siteUrl,
   output: 'server',
   adapter: vercel(),
+  build: {
+    inlineStylesheets: 'always',
+  },
   env: {
     schema: {
       SITE_URL: envField.string({

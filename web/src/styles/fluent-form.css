@@ -9,7 +9,7 @@
   --ff-error: #ba1a1a;
   --ff-radius: 0.5rem;
   --ff-gap: 1.5rem;
-  font-family: 'Noto Sans', system-ui, sans-serif;
+  font-family: 'Noto Sans Variable', system-ui, sans-serif;
   color: var(--ff-on-surface);
 }
 
@@ -40,7 +40,7 @@
 
 .fluent-form-embed .ff-el-input--label label {
   display: block;
-  font-family: 'Noto Sans', system-ui, sans-serif;
+  font-family: 'Noto Sans Variable', system-ui, sans-serif;
   font-size: 12px;
   font-weight: 500;
   line-height: 1.2;
@@ -63,7 +63,7 @@
   border: 1px solid var(--ff-outline);
   border-radius: var(--ff-radius);
   color: var(--ff-on-surface);
-  font-family: 'Noto Sans', system-ui, sans-serif;
+  font-family: 'Noto Sans Variable', system-ui, sans-serif;
   font-size: 16px;
   line-height: 1.6;
   margin: 0;
@@ -167,7 +167,7 @@
   color: var(--ff-on-primary) !important;
   cursor: pointer;
   display: block;
-  font-family: 'Noto Sans', system-ui, sans-serif;
+  font-family: 'Noto Sans Variable', system-ui, sans-serif;
   font-size: 14px;
   font-weight: 600;
   letter-spacing: 0.05em;
@@ -252,7 +252,7 @@
 
 .fluent-form-embed .ff-el-section-break .ff-el-section-title {
   color: var(--ff-on-surface);
-  font-family: 'Noto Serif', Georgia, serif;
+  font-family: 'Noto Serif Variable', Georgia, serif;
   font-size: 24px;
   font-weight: 600;
   line-height: 1.4;

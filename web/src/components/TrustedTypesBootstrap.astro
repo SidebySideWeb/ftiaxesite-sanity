@@ -1,0 +1,16 @@
+---
+/**
+ * Permissive default Trusted Types policy so GTM/Cal.com can inject scripts
+ * while satisfying CSP `require-trusted-types-for 'script'`.
+ */
+---
+
+<script is:inline>
+  if (window.trustedTypes && trustedTypes.createPolicy) {
+    trustedTypes.createPolicy('default', {
+      createHTML: (string) => string,
+      createScript: (string) => string,
+      createScriptURL: (string) => string,
+    });
+  }
+</script>

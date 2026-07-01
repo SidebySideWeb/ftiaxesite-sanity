@@ -12,16 +12,37 @@ const ga4Id = (import.meta.env.PUBLIC_GA4_MEASUREMENT_ID ?? '').trim();
 {
   placement === 'head' && gtmId ? (
     <script is:inline define:vars={{ gtmId }}>
-      (function (w, d, s, l, i) {
-        w[l] = w[l] || [];
-        w[l].push({ 'gtm.start': new Date().getTime(), event: 'gtm.js' });
-        var f = d.getElementsByTagName(s)[0],
-          j = d.createElement(s),
-          dl = l !== 'dataLayer' ? '&l=' + l : '';
-        j.async = true;
-        j.src = 'https://www.googletagmanager.com/gtm.js?id=' + i + dl;
-        f.parentNode.insertBefore(j, f);
-      })(window, document, 'script', 'dataLayer', gtmId);
+      (function () {
+        function loadGtm() {
+          if (window.__ftiaxesiteGtmLoaded) return;
+          window.__ftiaxesiteGtmLoaded = true;
+          (function (w, d, s, l, i) {
+            w[l] = w[l] || [];
+            w[l].push({ 'gtm.start': new Date().getTime(), event: 'gtm.js' });
+            var f = d.getElementsByTagName(s)[0],
+              j = d.createElement(s),
+              dl = l !== 'dataLayer' ? '&l=' + l : '';
+            j.async = true;
+            j.src = 'https://www.googletagmanager.com/gtm.js?id=' + i + dl;
+            f.parentNode.insertBefore(j, f);
+          })(window, document, 'script', 'dataLayer', gtmId);
+        }
+
+        function scheduleGtm() {
+          window.addEventListener(
+            'load',
+            function () {
+              window.setTimeout(loadGtm, 3500);
+            },
+            { once: true },
+          );
+        }
+
+        scheduleGtm();
+        ['pointerdown', 'keydown', 'touchstart'].forEach(function (eventName) {
+          window.addEventListener(eventName, loadGtm, { once: true, passive: true });
+        });
+      })();
     </script>
   ) : null
 }
@@ -29,14 +50,31 @@ const ga4Id = (import.meta.env.PUBLIC_GA4_MEASUREMENT_ID ?? '').trim();
 {
   placement === 'head' && ga4Id && !gtmId ? (
     <>
-      <script async src={`https://www.googletagmanager.com/gtag/js?id=${encodeURIComponent(ga4Id)}`}></script>
       <script is:inline define:vars={{ ga4Id }}>
-        window.dataLayer = window.dataLayer || [];
-        function gtag() {
-          dataLayer.push(arguments);
-        }
-        gtag('js', new Date());
-        gtag('config', ga4Id);
+        (function () {
+          function loadGa4() {
+            if (window.__ftiaxesiteGa4Loaded) return;
+            window.__ftiaxesiteGa4Loaded = true;
+            var script = document.createElement('script');
+            script.async = true;
+            script.src = 'https://www.googletagmanager.com/gtag/js?id=' + encodeURIComponent(ga4Id);
+            document.head.appendChild(script);
+            window.dataLayer = window.dataLayer || [];
+            function gtag() {
+              dataLayer.push(arguments);
+            }
+            gtag('js', new Date());
+            gtag('config', ga4Id);
+          }
+
+          window.addEventListener(
+            'load',
+            function () {
+              window.setTimeout(loadGa4, 3500);
+            },
+            { once: true },
+          );
+        })();
       </script>
     </>
   ) : null

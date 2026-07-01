@@ -10,6 +10,7 @@ import type {SeoFieldsData, SiteSeoDefaults} from './seo'
 import {pickDocumentSeoData} from './seo'
 import {DOCUMENT_SEO_PROJECTION, SEO_FIELDS_PROJECTION} from './seo-queries'
 import {normalizePath, pickLocale, pickLocaleLines, urlFor} from './sanity-helpers'
+import {PLACEHOLDER_IMAGES, sanitizeCmsImageUrl} from './placeholder-images'
 
 export type {SeoFieldsData} from './seo'
 export type {SiteSeoDefaults} from './seo'
@@ -309,10 +310,16 @@ function mapHomePage(doc: Record<string, unknown>, locale: SiteLocale): PageFiel
     fti_home_cta_note: pickLocale(doc.ctaSubtext as {el?: string; en?: string}, locale),
   }
 
-  const heroImage = urlFor(doc.heroImage as Parameters<typeof urlFor>[0], 1200)
+  const heroImage = sanitizeCmsImageUrl(
+    urlFor(doc.heroImage as Parameters<typeof urlFor>[0], 640),
+    PLACEHOLDER_IMAGES.homeHero,
+  )
   if (heroImage) fields.fti_home_hero_image = heroImage
 
-  const processImage = urlFor(doc.processImage as Parameters<typeof urlFor>[0], 1200)
+  const processImage = sanitizeCmsImageUrl(
+    urlFor(doc.processImage as Parameters<typeof urlFor>[0], 960),
+    null,
+  )
   if (processImage) fields.fti_home_process_image = processImage
 
   valueProps.slice(0, 3).forEach((item, index) => {
@@ -662,8 +669,8 @@ function mapCaseStudy(doc: Record<string, unknown>, locale: SiteLocale): CaseStu
     title: String(doc.title ?? ''),
     excerpt: pickLocale(doc.summary as {el?: string; en?: string}, locale),
     content: '',
-    imageUrl: urlFor(doc.image as Parameters<typeof urlFor>[0], 1200),
-    screenshotUrl: urlFor(doc.image as Parameters<typeof urlFor>[0], 1200),
+    imageUrl: sanitizeCmsImageUrl(urlFor(doc.image as Parameters<typeof urlFor>[0], 720), null),
+    screenshotUrl: sanitizeCmsImageUrl(urlFor(doc.image as Parameters<typeof urlFor>[0], 720), null),
     clientName: pickLocale(doc.categoryBadge as {el?: string; en?: string}, locale),
     statusLabel,
     projectUrl: '',
@@ -746,7 +753,7 @@ export async function fetchServices(limit = 20, locale: SiteLocale = DEFAULT_LOC
     title: pickLocale(block.title as {el?: string; en?: string}, locale),
     excerpt: pickLocale(block.body as {el?: string; en?: string}, locale),
     content: pickLocale(block.body as {el?: string; en?: string}, locale),
-    imageUrl: urlFor(block.image as Parameters<typeof urlFor>[0], 800),
+    imageUrl: sanitizeCmsImageUrl(urlFor(block.image as Parameters<typeof urlFor>[0], 800), null),
     icon: 'web',
     summary: pickLocale(block.body as {el?: string; en?: string}, locale),
     idealFor: pickLocale(block.idealForLabel as {el?: string; en?: string}, locale),

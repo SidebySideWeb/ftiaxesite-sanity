@@ -6,6 +6,7 @@ import '../styles/global.css';
 
 import SeoHead from '../components/SeoHead.astro';
 import Analytics from '../components/Analytics.astro';
+import TrustedTypesBootstrap from '../components/TrustedTypesBootstrap.astro';
 
 import BreadcrumbSchema from '../components/schema/BreadcrumbSchema.astro';
 
@@ -122,6 +123,7 @@ const canonicalUrl = canonicalPath
 
   <head>
 
+    <TrustedTypesBootstrap />
     <Analytics placement="head" />
 
     <SeoHead
@@ -144,25 +146,13 @@ const canonicalUrl = canonicalPath
 
     />
 
-    <link href="https://fonts.googleapis.com" rel="preconnect" />
+    <link rel="preload" href="/fonts/noto-serif-greek.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/fonts/noto-sans-greek.woff2" as="font" type="font/woff2" crossorigin />
 
-    <link crossorigin href="https://fonts.gstatic.com" rel="preconnect" />
-
-    <link
-
-      href="https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&display=swap"
-
-      rel="stylesheet"
-
-    />
-
-    <link
-
-      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
-
-      rel="stylesheet"
-
-    />
+    <link href="/fonts/fonts.css" rel="stylesheet" media="print" onload="this.media='all'" />
+    <noscript><link href="/fonts/fonts.css" rel="stylesheet" /></noscript>
+    <link href="/fonts/icons.css" rel="stylesheet" media="print" onload="this.media='all'" />
+    <noscript><link href="/fonts/icons.css" rel="stylesheet" /></noscript>
 
     <link href="/favicon.png" rel="icon" type="image/png" />
     <link href="/favicon.png" rel="apple-touch-icon" />
