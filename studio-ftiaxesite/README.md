@@ -1,9 +1,20 @@
-# Sanity Clean Content Studio
+# ftiaxesite Sanity Studio
 
-Congratulations, you have now installed the Sanity Content Studio, an open-source real-time content editing environment connected to the Sanity backend.
+Content studio for [ftiaxesite.gr](https://ftiaxesite.gr/).
 
-Now you can do the following things:
+## Seed content
 
-- [Read “getting started” in the docs](https://www.sanity.io/docs/introduction/getting-started?utm_source=readme)
-- [Join the Sanity community](https://www.sanity.io/community/join?utm_source=readme)
-- [Extend and build plugins](https://www.sanity.io/docs/content-studio/extending?utm_source=readme)
+```bash
+npm run seed
+```
+
+Re-runs are idempotent: documents use fixed `_id` values and `createOrReplace`.
+
+Legal copy in `legalDoc` documents is **draft content for development only**. Have a qualified lawyer review privacy and cookie policies before launch.
+
+## Scripts
+
+| Script | Description |
+|--------|-------------|
+| `npm run seed` | Seed or update all redesign content |
+| `npm run check-dashes` | Fail if en/em dashes appear in reference HTML or seed script |

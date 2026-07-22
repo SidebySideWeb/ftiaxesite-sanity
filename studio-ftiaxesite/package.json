@@ -9,7 +9,8 @@
     "deploy": "sanity deploy",
     "deploy-graphql": "sanity graphql deploy",
     "dev": "sanity dev",
-    "seed": "sanity exec scripts/seed-content.ts --with-user-token",
+    "seed": "sanity exec scripts/seed.ts --with-user-token",
+    "check-dashes": "node scripts/check-dashes.mjs",
     "migrate-legacy-seo": "sanity exec scripts/migrate-legacy-seo.ts --with-user-token",
     "start": "sanity start"
   },

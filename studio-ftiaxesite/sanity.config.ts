@@ -4,7 +4,6 @@ import {visionTool} from '@sanity/vision'
 import seofields from 'sanity-plugin-seofields'
 import {schemaTypes} from './schemaTypes'
 import {structure} from './structure'
-import {bookingsTool} from './tools/bookingsTool'
 
 export default defineConfig({
   name: 'default',
@@ -24,9 +23,9 @@ export default defineConfig({
     }),
   ],
 
-  tools: (prev) => [...prev, bookingsTool],
-
   schema: {
     types: schemaTypes,
+    templates: (templates) =>
+      templates.filter(({schemaType}) => !['siteSettings', 'homePage'].includes(schemaType)),
   },
 })

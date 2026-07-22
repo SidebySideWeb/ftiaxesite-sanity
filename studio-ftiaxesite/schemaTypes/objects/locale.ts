@@ -17,6 +17,7 @@ export const localeString = defineType({
       title: 'Greek (primary)',
       type: 'string',
       fieldset: 'translations',
+      validation: (Rule) => Rule.required(),
     }),
     defineField({
       name: 'en',
@@ -45,6 +46,7 @@ export const localeText = defineType({
       type: 'text',
       rows: 3,
       fieldset: 'translations',
+      validation: (Rule) => Rule.required(),
     }),
     defineField({
       name: 'en',
@@ -73,6 +75,7 @@ export const localeRichText = defineType({
       type: 'array',
       of: [{type: 'block'}],
       fieldset: 'translations',
+      validation: (Rule) => Rule.required(),
     }),
     defineField({
       name: 'en',

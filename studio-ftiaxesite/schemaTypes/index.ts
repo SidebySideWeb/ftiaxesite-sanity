@@ -1,56 +1,31 @@
-// Shared / object types
 import {localeString, localeText, localeRichText} from './objects/locale'
-import {navLink, footerColumn} from './objects/seoAndNav'
-import {
-  serviceCard,
-  valuePropItem,
-  stepItem,
-  detailedStepItem,
-  faqItem,
-  referenceItem,
-  serviceBlock,
-  metricChip,
-  clientLogo,
-} from './objects/repeatableItems'
 
-// Document types
 import {siteSettings} from './documents/siteSettings'
 import {homePage} from './documents/homePage'
-import {servicesPage} from './documents/servicesPage'
-import {quotePage} from './documents/quotePage'
-import {howWeWorkPage} from './documents/howWeWorkPage'
-import {portfolioPage, caseStudy} from './documents/portfolio'
-import {blogIndexPage, blogPost} from './documents/blog'
-import {contactPage} from './documents/contactPage'
+import {servicePackage} from './documents/servicePackage'
+import {project} from './documents/project'
+import {faqItem} from './documents/faqItem'
+import {processStep} from './documents/processStep'
+import {valueProp} from './documents/valueProp'
+import {techItem} from './documents/techItem'
+import {legalDoc} from './documents/legalDoc'
+import {post} from './documents/post'
 import {formSubmission} from './documents/formSubmission'
 
 export const schemaTypes = [
-  // objects first
   localeString,
   localeText,
   localeRichText,
-  navLink,
-  footerColumn,
-  serviceCard,
-  valuePropItem,
-  stepItem,
-  detailedStepItem,
-  faqItem,
-  referenceItem,
-  serviceBlock,
-  metricChip,
-  clientLogo,
 
-  // documents
   siteSettings,
   homePage,
-  servicesPage,
-  quotePage,
-  howWeWorkPage,
-  portfolioPage,
-  caseStudy,
-  blogIndexPage,
-  blogPost,
-  contactPage,
+  servicePackage,
+  project,
+  faqItem,
+  processStep,
+  valueProp,
+  techItem,
+  legalDoc,
+  post,
   formSubmission,
 ]
