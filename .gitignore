@@ -30,3 +30,6 @@ backup-*.tar.gz
 
 # Local editor workspace
 *.code-workspace
+
+studio-ftiaxesite/y/
+studio-ftiaxesite/dist/
