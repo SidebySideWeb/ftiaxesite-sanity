@@ -23,3 +23,10 @@ npm-debug.log*
 
 # Sanity Studio runtime
 studio-ftiaxesite/.sanity/
+
+# Local dataset backups (do not commit)
+backup-*.tar.gz
+*.tar.gz
+
+# Local editor workspace
+*.code-workspace
