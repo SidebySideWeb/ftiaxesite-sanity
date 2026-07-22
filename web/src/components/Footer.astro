@@ -1,0 +1,82 @@
+---
+import Localized from './Localized.astro'
+import type {ServicePackageDoc, SiteSettingsDoc} from '../lib/types'
+import {localeAttrs, t} from '../lib/locale'
+
+interface Props {
+  settings: SiteSettingsDoc | null
+  packages: readonly ServicePackageDoc[]
+}
+
+const {settings, packages} = Astro.props
+const year = new Date().getFullYear()
+const copyright = (settings?.copyrightLine ?? '© {year} ftiaxesite.gr. All rights reserved.').replace(
+  '{year}',
+  String(year),
+)
+const phone = settings?.phone?.replace(/\s/g, '') ?? ''
+const telHref = phone ? `tel:${phone.startsWith('+') ? phone : `+30${phone.replace(/^0/, '')}`}` : '#'
+---
+
+<footer>
+  <div class="wrap">
+    <div class="foot-grid">
+      <div class="foot">
+        <a href="/" class="logo" aria-label="ftiaxesite.gr">
+          <img src="/ftiaxesite-logo.svg" alt="ftiaxesite.gr" width="168" height="22" />
+        </a>
+        <Localized value={settings?.tagline} tag="p" class="tag" />
+        {settings?.familyBadge ? <span class="family">{settings.familyBadge}</span> : null}
+      </div>
+      <div class="foot">
+        <Localized value={settings?.footerServicesTitle} tag="h4" />
+        {
+          packages.map((pkg) => (
+            <a href="#pricing" {...localeAttrs(pkg.title)}>{t(pkg.title, 'el')}</a>
+          ))
+        }
+      </div>
+      <div class="foot">
+        <Localized value={settings?.footerContactTitle} tag="h4" />
+        {settings?.email ? <a href={`mailto:${settings.email}`}>{settings.email}</a> : null}
+        {settings?.phone ? <a href={telHref}>{settings.phone}</a> : null}
+        <Localized value={settings?.addressLine} tag="span" class="addr" />
+        {
+          settings?.navCtaLabel ? (
+            <button type="button" class="linklike" data-open="quoteModal" {...localeAttrs(settings.navCtaLabel)}>
+              {t(settings.navCtaLabel, 'el')}
+            </button>
+          ) : null
+        }
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span>{copyright}</span>
+      <span class="legal-links">
+        {
+          settings?.privacyLinkLabel ? (
+            <a href="/privacy/" {...localeAttrs(settings.privacyLinkLabel)}>{t(settings.privacyLinkLabel, 'el')}</a>
+          ) : null
+        }
+        {
+          settings?.cookiesLinkLabel ? (
+            <a href="/cookies/" {...localeAttrs(settings.cookiesLinkLabel)}>{t(settings.cookiesLinkLabel, 'el')}</a>
+          ) : null
+        }
+        {
+          settings?.cookieSettingsLabel ? (
+            <button type="button" id="cookieSettingsBtn" {...localeAttrs(settings.cookieSettingsLabel)}>
+              {t(settings.cookieSettingsLabel, 'el')}
+            </button>
+          ) : null
+        }
+      </span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  document.getElementById('cookieSettingsBtn')?.addEventListener('click', () => {
+    window.__ftiaxesiteShowCookiePreferences?.()
+  })
+</script>

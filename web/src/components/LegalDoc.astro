@@ -1,0 +1,38 @@
+---
+import {localeAttrs, t} from '../lib/locale'
+import type {LegalDocDoc} from '../lib/types'
+
+interface Props {
+  doc: LegalDocDoc | null
+}
+
+const {doc} = Astro.props
+
+function formatBody(text: string): string {
+  return text
+    .split(/\n{2,}/)
+    .map((block) => block.trim())
+    .filter(Boolean)
+    .map((block) => {
+      if (block.startsWith('## ')) {
+        return `<h3>${block.replace(/^##\s+/, '')}</h3>`
+      }
+      if (block.includes('\n- ')) {
+        const [heading, ...rest] = block.split('\n')
+        const items = rest.map((line) => `<li>${line.replace(/^-\s+/, '')}</li>`).join('')
+        return `${heading ? `<p>${heading}</p>` : ''}<ul>${items}</ul>`
+      }
+      if (block.startsWith('- ')) {
+        const items = block.split('\n').map((line) => `<li>${line.replace(/^-\s+/, '')}</li>`).join('')
+        return `<ul>${items}</ul>`
+      }
+      return `<p>${block}</p>`
+    })
+    .join('')
+}
+
+const bodyEl = formatBody(t(doc?.body, 'el'))
+const bodyEn = formatBody(t(doc?.body, 'en'))
+---
+
+<article class="doc" {...localeAttrs({el: bodyEl, en: bodyEn})} set:html={bodyEl} />

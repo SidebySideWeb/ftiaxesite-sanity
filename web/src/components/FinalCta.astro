@@ -1,0 +1,36 @@
+---
+import Localized from './Localized.astro'
+import type {HomePageDoc, SiteSettingsDoc} from '../lib/types'
+import {localeAttrs, t} from '../lib/locale'
+
+interface Props {
+  home: HomePageDoc | null
+  settings: SiteSettingsDoc | null
+}
+
+const {home, settings} = Astro.props
+const phone = settings?.phone?.replace(/\s/g, '') ?? ''
+const telHref = phone ? `tel:${phone.startsWith('+') ? phone : `+30${phone.replace(/^0/, '')}`}` : '#'
+---
+
+<section id="contact" class="cta-final">
+  <div class="wrap reveal">
+    <Localized value={home?.finalCtaEyebrow} tag="span" class="eyebrow" />
+    <Localized value={home?.finalCtaHeading} tag="h2" />
+    <Localized value={home?.finalCtaBody} tag="p" />
+    <div class="cta-row">
+      {
+        home?.finalCtaPrimaryLabel ? (
+          <button type="button" class="btn btn-primary" data-open="quoteModal" {...localeAttrs(home.finalCtaPrimaryLabel)}>
+            {t(home.finalCtaPrimaryLabel, 'el')}
+          </button>
+        ) : null
+      }
+      {
+        settings?.phone ? (
+          <a href={telHref} class="btn btn-ghost">{settings.phone}</a>
+        ) : null
+      }
+    </div>
+  </div>
+</section>

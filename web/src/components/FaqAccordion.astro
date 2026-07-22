@@ -1,0 +1,35 @@
+---
+import Localized from './Localized.astro'
+import type {FaqItemDoc, HomePageDoc} from '../lib/types'
+import {localeAttrs, t} from '../lib/locale'
+
+interface Props {
+  home: HomePageDoc | null
+  faqs: readonly FaqItemDoc[]
+}
+
+const {home, faqs} = Astro.props
+---
+
+<section id="faq" class="block">
+  <div class="wrap">
+    <div class="sec-head reveal" style="margin-left:auto;margin-right:auto;text-align:center">
+      <Localized value={home?.faqEyebrow} tag="span" class="eyebrow" />
+      <Localized value={home?.faqHeading} tag="h2" />
+      {home?.faqIntro ? <Localized value={home.faqIntro} tag="p" /> : null}
+    </div>
+    <div class="faq-list reveal">
+      {
+        faqs.map((item) => (
+          <details class="faq-item">
+            <summary>
+              <span {...localeAttrs(item.question)}>{t(item.question, 'el')}</span>
+              <span class="sign">+</span>
+            </summary>
+            <p class="answer" {...localeAttrs(item.answer)}>{t(item.answer, 'el')}</p>
+          </details>
+        ))
+      }
+    </div>
+  </div>
+</section>

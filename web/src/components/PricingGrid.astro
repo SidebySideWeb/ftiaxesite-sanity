@@ -1,0 +1,26 @@
+---
+import PriceCard from './PriceCard.astro'
+import Localized from './Localized.astro'
+import type {HomePageDoc, ServicePackageDoc} from '../lib/types'
+
+interface Props {
+  home: HomePageDoc | null
+  packages: readonly ServicePackageDoc[]
+}
+
+const {home, packages} = Astro.props
+---
+
+<section id="pricing" class="block">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <Localized value={home?.pricingEyebrow} tag="span" class="eyebrow" />
+      <Localized value={home?.pricingHeading} tag="h2" />
+      <Localized value={home?.pricingIntro} tag="p" />
+    </div>
+    <div class="price-grid card-grid">
+      {packages.map((pkg) => <PriceCard pkg={pkg} home={home} />)}
+    </div>
+    {home?.pricingNote ? <Localized value={home.pricingNote} tag="p" class="price-note reveal" /> : null}
+  </div>
+</section>

@@ -1,0 +1,25 @@
+---
+import ProjectCard from './ProjectCard.astro'
+import Localized from './Localized.astro'
+import type {HomePageDoc, ProjectDoc} from '../lib/types'
+
+interface Props {
+  home: HomePageDoc | null
+  projects: readonly ProjectDoc[]
+}
+
+const {home, projects} = Astro.props
+---
+
+<section id="work" class="block">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <Localized value={home?.workEyebrow} tag="span" class="eyebrow" />
+      <Localized value={home?.workHeading} tag="h2" />
+      <Localized value={home?.workIntro} tag="p" />
+    </div>
+    <div class="work-grid card-grid">
+      {projects.map((project) => <ProjectCard project={project} />)}
+    </div>
+  </div>
+</section>

@@ -1,46 +1,53 @@
 ---
-import BlogPostCard from '../../components/BlogPostCard.astro';
-import SiteLayout from '../../layouts/SiteLayout.astro';
-import { fetchPageFields, fetchPageSeoData, pageField } from '../../lib/cms';
-import { localeToWpmlCode, resolvePageLocale } from '../../lib/i18n';
-import { fetchWordPressPosts } from '../../lib/wordpress.ts';
+import BaseLayout from '../../layouts/BaseLayout.astro'
+import Nav from '../../components/Nav.astro'
+import Footer from '../../components/Footer.astro'
+import Localized from '../../components/Localized.astro'
+import {fetchHomePage, fetchPosts, fetchServicePackages, fetchSiteSettings} from '../../lib/sanity'
+import {imageUrl} from '../../lib/sanity'
+import {localeAttrs, t} from '../../lib/locale'
 
-const locale = resolvePageLocale(Astro.currentLocale);
-const fields = await fetchPageFields('blog', locale);
-const seoData = await fetchPageSeoData('blog', locale);
-const listedBlogPosts = await fetchWordPressPosts({ limit: 12, lang: localeToWpmlCode(locale) });
-const emptyMessage =
-  locale === 'en'
-    ? 'No posts found in Sanity yet. Create blog posts in the Studio.'
-    : 'Δεν βρέθηκαν άρθρα στο Sanity. Δημιούργησε blog posts στο Studio.';
+const [settings, home, posts, packages] = await Promise.all([
+  fetchSiteSettings(),
+  fetchHomePage(),
+  fetchPosts(),
+  fetchServicePackages(),
+])
 ---
 
-<SiteLayout
-  canonicalPath="/blog/"
-  description="Άρθρα και insights για web design, Astro και WordPress headless development."
-  locale={locale}
-  seoData={seoData}
-  title="Blog"
->
-  <section class="mx-auto max-w-container-max-width px-margin-mobile py-section-gap-mobile md:px-margin-desktop md:py-section-gap-desktop">
-    <header class="mb-12 max-w-2xl">
-      <h1 class="mb-4 font-headline-lg text-headline-lg text-on-surface">
-        {pageField(fields, 'fti_blog_hero_title', 'Blog')}
-      </h1>
-      <p class="font-body-lg text-body-lg text-on-surface-variant">
-        {pageField(fields, 'fti_blog_hero_description', 'Άρθρα για ταχύτητα ιστοσελίδων, headless CMS και καλές πρακτικές για επιχειρήσεις.')}
-      </p>
-    </header>
-    <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-      {
-        listedBlogPosts.length === 0 ? (
-          <p class="rounded-lg border border-dashed border-outline-variant bg-surface-container-lowest p-6 text-sm text-on-surface-variant sm:col-span-2 lg:col-span-3">
-            {emptyMessage}
-          </p>
-        ) : (
-          listedBlogPosts.map((blogPost) => <BlogPostCard blogPost={blogPost} locale={locale} />)
-        )
-      }
+<BaseLayout title="Blog | ftiaxesite.gr" settings={settings}>
+  <Nav settings={settings} />
+  <main class="wrap block">
+    <div class="page-hero reveal">
+      <Localized value={home?.workEyebrow} tag="span" class="eyebrow" />
+      <h1 data-el="Blog" data-en="Blog">Blog</h1>
+      <Localized value={home?.workIntro} tag="p" />
     </div>
-  </section>
-</SiteLayout>
+    {
+      posts.length === 0 ? (
+        <p class="reveal" data-el="Δεν υπάρχουν άρθρα ακόμα." data-en="No posts yet.">
+          Δεν υπάρχουν άρθρα ακόμα.
+        </p>
+      ) : (
+        <div class="blog-grid">
+          {
+            posts.map((post) => {
+              const slug = post.slug?.current ?? ''
+              const image = imageUrl(post.mainImage, 640)
+              return (
+                <a class="blog-card reveal" href={`/blog/${slug}/`}>
+                  {image ? <img src={image} alt="" loading="lazy" /> : null}
+                  <div class="body">
+                    <h2 {...localeAttrs(post.title)}>{t(post.title, 'el')}</h2>
+                    <p {...localeAttrs(post.excerpt)}>{t(post.excerpt, 'el')}</p>
+                  </div>
+                </a>
+              )
+            })
+          }
+        </div>
+      )
+    }
+  </main>
+  <Footer settings={settings} packages={packages} />
+</BaseLayout>

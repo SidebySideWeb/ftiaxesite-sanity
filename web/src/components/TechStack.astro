@@ -1,0 +1,48 @@
+---
+import Localized from './Localized.astro'
+import type {HomePageDoc, TechItemDoc} from '../lib/types'
+import {t} from '../lib/locale'
+
+interface Props {
+  home: HomePageDoc | null
+  techItems: readonly TechItemDoc[]
+}
+
+const {home, techItems} = Astro.props
+const technologies = techItems.filter((item) => item.group === 'technology')
+const hosting = techItems.filter((item) => item.group === 'hosting')
+---
+
+<section id="stack" class="block">
+  <div class="wrap">
+    <div class="reveal" style="max-width:62ch">
+      <img
+        class="stack-logo"
+        src="/ftiaxesite-logo-reverse.svg"
+        alt=""
+        width="168"
+        height="22"
+        aria-hidden="true"
+      />
+      <Localized value={home?.stackEyebrow} tag="span" class="eyebrow" />
+      <Localized value={home?.stackHeading} tag="h2" />
+      <Localized value={home?.stackIntro} tag="p" class="sub" />
+    </div>
+    <div class="stack-grid">
+      <div class="stack-col reveal">
+        <Localized value={home?.stackTechHeading} tag="h3" />
+        <div class="chips">
+          {technologies.map((item) => <span class="chip">{item.label}</span>)}
+        </div>
+        <Localized value={home?.stackTechIntro} tag="p" />
+      </div>
+      <div class="stack-col reveal">
+        <Localized value={home?.stackHostingHeading} tag="h3" />
+        <div class="chips">
+          {hosting.map((item) => <span class="chip">{item.label}</span>)}
+        </div>
+        <Localized value={home?.stackHostingIntro} tag="p" />
+      </div>
+    </div>
+  </div>
+</section>

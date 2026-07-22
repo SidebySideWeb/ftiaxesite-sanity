@@ -1,0 +1,33 @@
+---
+import Localized from './Localized.astro'
+import type {HomePageDoc, ProcessStepDoc} from '../lib/types'
+import {localeAttrs, t} from '../lib/locale'
+
+interface Props {
+  home: HomePageDoc | null
+  steps: readonly ProcessStepDoc[]
+}
+
+const {home, steps} = Astro.props
+---
+
+<section id="process" class="block">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <Localized value={home?.processEyebrow} tag="span" class="eyebrow" />
+      <Localized value={home?.processHeading} tag="h2" />
+      {home?.processIntro ? <Localized value={home.processIntro} tag="p" /> : null}
+    </div>
+    <div class="steps">
+      {
+        steps.map((step) => (
+          <div class="step reveal">
+            <span class="n"></span>
+            <h3 {...localeAttrs(step.title)}>{t(step.title, 'el')}</h3>
+            <p {...localeAttrs(step.description)}>{t(step.description, 'el')}</p>
+          </div>
+        ))
+      }
+    </div>
+  </div>
+</section>

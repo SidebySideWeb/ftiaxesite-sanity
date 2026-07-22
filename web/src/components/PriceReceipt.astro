@@ -1,0 +1,32 @@
+---
+import Localized from './Localized.astro'
+import {deliveryLabel, formatPrice, localeAttrs, t} from '../lib/locale'
+import type {LocalizedString, ServicePackageDoc} from '../lib/types'
+
+interface Props {
+  packages: readonly ServicePackageDoc[]
+  badge?: LocalizedString | null
+}
+
+const {packages, badge} = Astro.props
+---
+
+<div class="mock">
+  <div class="mock-bar"><i></i><i></i><i></i><span class="mock-url">ftiaxesite.gr</span></div>
+  <div class="mock-body">
+    {
+      packages.map((pkg) => (
+        <div class="receipt-row">
+          <span class="svc">
+            <span {...localeAttrs(pkg.title)}>{t(pkg.title, 'el')}</span>
+            <span class="time" {...localeAttrs({el: deliveryLabel(pkg.deliveryDaysMin, pkg.deliveryDaysMax, 'el'), en: deliveryLabel(pkg.deliveryDaysMin, pkg.deliveryDaysMax, 'en')})}>
+              {deliveryLabel(pkg.deliveryDaysMin, pkg.deliveryDaysMax, 'el')}
+            </span>
+          </span>
+          <span class="price">{pkg.price != null ? formatPrice(pkg.price, 'el') : ''}</span>
+        </div>
+      ))
+    }
+    {badge ? <Localized value={badge} tag="span" class="receipt-tag" /> : null}
+  </div>
+</div>

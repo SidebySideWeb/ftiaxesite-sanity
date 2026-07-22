@@ -1,6 +1,9 @@
 import {createClient} from '@sanity/client'
 import {getSecret} from 'astro:env/server'
-import {sanityApiVersion, sanityDataset, sanityProjectId} from './sanity-project'
+
+const sanityProjectId = import.meta.env.PUBLIC_SANITY_PROJECT_ID ?? '29vmuk87'
+const sanityDataset = import.meta.env.PUBLIC_SANITY_DATASET ?? 'production'
+const sanityApiVersion = '2024-01-01'
 
 export function createSanityWriteClient() {
   const token = getSecret('SANITY_WRITE_TOKEN')

@@ -1,0 +1,29 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro'
+import Nav from '../../components/Nav.astro'
+import Footer from '../../components/Footer.astro'
+import LegalDoc from '../../components/LegalDoc.astro'
+import Localized from '../../components/Localized.astro'
+import {fetchLegalDoc, fetchServicePackages, fetchSiteSettings} from '../../lib/sanity'
+import {t} from '../../lib/locale'
+
+const [settings, doc, packages] = await Promise.all([
+  fetchSiteSettings(),
+  fetchLegalDoc('cookies'),
+  fetchServicePackages(),
+])
+---
+
+<BaseLayout
+  title={t(doc?.title, 'el') ? `${t(doc?.title, 'el')} | ftiaxesite.gr` : undefined}
+  settings={settings}
+>
+  <Nav settings={settings} />
+  <main class="wrap block">
+    <div class="page-hero">
+      <Localized value={doc?.title} tag="h1" />
+    </div>
+    <LegalDoc doc={doc} />
+  </main>
+  <Footer settings={settings} packages={packages} />
+</BaseLayout>

@@ -1,0 +1,46 @@
+---
+import Localized from './Localized.astro'
+import PriceReceipt from './PriceReceipt.astro'
+import type {HomePageDoc, ServicePackageDoc} from '../lib/types'
+import {localeAttrs, t} from '../lib/locale'
+
+interface Props {
+  home: HomePageDoc | null
+  packages: readonly ServicePackageDoc[]
+}
+
+const {home, packages} = Astro.props
+---
+
+<span id="top"></span>
+
+<section class="hero">
+  <div class="wrap hero-grid">
+    <div class="reveal">
+      <Localized value={home?.heroEyebrow} tag="span" class="eyebrow" />
+      <h1>
+        <span {...localeAttrs(home?.heroHeading)}>{t(home?.heroHeading, 'el')}</span>{' '}
+        <span class="hl" {...localeAttrs(home?.heroHighlight)}>{t(home?.heroHighlight, 'el')}</span>.
+      </h1>
+      <Localized value={home?.heroBody} tag="p" class="lead" />
+      <div class="hero-cta">
+        <a href="#pricing" class="btn btn-primary" {...localeAttrs(home?.ctaPrimaryLabel)}>
+          {t(home?.ctaPrimaryLabel, 'el')}
+        </a>
+        <button type="button" class="btn btn-ghost" data-open="quoteModal" {...localeAttrs(home?.ctaSecondaryLabel)}>
+          {t(home?.ctaSecondaryLabel, 'el')}
+        </button>
+      </div>
+      {
+        home?.heroToolsLine ? (
+          <div class="tools">
+            <span class="dot"></span><span>{home.heroToolsLine}</span>
+          </div>
+        ) : null
+      }
+    </div>
+    <div class="reveal">
+      <PriceReceipt packages={packages} badge={home?.receiptBadge} />
+    </div>
+  </div>
+</section>

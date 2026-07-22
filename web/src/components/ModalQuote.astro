@@ -1,0 +1,88 @@
+---
+import QuoteForm from './QuoteForm.astro'
+import Localized from './Localized.astro'
+import type {HomePageDoc, ServicePackageDoc, SiteSettingsDoc} from '../lib/types'
+import {localeAttrs, t} from '../lib/locale'
+
+interface Props {
+  home: HomePageDoc | null
+  packages: readonly ServicePackageDoc[]
+  settings: SiteSettingsDoc | null
+}
+
+const {home, packages, settings} = Astro.props
+const copy = home?.quoteForm
+---
+
+<dialog id="quoteModal" class="modal modal-lg" aria-labelledby="quoteTitle">
+  <div class="modal-panel">
+    <div class="modal-head">
+      <div>
+        <h2 id="quoteTitle" {...localeAttrs(copy?.title)}>{t(copy?.title, 'el')}</h2>
+        {copy?.intro ? <p {...localeAttrs(copy.intro)}>{t(copy.intro, 'el')}</p> : null}
+      </div>
+      <button type="button" class="modal-close" data-close aria-label="Close">✕</button>
+    </div>
+    <div class="modal-body">
+      <QuoteForm home={home} packages={packages} settings={settings} formId="quoteForm" />
+    </div>
+  </div>
+</dialog>
+
+<script>
+  let lastFocus = null
+
+  function openModal(id, pkg) {
+    const dialog = document.getElementById(id)
+    if (!dialog || !(dialog instanceof HTMLDialogElement)) return
+    lastFocus = document.activeElement
+    if (pkg) {
+      const sel = document.getElementById('quoteForm-package') || document.getElementById('qPackage')
+      if (sel) sel.value = pkg
+    }
+    dialog.showModal()
+    document.body.classList.add('modal-open')
+    const first = dialog.querySelector('input,select,textarea,button.btn')
+    if (first instanceof HTMLElement) first.focus()
+  }
+
+  function closeModal(dialog) {
+    if (!dialog || !(dialog instanceof HTMLDialogElement)) return
+    dialog.close()
+    document.body.classList.remove('modal-open')
+    if (lastFocus instanceof HTMLElement) lastFocus.focus()
+  }
+
+  function bindModalHandlers() {
+    document.addEventListener('click', (event) => {
+      const target = event.target
+      if (!(target instanceof Element)) return
+
+      const opener = target.closest('[data-open]')
+      if (opener) {
+        event.preventDefault()
+        openModal(opener.getAttribute('data-open'), opener.getAttribute('data-package'))
+        return
+      }
+
+      const closer = target.closest('[data-close]')
+      if (closer) {
+        closeModal(closer.closest('dialog'))
+        return
+      }
+
+      if (target.tagName === 'DIALOG') {
+        closeModal(target)
+      }
+    })
+
+    document.querySelectorAll('dialog.modal').forEach((dialog) => {
+      dialog.addEventListener('cancel', () => {
+        document.body.classList.remove('modal-open')
+      })
+    })
+  }
+
+  bindModalHandlers()
+  document.addEventListener('astro:page-load', bindModalHandlers)
+</script>

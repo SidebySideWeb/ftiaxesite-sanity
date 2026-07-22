@@ -1,0 +1,27 @@
+---
+import Localized from './Localized.astro'
+import type {ValuePropDoc} from '../lib/types'
+import {localeAttrs, t} from '../lib/locale'
+
+interface Props {
+  items: readonly ValuePropDoc[]
+}
+
+const {items} = Astro.props
+---
+
+<section class="block" style="padding-top:20px;padding-bottom:8px">
+  <div class="wrap">
+    <div class="values-grid card-grid">
+      {
+        items.map((item, index) => (
+          <div class="card vcard reveal">
+            <span class="vnum">{String(index + 1).padStart(2, '0')}</span>
+            <h3 {...localeAttrs(item.title)}>{t(item.title, 'el')}</h3>
+            <p {...localeAttrs(item.description)}>{t(item.description, 'el')}</p>
+          </div>
+        ))
+      }
+    </div>
+  </div>
+</section>

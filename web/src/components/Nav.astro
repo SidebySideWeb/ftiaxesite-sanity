@@ -1,0 +1,64 @@
+---
+import Localized from './Localized.astro'
+import type {NavLink, SiteSettingsDoc} from '../lib/types'
+import {localeAttrs, t} from '../lib/locale'
+
+interface Props {
+  settings: SiteSettingsDoc | null
+}
+
+const {settings} = Astro.props
+const navLinks = settings?.navLinks ?? []
+const ctaLabel = settings?.navCtaLabel
+---
+
+<header class="nav">
+  <div class="wrap nav-inner">
+    <a href="/" class="logo" aria-label="ftiaxesite.gr">
+      <img src="/ftiaxesite-logo.svg" alt="ftiaxesite.gr" width="168" height="22" />
+    </a>
+    <nav class="nav-links" id="primaryNav">
+      {
+        navLinks.map((link: NavLink) => (
+          <a class="nl" href={link.href ?? '#'} {...localeAttrs(link.label)}>
+            {t(link.label, 'el')}
+          </a>
+        ))
+      }
+    </nav>
+    <div class="nav-right">
+      <div class="lang" role="group" aria-label="Language">
+        <button type="button" data-lang="el" class="active">EL</button>
+        <button type="button" data-lang="en">EN</button>
+      </div>
+      {
+        ctaLabel ? (
+          <button type="button" class="btn btn-primary btn-sm" data-open="quoteModal" {...localeAttrs(ctaLabel)}>
+            {t(ctaLabel, 'el')}
+          </button>
+        ) : null
+      }
+    </div>
+    <button type="button" class="burger" aria-label="Menu" id="navBurger">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<script>
+  const burger = document.getElementById('navBurger')
+  const nav = document.getElementById('primaryNav')
+  burger?.addEventListener('click', () => {
+    if (!nav) return
+    const open = getComputedStyle(nav).display === 'none'
+    nav.style.display = open ? 'flex' : ''
+    nav.style.flexDirection = 'column'
+    nav.style.position = 'absolute'
+    nav.style.top = '70px'
+    nav.style.left = '0'
+    nav.style.right = '0'
+    nav.style.background = 'var(--cream)'
+    nav.style.padding = '16px 24px'
+    nav.style.borderBottom = '1px solid var(--line)'
+  })
+</script>

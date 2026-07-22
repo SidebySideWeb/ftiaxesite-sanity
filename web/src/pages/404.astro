@@ -1,0 +1,16 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro'
+import {fetchServicePackages, fetchSiteSettings} from '../lib/sanity'
+
+const [settings, packages] = await Promise.all([fetchSiteSettings(), fetchServicePackages()])
+---
+
+<BaseLayout title="404 | ftiaxesite.gr" settings={settings} noindex={true}>
+  <main class="not-found">
+    <h1 data-el="Η σελίδα δεν βρέθηκε" data-en="Page not found">Η σελίδα δεν βρέθηκε</h1>
+    <p data-el="Η διεύθυνση που ζήτησες δεν υπάρχει." data-en="The page you requested does not exist.">
+      Η διεύθυνση που ζήτησες δεν υπάρχει.
+    </p>
+    <a href="/" class="btn btn-primary" data-el="Πίσω στην αρχική" data-en="Back to home">Πίσω στην αρχική</a>
+  </main>
+</BaseLayout>

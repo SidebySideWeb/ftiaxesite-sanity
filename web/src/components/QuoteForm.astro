@@ -1,178 +1,238 @@
 ---
-import CalBookingLink from './CalBookingLink.astro'
+import Localized from './Localized.astro'
+import {formatPrice, localeAttrs, t} from '../lib/locale'
+import type {HomePageDoc, ServicePackageDoc, SiteSettingsDoc} from '../lib/types'
 
 interface Props {
-  readonly submitNote?: string
+  home: HomePageDoc | null
+  packages: readonly ServicePackageDoc[]
+  settings: SiteSettingsDoc | null
+  formId?: string
+  showHeader?: boolean
 }
 
-const {submitNote = 'Καμία δέσμευση. Θα λάβεις μια αρχική εκτίμηση εντός 24 ωρών.'} = Astro.props
+const {home, packages, settings, formId = 'quoteForm', showHeader = false} = Astro.props
+const copy = home?.quoteForm
+const calUrl =
+  settings?.calBookingUrl ?? 'https://cal.com/dimitris-geronikolos-z3h6en/chat-for-your-project'
 
-const inputClass =
-  'w-full rounded-DEFAULT border border-outline-variant bg-surface-container-low px-4 py-3 text-body-md outline-none transition-all focus:border-primary focus:ring-1 focus:ring-primary'
-const labelClass = 'font-label-md text-on-surface-variant'
+function packageOptionLabel(pkg: ServicePackageDoc): {el: string; en: string} {
+  const titleEl = t(pkg.title, 'el')
+  const titleEn = t(pkg.title, 'en')
+  const priceEl = pkg.price != null ? formatPrice(pkg.price, 'el') : ''
+  const priceEn = pkg.price != null ? formatPrice(pkg.price, 'en') : ''
+  return {
+    el: `${titleEl}, ${priceEl}`.trim(),
+    en: `${titleEn}, ${priceEn}`.trim(),
+  }
+}
+
+const timelineOptions = [
+  {value: 'asap', label: copy?.timelineAsap},
+  {value: 'soon', label: copy?.timelineSoon},
+  {value: 'flexible', label: copy?.timelineFlexible},
+]
 ---
 
-<div class="quote-form" data-quote-form>
-  <form class="space-y-6" data-quote-form-fields novalidate>
-    <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
-      <div class="space-y-2">
-        <label class={labelClass} for="quote-name">Όνοματεπώνυμο *</label>
-        <input class={inputClass} id="quote-name" name="name" required type="text" autocomplete="name" />
+<div class="quote-form-wrap">
+  {
+    showHeader && copy ? (
+      <div class="modal-head" style="border-bottom:none;padding-bottom:0">
+        <div>
+          <Localized value={copy.title} tag="h2" />
+          <Localized value={copy.intro} tag="p" />
+        </div>
       </div>
-      <div class="space-y-2">
-        <label class={labelClass} for="quote-email">Email *</label>
-        <input class={inputClass} id="quote-email" name="email" required type="email" autocomplete="email" />
+    ) : null
+  }
+
+  <form id={formId} class="quote-form" novalidate>
+    <div class="form-grid">
+      <div class="field">
+        <label for={`${formId}-name`} {...localeAttrs(copy?.nameLabel)}>
+          {t(copy?.nameLabel, 'el')} <span class="req">*</span>
+        </label>
+        <input type="text" id={`${formId}-name`} name="name" required autocomplete="name" />
+      </div>
+      <div class="field">
+        <label for={`${formId}-email`} {...localeAttrs(copy?.emailLabel)}>
+          {t(copy?.emailLabel, 'el')} <span class="req">*</span>
+        </label>
+        <input type="email" id={`${formId}-email`} name="email" required autocomplete="email" />
+      </div>
+      <div class="field">
+        <label for={`${formId}-company`} {...localeAttrs(copy?.companyLabel)}>
+          {t(copy?.companyLabel, 'el')}
+        </label>
+        <input type="text" id={`${formId}-company`} name="company" autocomplete="organization" />
+      </div>
+      <div class="field">
+        <label for={`${formId}-package`} {...localeAttrs(copy?.packageLabel)}>
+          {t(copy?.packageLabel, 'el')} <span class="req">*</span>
+        </label>
+        <select id={`${formId}-package`} name="package" required>
+          <option value="" {...localeAttrs(copy?.packagePlaceholder)}>{t(copy?.packagePlaceholder, 'el')}</option>
+          {
+            packages.map((pkg) => {
+              const label = packageOptionLabel(pkg)
+              const slug = pkg.slug?.current ?? ''
+              return (
+                <option value={slug} data-title-el={t(pkg.title, 'el')} data-title-en={t(pkg.title, 'en')} {...localeAttrs(label)}>
+                  {label.el}
+                </option>
+              )
+            })
+          }
+          <option value="other" {...localeAttrs(copy?.otherPackageLabel)}>{t(copy?.otherPackageLabel, 'el')}</option>
+        </select>
+      </div>
+      <div class="field full">
+        <label class="check">
+          <input type="checkbox" id={`${formId}-hasSite`} name="hasSite" />
+          <span {...localeAttrs(copy?.hasSiteLabel)}>{t(copy?.hasSiteLabel, 'el')}</span>
+        </label>
+      </div>
+      <div class="field full hidden" id={`${formId}-urlField`}>
+        <label for={`${formId}-url`} {...localeAttrs(copy?.existingUrlLabel)}>
+          {t(copy?.existingUrlLabel, 'el')}
+        </label>
+        <input type="url" id={`${formId}-url`} name="existingUrl" placeholder="https://" />
+      </div>
+      <div class="field full">
+        <label for={`${formId}-desc`} {...localeAttrs(copy?.descriptionLabel)}>
+          {t(copy?.descriptionLabel, 'el')} <span class="req">*</span>
+        </label>
+        <textarea id={`${formId}-desc`} name="description" required></textarea>
+      </div>
+      <div class="field full">
+        <label for={`${formId}-time`} {...localeAttrs(copy?.timelineLabel)}>
+          {t(copy?.timelineLabel, 'el')} <span class="req">*</span>
+        </label>
+        <select id={`${formId}-time`} name="timeline" required>
+          <option value="" {...localeAttrs(copy?.timelinePlaceholder)}>{t(copy?.timelinePlaceholder, 'el')}</option>
+          {
+            timelineOptions.map((option) => (
+              <option
+                value={option.value}
+                data-label-el={t(option.label, 'el')}
+                data-label-en={t(option.label, 'en')}
+                {...localeAttrs(option.label)}
+              >
+                {t(option.label, 'el')}
+              </option>
+            ))
+          }
+        </select>
       </div>
     </div>
-
-    <div class="space-y-2">
-      <label class={labelClass} for="quote-company">Επωνυμία Επιχείρησης (προαιρετικά)</label>
-      <input class={inputClass} id="quote-company" name="company" type="text" autocomplete="organization" />
-    </div>
-
-    <div class="space-y-2">
-      <label class={labelClass} for="quote-project-type">Τύπος Project *</label>
-      <select class={inputClass} id="quote-project-type" name="projectType" required>
-        <option disabled selected value="">Επιλέξτε κατηγορία</option>
-        <option value="Απλό site παρουσίασης">Απλό site παρουσίασης</option>
-        <option value="Site με διαχείριση (WordPress)">Site με διαχείριση (WordPress)</option>
-        <option value="E-shop / Σύνθετη εφαρμογή">E-shop / Σύνθετη εφαρμογή</option>
-        <option value="Άλλο">Άλλο</option>
-      </select>
-    </div>
-
-    <div class="space-y-3">
-      <label class="flex cursor-pointer items-start gap-3">
-        <input
-          class="mt-1 h-4 w-4 rounded border-outline-variant text-primary focus:ring-primary"
-          id="quote-has-website"
-          name="hasExistingWebsite"
-          type="checkbox"
-        />
-        <span class="font-body-md text-on-surface">Έχω ήδη ιστοσελίδα και θέλω ανανέωση</span>
-      </label>
-      <div class="hidden space-y-2" data-quote-existing-url-wrap>
-        <label class={labelClass} for="quote-existing-url">URL υπάρχουσας ιστοσελίδας</label>
-        <input
-          class={inputClass}
-          id="quote-existing-url"
-          name="existingWebsiteUrl"
-          placeholder="https://www.mysite.gr"
-          type="url"
-        />
-      </div>
-    </div>
-
-    <div class="space-y-2">
-      <label class={labelClass} for="quote-message">Περιγραφή Project *</label>
-      <textarea
-        class={`${inputClass} resize-none`}
-        id="quote-message"
-        name="message"
-        placeholder="Περιγράψτε μας τι έχετε στο μυαλό σας..."
-        required
-        rows="5"
-      ></textarea>
-    </div>
-
-    <div class="space-y-2">
-      <label class={labelClass} for="quote-timeline">Επιθυμητό Χρονοδιάγραμμα *</label>
-      <select class={inputClass} id="quote-timeline" name="timeline" required>
-        <option disabled selected value="">Πότε το χρειάζεστε;</option>
-        <option value="Άμεσα (εντός 1 μήνα)">Άμεσα (εντός 1 μήνα)</option>
-        <option value="Σύντομα (1-3 μήνες)">Σύντομα (1-3 μήνες)</option>
-        <option value="Ευέλικτο (πάνω από 3 μήνες)">Ευέλικτο (πάνω από 3 μήνες)</option>
-      </select>
-    </div>
-
-    <p class="hidden font-body-sm text-body-sm text-error" data-quote-form-error role="alert"></p>
-
-    <div class="pt-4 text-center">
-      <button
-        class="w-full rounded-full bg-primary py-4 font-label-lg text-lg text-on-primary shadow-sm transition-all duration-300 hover:translate-y-[-1px] hover:shadow-md active:scale-95 disabled:cursor-not-allowed disabled:opacity-60"
-        data-quote-submit
-        type="submit"
-      >
-        Στείλε το αίτημα
-      </button>
-      <p class="mt-4 font-body-sm text-body-sm text-on-surface-variant">{submitNote}</p>
+    <div class="form-foot">
+      {
+        copy?.submitLabel ? (
+          <button type="submit" class="btn btn-primary" {...localeAttrs(copy.submitLabel)}>
+            {t(copy.submitLabel, 'el')}
+          </button>
+        ) : null
+      }
+      {copy?.footnote ? <Localized value={copy.footnote} tag="span" class="note" /> : null}
     </div>
   </form>
 
-  <div class="hidden text-center" data-quote-form-success>
-    <div class="mx-auto mb-8 flex h-16 w-16 items-center justify-center rounded-full bg-primary-container/20">
-      <span class="material-symbols-outlined text-4xl text-primary">check_circle</span>
-    </div>
-    <h3 class="mb-4 font-headline-sm text-headline-sm text-on-surface">Ευχαριστούμε — λάβαμε το αίτημά σου!</h3>
-    <p class="mb-8 font-body-md text-on-surface-variant">{submitNote}</p>
-    <p class="mb-4 font-body-sm text-body-sm text-on-surface-variant">Θέλεις να μιλήσουμε πιο σύντομα;</p>
-    <CalBookingLink />
+  <div class="success hidden" id={`${formId}-success`}>
+    <span class="mark">✓</span>
+    {copy?.successTitle ? <Localized value={copy.successTitle} tag="h3" /> : null}
+    {copy?.successBody ? <Localized value={copy.successBody} tag="p" /> : null}
+    <span class="divider"></span>
+    {copy?.successCallPrompt ? <Localized value={copy.successCallPrompt} tag="p" /> : null}
+    {
+      copy?.successCalLabel ? (
+        <a class="btn btn-primary" href={calUrl} target="_blank" rel="noopener noreferrer" {...localeAttrs(copy.successCalLabel)}>
+          {t(copy.successCalLabel, 'el')}
+        </a>
+      ) : null
+    }
   </div>
 </div>
 
-<script>
-  function initQuoteForm(root: HTMLElement): void {
-    const form = root.querySelector<HTMLFormElement>('[data-quote-form-fields]')
-    const successPanel = root.querySelector<HTMLElement>('[data-quote-form-success]')
-    const errorEl = root.querySelector<HTMLElement>('[data-quote-form-error]')
-    const submitBtn = root.querySelector<HTMLButtonElement>('[data-quote-submit]')
-    const hasWebsiteCheckbox = root.querySelector<HTMLInputElement>('#quote-has-website')
-    const existingUrlWrap = root.querySelector<HTMLElement>('[data-quote-existing-url-wrap]')
+<script define:vars={{formId, calUrl}}>
+  function initQuoteForm(id) {
+    const form = document.getElementById(id)
+    if (!form || form.dataset.bound === 'true') return
+    form.dataset.bound = 'true'
 
-    if (!form || !successPanel || !errorEl || !submitBtn) {
-      return
-    }
+    const hasSite = document.getElementById(`${id}-hasSite`)
+    const urlField = document.getElementById(`${id}-urlField`)
+    const success = document.getElementById(`${id}-success`)
+    const packageSelect = document.getElementById(`${id}-package`)
+    const timelineSelect = document.getElementById(`${id}-time`)
 
-    hasWebsiteCheckbox?.addEventListener('change', () => {
-      if (!existingUrlWrap) return
-      existingUrlWrap.classList.toggle('hidden', !hasWebsiteCheckbox.checked)
+    hasSite?.addEventListener('change', () => {
+      urlField?.classList.toggle('hidden', !hasSite.checked)
     })
 
     form.addEventListener('submit', async (event) => {
       event.preventDefault()
-      errorEl.classList.add('hidden')
-      errorEl.textContent = ''
-      submitBtn.disabled = true
-      submitBtn.textContent = 'Αποστολή…'
+      if (!form.reportValidity()) return
 
-      const formData = new FormData(form)
-      const payload = {
-        name: String(formData.get('name') ?? '').trim(),
-        email: String(formData.get('email') ?? '').trim(),
-        company: String(formData.get('company') ?? '').trim() || undefined,
-        projectType: String(formData.get('projectType') ?? '').trim(),
-        hasExistingWebsite: hasWebsiteCheckbox?.checked ?? false,
-        existingWebsiteUrl: String(formData.get('existingWebsiteUrl') ?? '').trim() || undefined,
-        message: String(formData.get('message') ?? '').trim(),
-        timeline: String(formData.get('timeline') ?? '').trim(),
+      const selectedPackage = packageSelect?.selectedOptions?.[0]
+      const selectedTimeline = timelineSelect?.selectedOptions?.[0]
+      const lang = document.documentElement.lang === 'en' ? 'en' : 'el'
+
+      let projectType = ''
+      if (packageSelect?.value === 'other') {
+        projectType = lang === 'en' ? 'Something else, not sure yet' : 'Κάτι άλλο, δεν είμαι σίγουρος'
+      } else if (selectedPackage) {
+        projectType =
+          lang === 'en'
+            ? selectedPackage.getAttribute('data-title-en') || selectedPackage.textContent?.trim() || ''
+            : selectedPackage.getAttribute('data-title-el') || selectedPackage.textContent?.trim() || ''
       }
+
+      const timeline =
+        lang === 'en'
+          ? selectedTimeline?.getAttribute('data-label-en') || selectedTimeline?.textContent?.trim() || ''
+          : selectedTimeline?.getAttribute('data-label-el') || selectedTimeline?.textContent?.trim() || ''
+
+      const payload = {
+        name: form.querySelector('[name="name"]')?.value?.trim(),
+        email: form.querySelector('[name="email"]')?.value?.trim(),
+        company: form.querySelector('[name="company"]')?.value?.trim() || undefined,
+        projectType,
+        hasExistingWebsite: Boolean(hasSite?.checked),
+        existingWebsiteUrl: form.querySelector('[name="existingUrl"]')?.value?.trim() || undefined,
+        message: form.querySelector('[name="description"]')?.value?.trim(),
+        timeline,
+      }
+
+      const submitBtn = form.querySelector('[type="submit"]')
+      if (submitBtn) submitBtn.disabled = true
 
       try {
         const response = await fetch('/api/quote-request/', {
           method: 'POST',
-          headers: {'Content-Type': 'application/json', Accept: 'application/json'},
+          headers: {'Content-Type': 'application/json'},
           body: JSON.stringify(payload),
         })
-
-        const result = (await response.json()) as {success?: boolean; error?: string}
-
+        const result = await response.json()
         if (!response.ok || !result.success) {
-          throw new Error(result.error ?? 'Unable to save your submission.')
+          throw new Error(result.error || 'Submit failed')
         }
 
+        window.dataLayer = window.dataLayer || []
+        window.dataLayer.push({
+          event: 'quote_form_submit',
+          quote_package: packageSelect?.value || '',
+        })
+
         form.classList.add('hidden')
-        successPanel.classList.remove('hidden')
-        successPanel.scrollIntoView({behavior: 'smooth', block: 'nearest'})
+        success?.classList.remove('hidden')
       } catch (error) {
-        errorEl.textContent =
-          error instanceof Error ? error.message : 'Δεν ήταν δυνατή η αποστολή. Δοκίμασε ξανά.'
-        errorEl.classList.remove('hidden')
-      } finally {
-        submitBtn.disabled = false
-        submitBtn.textContent = 'Στείλε το αίτημα'
+        console.error(error)
+        if (submitBtn) submitBtn.disabled = false
+        alert(document.documentElement.lang === 'en' ? 'Something went wrong. Please try again.' : 'Κάτι πήγε στραβά. Δοκίμασε ξανά.')
       }
     })
   }
 
-  document.querySelectorAll<HTMLElement>('[data-quote-form]').forEach(initQuoteForm)
+  initQuoteForm(formId)
+  document.addEventListener('astro:page-load', () => initQuoteForm(formId))
 </script>

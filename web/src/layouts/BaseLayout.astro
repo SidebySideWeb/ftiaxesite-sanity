@@ -1,81 +1,104 @@
 ---
-import Analytics from '../components/Analytics.astro';
+import '@fontsource/manrope/500.css'
+import '@fontsource/manrope/600.css'
+import '@fontsource/manrope/700.css'
+import '@fontsource/manrope/800.css'
+import '@fontsource/inter/400.css'
+import '@fontsource/inter/500.css'
+import '@fontsource/inter/600.css'
+import '../styles/global.css'
+import Analytics from '../components/Analytics.astro'
+import CookieConsent from '../components/CookieConsent.astro'
+import {buildCanonicalUrl, resolveSiteOrigin} from '../lib/site-url'
+import {t} from '../lib/locale'
+import type {SiteSettingsDoc} from '../lib/types'
 
 interface Props {
-  readonly title: string;
-  readonly description: string;
-  readonly canonicalPath?: string;
-  readonly ogImageUrl?: string | null;
+  title?: string
+  description?: string
+  settings?: SiteSettingsDoc | null
+  noindex?: boolean
 }
 
-const { title, description, canonicalPath, ogImageUrl } = Astro.props;
+const {title, description, settings = null, noindex = false} = Astro.props
+const siteOrigin = resolveSiteOrigin(Astro.site)
+const canonical = buildCanonicalUrl(Astro.url.pathname, siteOrigin)
 
-const siteUrl = (import.meta.env.SITE_URL ?? '').replace(/\/$/, '');
-const siteName = import.meta.env.SITE_NAME ?? 'Astro + WordPress';
-
-const canonicalUrl = ((): string | undefined => {
-  if (siteUrl.length === 0) {
-    return undefined;
-  }
-  if (!canonicalPath) {
-    return undefined;
-  }
-  const normalizedPath = canonicalPath.startsWith('/') ? canonicalPath : `/${canonicalPath}`;
-  return `${siteUrl}${normalizedPath}`;
-})();
-
-const pageTitle = `${title} · ${siteName}`;
+const pageTitle =
+  title ??
+  t(settings?.defaultSeoTitle, 'el') ??
+  'Κατασκευή Ιστοσελίδων & Eshop | Το Site σου σε 2 Εβδομάδες | ftiaxesite.gr'
+const pageDescription =
+  description ??
+  t(settings?.defaultSeoDescription, 'el') ??
+  'Επαγγελματική κατασκευή και ανακατασκευή ιστοσελίδων για ελληνικές επιχειρήσεις. Ξεκάθαρες τιμές από 900 ευρώ, γρήγορη παράδοση σε 2 εβδομάδες, χωρίς κρυφές χρεώσεις.'
 ---
 
 <!doctype html>
-<html class="h-full" lang="en">
+<html lang="el" class="no-js">
   <head>
-    <Analytics placement="head" />
-    <meta charset="utf-8" />
-    <meta content="width=device-width, initial-scale=1" name="viewport" />
-    <meta content={description} name="description" />
-    <meta content={siteName} name="author" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{pageTitle}</title>
-    {canonicalUrl ? <link href={canonicalUrl} rel="canonical" /> : null}
-    <meta content={pageTitle} property="og:title" />
-    <meta content={description} property="og:description" />
-    <meta content="website" property="og:type" />
-    {canonicalUrl ? <meta content={canonicalUrl} property="og:url" /> : null}
-    {ogImageUrl ? <meta content={ogImageUrl} property="og:image" /> : null}
-    <meta content="summary_large_image" name="twitter:card" />
-    <meta content={pageTitle} name="twitter:title" />
-    <meta content={description} name="twitter:description" />
-    {ogImageUrl ? <meta content={ogImageUrl} name="twitter:image" /> : null}
-    <link href="/favicon.png" rel="icon" type="image/png" />
-    <link href="/favicon.png" rel="apple-touch-icon" />
+    <meta name="description" content={pageDescription} />
+    <link rel="canonical" href={canonical} />
+    {noindex ? <meta name="robots" content="noindex,nofollow" /> : null}
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="el_GR" />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={pageDescription} />
+    <meta property="og:url" content={canonical} />
+    <link rel="icon" href="/favicon.ico" sizes="any" />
+    <link rel="icon" href="/ftiaxesite-favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <script is:inline>
+      document.documentElement.classList.replace('no-js', 'js')
+    </script>
+    <Analytics placement="head" />
+    <slot name="head" />
   </head>
-  <body class="min-h-full bg-slate-50 text-slate-900 antialiased">
+  <body>
     <Analytics placement="body" />
-    <a
-      class="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:rounded-md focus:bg-white focus:px-3 focus:py-2 focus:text-sm focus:font-semibold focus:text-slate-900 focus:shadow-lg"
-      href="#main-content"
-    >
-      Skip to content
-    </a>
-    <div class="flex min-h-full flex-col">
-      <header class="border-b border-slate-200 bg-white">
-        <div class="mx-auto flex w-full max-w-6xl flex-col gap-4 px-4 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-6 lg:px-8">
-          <a class="text-lg font-semibold tracking-tight text-slate-900" href="/">{siteName}</a>
-          <nav aria-label="Primary" class="flex flex-wrap gap-x-6 gap-y-2 text-sm font-medium">
-            <a class="text-slate-700 hover:text-slate-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-600" href="/">Home</a>
-            <a class="text-slate-700 hover:text-slate-900 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-600" href="/blog/">Blog</a>
-          </nav>
-        </div>
-      </header>
-      <main class="flex-1" id="main-content">
-        <slot />
-      </main>
-      <footer class="border-t border-slate-200 bg-white">
-        <div class="mx-auto flex w-full max-w-6xl flex-col gap-2 px-4 py-8 text-sm text-slate-600 sm:px-6 lg:px-8">
-          <p class="font-medium text-slate-800">{siteName}</p>
-          <p>Powered by Astro and a headless WordPress CMS.</p>
-        </div>
-      </footer>
-    </div>
+    <slot />
+    <CookieConsent />
+    <script is:inline>
+      function setLang(lang) {
+        document.documentElement.lang = lang
+        document.querySelectorAll('[data-el]').forEach(function (el) {
+          var val = el.getAttribute('data-' + lang)
+          if (val !== null) el.innerHTML = val
+        })
+        document.querySelectorAll('.lang button').forEach(function (btn) {
+          btn.classList.toggle('active', btn.getAttribute('data-lang') === lang)
+        })
+      }
+
+      document.querySelectorAll('.lang button[data-lang]').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          setLang(btn.getAttribute('data-lang'))
+        })
+      })
+
+      var io = new IntersectionObserver(
+        function (entries) {
+          entries.forEach(function (entry) {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('in')
+              io.unobserve(entry.target)
+            }
+          })
+        },
+        {threshold: 0.12},
+      )
+
+      function initReveal() {
+        document.querySelectorAll('.reveal').forEach(function (el) {
+          io.observe(el)
+        })
+      }
+
+      initReveal()
+      document.addEventListener('astro:page-load', initReveal)
+    </script>
   </body>
 </html>

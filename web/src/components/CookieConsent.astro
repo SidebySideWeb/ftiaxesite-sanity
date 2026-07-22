@@ -1,0 +1,93 @@
+---
+import 'vanilla-cookieconsent/dist/cookieconsent.css'
+---
+
+<script>
+  import * as CookieConsent from 'vanilla-cookieconsent'
+
+  if (!window.__ftiaxesiteCookieConsentInit) {
+    window.__ftiaxesiteCookieConsentInit = true
+
+    CookieConsent.run({
+      categories: {
+        necessary: {enabled: true, readOnly: true},
+        analytics: {},
+      },
+      language: {
+        default: 'el',
+        translations: {
+          el: {
+            consentModal: {
+              title: 'Χρησιμοποιούμε cookies',
+              description:
+                'Χρησιμοποιούμε απαραίτητα cookies για τη λειτουργία της σελίδας και προαιρετικά cookies στατιστικών, μόνο με τη συγκατάθεσή σου.',
+              acceptAllBtn: 'Αποδοχή όλων',
+              acceptNecessaryBtn: 'Μόνο απαραίτητα',
+              showPreferencesBtn: 'Ρυθμίσεις',
+            },
+            preferencesModal: {
+              title: 'Ρυθμίσεις cookies',
+              acceptAllBtn: 'Αποδοχή όλων',
+              acceptNecessaryBtn: 'Μόνο απαραίτητα',
+              savePreferencesBtn: 'Αποθήκευση',
+              sections: [
+                {
+                  title: 'Απαραίτητα',
+                  description: 'Απαιτούνται για τη βασική λειτουργία της σελίδας.',
+                  linkedCategory: 'necessary',
+                },
+                {
+                  title: 'Στατιστικά',
+                  description: 'Βοηθούν να κατανοήσω πώς χρησιμοποιείται η σελίδα.',
+                  linkedCategory: 'analytics',
+                },
+              ],
+            },
+          },
+          en: {
+            consentModal: {
+              title: 'We use cookies',
+              description:
+                'We use necessary cookies for the site to work and optional analytics cookies only with your consent.',
+              acceptAllBtn: 'Accept all',
+              acceptNecessaryBtn: 'Necessary only',
+              showPreferencesBtn: 'Settings',
+            },
+            preferencesModal: {
+              title: 'Cookie settings',
+              acceptAllBtn: 'Accept all',
+              acceptNecessaryBtn: 'Necessary only',
+              savePreferencesBtn: 'Save',
+              sections: [
+                {
+                  title: 'Necessary',
+                  description: 'Required for basic site functionality.',
+                  linkedCategory: 'necessary',
+                },
+                {
+                  title: 'Analytics',
+                  description: 'Help me understand how the site is used.',
+                  linkedCategory: 'analytics',
+                },
+              ],
+            },
+          },
+        },
+      },
+      onConsent: ({cookie}) => {
+        if (cookie.categories.includes('analytics')) {
+          window.__ftiaxesiteLoadGtm?.()
+        }
+      },
+      onChange: ({cookie}) => {
+        if (cookie.categories.includes('analytics')) {
+          window.__ftiaxesiteLoadGtm?.()
+        }
+      },
+    })
+
+    window.__ftiaxesiteShowCookiePreferences = () => {
+      CookieConsent.showPreferences()
+    }
+  }
+</script>

@@ -1,0 +1,86 @@
+---
+import {t} from '../lib/locale'
+import type {FaqItemDoc, ServicePackageDoc, SiteSettingsDoc} from '../lib/types'
+
+interface Props {
+  siteOrigin: string
+  settings: SiteSettingsDoc | null
+  packages: readonly ServicePackageDoc[]
+  faqs: readonly FaqItemDoc[]
+}
+
+const {siteOrigin, settings, packages, faqs} = Astro.props
+const origin = siteOrigin.replace(/\/$/, '')
+
+const offers = packages.flatMap((pkg) => {
+  if (pkg.price == null) return []
+  return [
+    {
+      '@type': 'Offer',
+      priceCurrency: pkg.currency ?? 'EUR',
+      price: String(pkg.price),
+      itemOffered: {'@type': 'Service', name: t(pkg.title, 'el')},
+    },
+  ]
+})
+
+const faqEntities = faqs.flatMap((item) => {
+  const question = t(item.question, 'el')
+  const answer = t(item.answer, 'el')
+  if (!question || !answer) return []
+  return [
+    {
+      '@type': 'Question',
+      name: question,
+      acceptedAnswer: {'@type': 'Answer', text: answer},
+    },
+  ]
+})
+
+const graph = [
+  {
+    '@type': 'ProfessionalService',
+    '@id': `${origin}/#business`,
+    name: settings?.brandName ?? 'ftiaxesite.gr',
+    description: t(settings?.tagline, 'el'),
+    url: `${origin}/`,
+    email: settings?.email,
+    telephone: settings?.phone,
+    priceRange: packages.length
+      ? `€${Math.min(...packages.map((p) => p.price ?? 0))}-€${Math.max(...packages.map((p) => p.price ?? 0))}`
+      : undefined,
+    areaServed: settings?.serviceArea?.el ? {'@type': 'Country', name: settings.serviceArea.el} : undefined,
+    address: {
+      '@type': 'PostalAddress',
+      streetAddress: settings?.addressStreet,
+      addressLocality: settings?.addressCity,
+      addressRegion: settings?.addressRegion,
+      postalCode: settings?.addressPostal,
+      addressCountry: 'GR',
+    },
+    parentOrganization: {
+      '@type': 'Organization',
+      name: 'sidebysideweb.gr',
+      url: 'https://sidebysideweb.gr/',
+    },
+    hasOfferCatalog: offers.length
+      ? {
+          '@type': 'OfferCatalog',
+          name: 'Υπηρεσίες κατασκευής ιστοσελίδων',
+          itemListElement: offers,
+        }
+      : undefined,
+  },
+  faqEntities.length
+    ? {
+        '@type': 'FAQPage',
+        '@id': `${origin}/#faq`,
+        mainEntity: faqEntities,
+      }
+    : null,
+].filter(Boolean)
+
+const schema = {'@context': 'https://schema.org', '@graph': graph}
+---
+
+<script type="application/ld+json" set:html={JSON.stringify(schema)} />
