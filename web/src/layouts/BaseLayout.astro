@@ -1,11 +1,18 @@
 ---
-import '@fontsource/manrope/500.css'
-import '@fontsource/manrope/600.css'
-import '@fontsource/manrope/700.css'
-import '@fontsource/manrope/800.css'
-import '@fontsource/inter/400.css'
-import '@fontsource/inter/500.css'
-import '@fontsource/inter/600.css'
+import '@fontsource/manrope/latin-500.css'
+import '@fontsource/manrope/latin-600.css'
+import '@fontsource/manrope/latin-700.css'
+import '@fontsource/manrope/latin-800.css'
+import '@fontsource/manrope/greek-500.css'
+import '@fontsource/manrope/greek-600.css'
+import '@fontsource/manrope/greek-700.css'
+import '@fontsource/manrope/greek-800.css'
+import '@fontsource/inter/latin-400.css'
+import '@fontsource/inter/latin-500.css'
+import '@fontsource/inter/latin-600.css'
+import '@fontsource/inter/greek-400.css'
+import '@fontsource/inter/greek-500.css'
+import '@fontsource/inter/greek-600.css'
 import '../styles/global.css'
 import Analytics from '../components/Analytics.astro'
 import CookieConsent from '../components/CookieConsent.astro'
@@ -53,6 +60,19 @@ const pageDescription =
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <script is:inline>
       document.documentElement.classList.replace('no-js', 'js')
+      if (window.trustedTypes && window.trustedTypes.createPolicy && !window.trustedTypes.defaultPolicy) {
+        window.trustedTypes.createPolicy('default', {
+          createHTML: function (s) {
+            return s
+          },
+          createScript: function (s) {
+            return s
+          },
+          createScriptURL: function (s) {
+            return s
+          },
+        })
+      }
     </script>
     <Analytics placement="head" />
     <slot name="head" />
@@ -63,13 +83,24 @@ const pageDescription =
     <CookieConsent />
     <script is:inline>
       function setLang(lang) {
+        if (lang !== 'el' && lang !== 'en') return
         document.documentElement.lang = lang
-        document.querySelectorAll('[data-el]').forEach(function (el) {
-          var val = el.getAttribute('data-' + lang)
-          if (val !== null) el.innerHTML = val
-        })
+        try {
+          localStorage.setItem('ftiaxesite-lang', lang)
+        } catch (e) {}
+
         document.querySelectorAll('.lang button').forEach(function (btn) {
           btn.classList.toggle('active', btn.getAttribute('data-lang') === lang)
+        })
+
+        document.querySelectorAll('[data-el]').forEach(function (el) {
+          var val = el.getAttribute('data-' + lang)
+          if (val === null) return
+          if (val.indexOf('<') !== -1) {
+            el.innerHTML = val
+          } else {
+            el.textContent = val
+          }
         })
       }
 
@@ -78,6 +109,11 @@ const pageDescription =
           setLang(btn.getAttribute('data-lang'))
         })
       })
+
+      try {
+        var saved = localStorage.getItem('ftiaxesite-lang')
+        if (saved === 'en' || saved === 'el') setLang(saved)
+      } catch (e) {}
 
       var io = new IntersectionObserver(
         function (entries) {

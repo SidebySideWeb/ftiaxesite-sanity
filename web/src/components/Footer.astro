@@ -29,7 +29,7 @@ const telHref = phone ? `tel:${phone.startsWith('+') ? phone : `+30${phone.repla
         {settings?.familyBadge ? <span class="family">{settings.familyBadge}</span> : null}
       </div>
       <div class="foot">
-        <Localized value={settings?.footerServicesTitle} tag="h4" />
+        <Localized value={settings?.footerServicesTitle} tag="h2" />
         {
           packages.map((pkg) => (
             <a href="#pricing" {...localeAttrs(pkg.title)}>{t(pkg.title, 'el')}</a>
@@ -37,7 +37,7 @@ const telHref = phone ? `tel:${phone.startsWith('+') ? phone : `+30${phone.repla
         }
       </div>
       <div class="foot">
-        <Localized value={settings?.footerContactTitle} tag="h4" />
+        <Localized value={settings?.footerContactTitle} tag="h2" />
         {settings?.email ? <a href={`mailto:${settings.email}`}>{settings.email}</a> : null}
         {settings?.phone ? <a href={telHref}>{settings.phone}</a> : null}
         <Localized value={settings?.addressLine} tag="span" class="addr" />

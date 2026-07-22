@@ -15,6 +15,7 @@ const {home, packages, settings, formId = 'quoteForm', showHeader = false} = Ast
 const copy = home?.quoteForm
 const calUrl =
   settings?.calBookingUrl ?? 'https://cal.com/dimitris-geronikolos-z3h6en/chat-for-your-project'
+const recaptchaSiteKey = (import.meta.env.PUBLIC_RECAPTCHA_SITE_KEY ?? '').trim()
 
 function packageOptionLabel(pkg: ServicePackageDoc): {el: string; en: string} {
   const titleEl = t(pkg.title, 'el')
@@ -153,7 +154,81 @@ const timelineOptions = [
   </div>
 </div>
 
-<script define:vars={{formId, calUrl}}>
+<script define:vars={{formId, recaptchaSiteKey}}>
+  function loadRecaptchaScript() {
+    if (!recaptchaSiteKey) return Promise.resolve()
+    if (window.grecaptcha?.execute) return Promise.resolve()
+    if (window.__ftiaxesiteRecaptchaLoading) return window.__ftiaxesiteRecaptchaLoading
+
+    window.__ftiaxesiteRecaptchaLoading = new Promise((resolve, reject) => {
+      const existing = document.querySelector('script[data-ftiaxesite-recaptcha]')
+      if (existing) {
+        existing.addEventListener('load', () => resolve())
+        existing.addEventListener('error', () => reject(new Error('reCAPTCHA failed to load')))
+        return
+      }
+      const script = document.createElement('script')
+      script.src = `https://www.google.com/recaptcha/api.js?render=${encodeURIComponent(recaptchaSiteKey)}`
+      script.async = true
+      script.dataset.ftiaxesiteRecaptcha = '1'
+      script.onload = () => resolve()
+      script.onerror = () => reject(new Error('reCAPTCHA failed to load'))
+      document.head.appendChild(script)
+    })
+
+    return window.__ftiaxesiteRecaptchaLoading
+  }
+
+  function whenRecaptchaReady(callback) {
+    if (!recaptchaSiteKey) {
+      callback()
+      return Promise.resolve()
+    }
+    return loadRecaptchaScript().then(() => {
+      return new Promise((resolve) => {
+        const finish = () => {
+          callback()
+          resolve()
+        }
+        const tryReady = () => {
+          if (window.grecaptcha?.execute) {
+            window.grecaptcha.ready(finish)
+            return true
+          }
+          return false
+        }
+        if (tryReady()) return
+        let attempts = 0
+        const timer = window.setInterval(() => {
+          attempts += 1
+          if (tryReady() || attempts > 40) {
+            window.clearInterval(timer)
+            if (attempts > 40) resolve()
+          }
+        }, 100)
+      })
+    })
+  }
+
+  function executeRecaptcha() {
+    return new Promise((resolve, reject) => {
+      if (!recaptchaSiteKey) {
+        resolve('')
+        return
+      }
+      whenRecaptchaReady(() => {
+        if (!window.grecaptcha?.execute) {
+          reject(new Error('reCAPTCHA unavailable'))
+          return
+        }
+        window.grecaptcha
+          .execute(recaptchaSiteKey, {action: 'quote_submit'})
+          .then(resolve)
+          .catch(reject)
+      }).catch(reject)
+    })
+  }
+
   function initQuoteForm(id) {
     const form = document.getElementById(id)
     if (!form || form.dataset.bound === 'true') return
@@ -164,6 +239,12 @@ const timelineOptions = [
     const success = document.getElementById(`${id}-success`)
     const packageSelect = document.getElementById(`${id}-package`)
     const timelineSelect = document.getElementById(`${id}-time`)
+
+    const warmup = () => {
+      loadRecaptchaScript().catch(() => {})
+    }
+    form.addEventListener('focusin', warmup, {once: true})
+    form.addEventListener('pointerdown', warmup, {once: true})
 
     hasSite?.addEventListener('change', () => {
       urlField?.classList.toggle('hidden', !hasSite.checked)
@@ -192,21 +273,31 @@ const timelineOptions = [
           ? selectedTimeline?.getAttribute('data-label-en') || selectedTimeline?.textContent?.trim() || ''
           : selectedTimeline?.getAttribute('data-label-el') || selectedTimeline?.textContent?.trim() || ''
 
-      const payload = {
-        name: form.querySelector('[name="name"]')?.value?.trim(),
-        email: form.querySelector('[name="email"]')?.value?.trim(),
-        company: form.querySelector('[name="company"]')?.value?.trim() || undefined,
-        projectType,
-        hasExistingWebsite: Boolean(hasSite?.checked),
-        existingWebsiteUrl: form.querySelector('[name="existingUrl"]')?.value?.trim() || undefined,
-        message: form.querySelector('[name="description"]')?.value?.trim(),
-        timeline,
-      }
-
       const submitBtn = form.querySelector('[type="submit"]')
       if (submitBtn) submitBtn.disabled = true
 
       try {
+        const recaptchaToken = await executeRecaptcha()
+        if (recaptchaSiteKey && !recaptchaToken) {
+          throw new Error(
+            lang === 'en'
+              ? 'Security check failed. Please try again.'
+              : 'Ο έλεγχος ασφαλείας απέτυχε. Δοκίμασε ξανά.',
+          )
+        }
+
+        const payload = {
+          name: form.querySelector('[name="name"]')?.value?.trim(),
+          email: form.querySelector('[name="email"]')?.value?.trim(),
+          company: form.querySelector('[name="company"]')?.value?.trim() || undefined,
+          projectType,
+          hasExistingWebsite: Boolean(hasSite?.checked),
+          existingWebsiteUrl: form.querySelector('[name="existingUrl"]')?.value?.trim() || undefined,
+          message: form.querySelector('[name="description"]')?.value?.trim(),
+          timeline,
+          recaptchaToken,
+        }
+
         const response = await fetch('/api/quote-request/', {
           method: 'POST',
           headers: {'Content-Type': 'application/json'},
@@ -228,7 +319,13 @@ const timelineOptions = [
       } catch (error) {
         console.error(error)
         if (submitBtn) submitBtn.disabled = false
-        alert(document.documentElement.lang === 'en' ? 'Something went wrong. Please try again.' : 'Κάτι πήγε στραβά. Δοκίμασε ξανά.')
+        alert(
+          error instanceof Error && error.message
+            ? error.message
+            : document.documentElement.lang === 'en'
+              ? 'Something went wrong. Please try again.'
+              : 'Κάτι πήγε στραβά. Δοκίμασε ξανά.',
+        )
       }
     })
   }

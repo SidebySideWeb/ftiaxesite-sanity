@@ -44,17 +44,17 @@ const siteSettings = {
   brandName: 'ftiaxesite.gr',
   tagline: T(
     'Επαγγελματική κατασκευή και ανακατασκευή ιστοσελίδων για ελληνικές επιχειρήσεις. Γρήγορα, ξεκάθαρα, χωρίς εκπλήξεις.',
-    'Professional website design and redesign for Greek businesses. Fast, clear, no surprises.',
+    'Professional websites for Greek businesses. Fast, clear, no surprises.',
   ),
   familyBadge: 'Member of the sidebysideweb.gr family',
   navLinks: [
-    {_key: 'nav-pricing', label: L('Υπηρεσίες & Τιμές', 'Services & Pricing'), href: '#pricing'},
-    {_key: 'nav-process', label: L('Πώς Δουλεύει', 'How It Works'), href: '#process'},
-    {_key: 'nav-work', label: L('Έργα', 'Portfolio'), href: '#work'},
+    {_key: 'nav-pricing', label: L('Υπηρεσίες & Τιμές', 'Services & Prices'), href: '#pricing'},
+    {_key: 'nav-process', label: L('Πώς Δουλεύει', 'How it works'), href: '#process'},
+    {_key: 'nav-work', label: L('Έργα', 'Work'), href: '#work'},
     {_key: 'nav-faq', label: L('Συχνές Ερωτήσεις', 'FAQ'), href: '#faq'},
     {_key: 'nav-contact', label: L('Επικοινωνία', 'Contact'), href: '#contact'},
   ],
-  navCtaLabel: L('Ζήτησε Προσφορά', 'Get a Quote'),
+  navCtaLabel: L('Ζήτησε Προσφορά', 'Get a quote'),
   email: 'dgeronikolos@sidebysideweb.gr',
   phone: '+30 694 733 3086',
   addressStreet: 'Κυθήρων 12',
@@ -74,11 +74,11 @@ const siteSettings = {
   copyrightLine: '© {year} ftiaxesite.gr. All rights reserved.',
   defaultSeoTitle: L(
     'Κατασκευή Ιστοσελίδων & Eshop | Το Site σου σε 2 Εβδομάδες | ftiaxesite.gr',
-    'Web Design & Eshop | Your Site in 2 Weeks | ftiaxesite.gr',
+    'ftiaxesite.gr | Your website, live in 2 weeks',
   ),
   defaultSeoDescription: T(
     'Επαγγελματική κατασκευή και ανακατασκευή ιστοσελίδων για ελληνικές επιχειρήσεις. Ξεκάθαρες τιμές από 900 ευρώ, γρήγορη παράδοση σε 2 εβδομάδες, χωρίς κρυφές χρεώσεις.',
-    'Professional website design and redesign for Greek businesses. Clear pricing from 900 euros, fast delivery in 2 weeks, no hidden fees.',
+    'Professional websites for Greek businesses. Clear prices, fast delivery, no surprises.',
   ),
   socialLinks: [],
   calBookingUrl: 'https://cal.com/dimitris-geronikolos-z3h6en/chat-for-your-project',
@@ -89,19 +89,19 @@ const homePage = {
   _type: 'homePage',
   heroEyebrow: L(
     'Επαγγελματική Κατασκευή & Ανακατασκευή Ιστοσελίδων',
-    'Professional Web Design & Redesign for Greek SMBs',
+    'Professional websites for Greek businesses',
   ),
   heroHeading: L(
     'Το site σου, έτοιμο και λειτουργικό σε',
-    'Your website, live and ready in just',
+    'Your website, live in',
   ),
   heroHighlight: L('2 εβδομάδες', '2 weeks'),
   heroBody: T(
     'Γρήγορη κατασκευή ιστοσελίδων και eshop για μικρές και μεσαίες ελληνικές επιχειρήσεις. Ξεκάθαρες τιμές, σύγχρονο design και μηδέν κρυφές χρεώσεις. Βλέπεις ακριβώς τι πληρώνεις πριν ξεκινήσουμε.',
-    'Fast, high-performing websites and eshops built for growing businesses. Fixed pricing, custom design, and zero surprise costs. Know the exact cost before we write a single line of code.',
+    'Clear prices. Fast delivery. No hidden packages, no surprises. You see what you pay before you pay it.',
   ),
-  ctaPrimaryLabel: L('Δες τις Τιμές', 'See Pricing'),
-  ctaSecondaryLabel: L('Ζήτησε Προσφορά', 'Get a Quote'),
+  ctaPrimaryLabel: L('Δες τις Τιμές', 'See the prices'),
+  ctaSecondaryLabel: L('Ζήτησε Προσφορά', 'Get a quote'),
   receiptBadge: L('✓ Τελικές τιμές, χωρίς κρυφές χρεώσεις', '✓ Final prices, no hidden fees'),
   heroToolsLine: 'WordPress · Astro · React · Next.js · Sanity CMS',
   pricingEyebrow: L(
@@ -119,7 +119,7 @@ const homePage = {
   ),
   popularBadgeLabel: L('Δημοφιλές', 'Popular'),
   packageCtaLabel: L('Το θέλω', 'I want this'),
-  processEyebrow: L('Πώς Δουλεύει', 'How It Works'),
+  processEyebrow: L('Πώς Δουλεύει', 'How it works'),
   processHeading: L(
     'Τέσσερα βήματα για το νέο σου site, χωρίς άγχος.',
     'Four simple steps to your new website.',
@@ -140,7 +140,7 @@ const homePage = {
     'Η φιλοσοφία μου είναι μηδέν συμβιβασμοί στην ταχύτητα. Το site σου φιλοξενείται σε κορυφαίους cloud servers, με αυτόματα backups και πιστοποιητικό SSL.',
     'Zero compromises on speed. Your site is hosted on enterprise cloud servers with automated backups and an SSL certificate.',
   ),
-  workEyebrow: L('Δείγματα Δουλειάς', 'Portfolio'),
+  workEyebrow: L('Δείγματα Δουλειάς', 'Work'),
   workHeading: L('Ιστοσελίδες & eshop που έχω κατασκευάσει.', 'Websites and stores I have built.'),
   workIntro: T(
     'Πραγματικά έργα για επιχειρήσεις, καταλύματα, εστίαση και συλλόγους σε όλη την Ελλάδα.',
@@ -157,7 +157,7 @@ const homePage = {
     'Πες μου για την επιχείρησή σου και θα σου απαντήσω εντός 24 ωρών με ακριβή προσφορά και χρονοδιάγραμμα παράδοσης.',
     'Tell me about your business and get a clear, fixed proposal within 24 hours.',
   ),
-  finalCtaPrimaryLabel: L('Ζήτησε Προσφορά', 'Get a Quote'),
+  finalCtaPrimaryLabel: L('Ζήτησε Προσφορά', 'Get a quote'),
   finalCtaSecondaryLabel: L('694 733 3086', '694 733 3086'),
   quoteForm: {
     title: L('Πες μου για το project σου', 'Tell me about your project'),
@@ -194,11 +194,11 @@ const homePage = {
   },
   seoTitle: L(
     'Κατασκευή Ιστοσελίδων & Eshop | Το Site σου σε 2 Εβδομάδες | ftiaxesite.gr',
-    'Web Design & Eshop | Your Site in 2 Weeks | ftiaxesite.gr',
+    'ftiaxesite.gr | Your website, live in 2 weeks',
   ),
   seoDescription: T(
     'Επαγγελματική κατασκευή και ανακατασκευή ιστοσελίδων για ελληνικές επιχειρήσεις. Ξεκάθαρες τιμές από 900 ευρώ, γρήγορη παράδοση σε 2 εβδομάδες, χωρίς κρυφές χρεώσεις.',
-    'Professional website design and redesign for Greek businesses. Clear pricing from 900 euros, fast delivery in 2 weeks, no hidden fees.',
+    'Professional websites for Greek businesses. Clear prices, fast delivery, no surprises.',
   ),
 }
 
@@ -300,7 +300,7 @@ const valueProps = [
     title: L('Πιο γρήγορα από ένα agency', 'Faster than an agency'),
     description: T(
       'Παράδοση σε 2-3 εβδομάδες, όχι σε 2-3 μήνες. Ξεκινάς να προσελκύεις πελάτες πριν προλάβει ο ανταγωνισμός.',
-      'Launch in 2-3 weeks, not 2-3 months. Start generating sales before your competitors catch up.',
+      '2-3 weeks, not 2-3 months. You launch before the competition does.',
     ),
     order: 1,
   },
@@ -310,17 +310,17 @@ const valueProps = [
     title: L('Πιο απλά από έναν freelancer', 'Simpler than a freelancer'),
     description: T(
       'Σαφές scope, συγκεκριμένο χρονοδιάγραμμα και σταθερή τιμή από την πρώτη μέρα. Ξέρεις ακριβώς τι παίρνεις.',
-      'Clear scope, fixed timeline, and transparent pricing from day one. No delays, no ghosting.',
+      'Clear scope and price from day one. You know exactly what you get.',
     ),
     order: 2,
   },
   {
     _id: 'valueProp-3',
     _type: 'valueProp',
-    title: L('Καλύτερα από ένα έτοιμο template', 'Better than a generic template'),
+    title: L('Καλύτερα από ένα έτοιμο template', 'Better than a template'),
     description: T(
       'Επαγγελματικό, custom design και εύκολο CMS που διαχειρίζεσαι εσύ, όχι αργά και φορτωμένα themes που κολλάνε.',
-      'Tailored design and a streamlined CMS you fully control, not bloated, slow off-the-shelf themes.',
+      'Professional design and a CMS you control, not a one-size-fits-all theme.',
     ),
     order: 3,
   },
@@ -330,7 +330,7 @@ const processSteps = [
   {
     _id: 'processStep-1',
     _type: 'processStep',
-    title: L('Μιλάμε & Συμφωνούμε', 'We Talk'),
+    title: L('Μιλάμε & Συμφωνούμε', 'We talk'),
     description: T(
       'Μου περιγράφεις τι χρειάζεσαι. Παίρνεις γραπτή προσφορά με σταθερή τιμή και ημερομηνία παράδοσης εντός 24 ωρών.',
       'Share your project details and receive a fixed-price quote within 24 hours.',
@@ -340,7 +340,7 @@ const processSteps = [
   {
     _id: 'processStep-2',
     _type: 'processStep',
-    title: L('Σχεδιάζω', 'I Design'),
+    title: L('Σχεδιάζω', 'I design'),
     description: T(
       'Βλέπεις και εγκρίνεις το εικαστικό σχέδιο πριν γραφτεί η πρώτη γραμμή κώδικα.',
       'Review and approve the visual prototype before coding starts.',
@@ -350,7 +350,7 @@ const processSteps = [
   {
     _id: 'processStep-3',
     _type: 'processStep',
-    title: L('Χτίζω', 'I Build'),
+    title: L('Χτίζω', 'I build'),
     description: T(
       'Η ιστοσελίδα σου υλοποιείται με σύγχρονα, γρήγορα εργαλεία που προσφέρουν υψηλές ταχύτητες και ασφάλεια.',
       'Developed using modern, ultra-fast frameworks built to last.',
@@ -360,7 +360,7 @@ const processSteps = [
   {
     _id: 'processStep-4',
     _type: 'processStep',
-    title: L('Παραδίδω & Εκπαιδεύω', 'I Deliver'),
+    title: L('Παραδίδω & Εκπαιδεύω', 'I deliver'),
     description: T(
       'Το site βγαίνει στον αέρα. Το παραλαμβάνεις πλήρως λειτουργικό, μαζί με βίντεο-οδηγίες για να κάνεις αλλαγές μόνος σου.',
       'Your site goes live, complete with video training so you can manage it effortlessly.',

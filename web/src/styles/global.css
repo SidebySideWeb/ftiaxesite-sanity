@@ -24,6 +24,7 @@
 
 html {
   scroll-behavior: smooth;
+  overflow-x: hidden;
 }
 
 body {
@@ -32,7 +33,6 @@ body {
   font-family: 'Inter', system-ui, sans-serif;
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
-  overflow-x: hidden;
 }
 
 body.modal-open {
@@ -207,6 +207,10 @@ header.nav {
   color: var(--cream);
 }
 
+.lang-mobile {
+  display: none;
+}
+
 .burger {
   display: none;
   background: none;
@@ -214,6 +218,7 @@ header.nav {
   cursor: pointer;
   flex-direction: column;
   gap: 5px;
+  padding: 8px 4px;
 }
 
 .burger span {
@@ -221,6 +226,37 @@ header.nav {
   height: 2px;
   background: var(--ink);
   display: block;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.burger[aria-expanded='true'] span:nth-child(1) {
+  transform: translateY(7px) rotate(45deg);
+}
+
+.burger[aria-expanded='true'] span:nth-child(2) {
+  opacity: 0;
+}
+
+.burger[aria-expanded='true'] span:nth-child(3) {
+  transform: translateY(-7px) rotate(-45deg);
+}
+
+.sticky-cta {
+  display: none;
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 10050;
+  padding: 12px 16px calc(12px + env(safe-area-inset-bottom, 0px));
+  background: rgba(251, 247, 239, 0.96);
+  backdrop-filter: blur(12px);
+  border-top: 1px solid var(--line);
+  box-shadow: 0 -8px 24px rgba(26, 23, 18, 0.08);
+}
+
+.sticky-cta .btn {
+  width: 100%;
 }
 
 .hero {
@@ -456,7 +492,7 @@ section.block {
   padding: 26px 24px;
 }
 
-.vcard h3 {
+.vcard h2 {
   font-size: 1.1rem;
   font-weight: 700;
   margin-bottom: 6px;
@@ -470,7 +506,7 @@ section.block {
 .vnum {
   font-family: 'Manrope', sans-serif;
   font-weight: 800;
-  color: var(--amber);
+  color: #8a5f10;
   font-size: 0.9rem;
   margin-bottom: 10px;
   display: block;
@@ -872,7 +908,7 @@ footer {
   margin-bottom: 40px;
 }
 
-.foot h4 {
+.foot h2 {
   font-family: 'Manrope', sans-serif;
   font-weight: 700;
   font-size: 0.78rem;
@@ -972,6 +1008,7 @@ dialog.modal {
   padding: 0;
   border: none;
   background: transparent;
+  margin: auto;
   max-width: 100vw;
   max-height: 100vh;
   overflow: visible;
@@ -1352,10 +1389,65 @@ dialog.modal-doc .modal-panel {
 @media (max-width: 640px) {
   .nav-links {
     display: none;
+    position: absolute;
+    top: 70px;
+    left: 0;
+    right: 0;
+    z-index: 60;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+    padding: 12px 24px 20px;
+    background: var(--cream);
+    border-bottom: 1px solid var(--line);
+    box-shadow: var(--shadow);
+  }
+
+  .nav-links.is-open {
+    display: flex;
+  }
+
+  .nav-links a.nl {
+    padding: 14px 0;
+    border-bottom: 1px solid var(--line);
+    font-size: 1rem;
+  }
+
+  .nav-links a.nl:last-of-type {
+    border-bottom: none;
+  }
+
+  .lang-desktop,
+  .nav-cta-desktop {
+    display: none;
+  }
+
+  .lang-mobile {
+    display: inline-flex;
+    margin-top: 16px;
+    align-self: flex-start;
   }
 
   .burger {
     display: flex;
+  }
+
+  .sticky-cta {
+    display: block;
+  }
+
+  .sticky-cta .btn {
+    width: 100%;
+  }
+
+  body {
+    padding-bottom: calc(84px + env(safe-area-inset-bottom, 0px));
+  }
+
+  body.modal-open .sticky-cta,
+  body.nav-open .sticky-cta {
+    visibility: hidden;
+    pointer-events: none;
   }
 
   .values-grid,

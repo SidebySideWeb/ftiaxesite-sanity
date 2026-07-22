@@ -45,9 +45,16 @@ export default defineConfig({
         optional: true,
         default: env.PUBLIC_GTM_ID ?? '',
       }),
+      PUBLIC_RECAPTCHA_SITE_KEY: envField.string({
+        context: 'client',
+        access: 'public',
+        optional: true,
+        default: env.PUBLIC_RECAPTCHA_SITE_KEY ?? '',
+      }),
       SANITY_WRITE_TOKEN: envField.string({context: 'server', access: 'secret', optional: true}),
       RESEND_API_KEY: envField.string({context: 'server', access: 'secret', optional: true}),
       ADMIN_NOTIFICATION_EMAIL: envField.string({context: 'server', access: 'secret', optional: true}),
+      RECAPTCHA_SECRET_KEY: envField.string({context: 'server', access: 'secret', optional: true}),
       SANITY_STUDIO_URL: envField.string({
         context: 'server',
         access: 'public',

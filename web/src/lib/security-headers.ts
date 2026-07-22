@@ -1,9 +1,9 @@
 /**
  * Security headers for ftiaxesite.gr.
  *
- * CSP allows GTM/GA4, Sanity CDN, and Cal.com embed.
- * Trusted Types: permissive default policy (see TrustedTypesBootstrap.astro)
- * keeps GTM/Cal.com working while blocking unsanitized DOM XSS sinks.
+ * CSP allows GTM/GA4, Sanity CDN, Cal.com, and reCAPTCHA.
+ * Trusted Types: permissive default policy created in BaseLayout
+ * keeps GTM/Cal.com/lang toggle working while blocking unsanitized DOM XSS sinks.
  */
 function buildContentSecurityPolicy(): string {
   const directives = [
@@ -18,11 +18,13 @@ function buildContentSecurityPolicy(): string {
       "'unsafe-inline'",
       'https://www.googletagmanager.com',
       'https://www.google-analytics.com',
+      'https://www.google.com',
+      'https://www.gstatic.com',
       'https://app.cal.com',
       'https://cal.com',
       'https://embed.cal.com',
     ].join(' '),
-    ["style-src", "'self'", "'unsafe-inline'"].join(' '),
+    ["style-src", "'self'", "'unsafe-inline'", 'https://www.gstatic.com'].join(' '),
     ["font-src", "'self'", 'data:'].join(' '),
     [
       'img-src',
@@ -34,6 +36,7 @@ function buildContentSecurityPolicy(): string {
       'https://www.google-analytics.com',
       'https://region1.google-analytics.com',
       'https://www.google.com',
+      'https://www.gstatic.com',
       'https://maps.google.com',
     ].join(' '),
     [
@@ -46,12 +49,15 @@ function buildContentSecurityPolicy(): string {
       'https://analytics.google.com',
       'https://stats.g.doubleclick.net',
       'https://www.google.com',
+      'https://www.gstatic.com',
       'https://api.cal.com',
     ].join(' '),
     [
       'frame-src',
       "'self'",
       'https://www.googletagmanager.com',
+      'https://www.google.com',
+      'https://recaptcha.google.com',
       'https://app.cal.com',
       'https://cal.com',
       'https://embed.cal.com',
@@ -59,7 +65,8 @@ function buildContentSecurityPolicy(): string {
     "worker-src 'self' blob:",
     "manifest-src 'self'",
     "require-trusted-types-for 'script'",
-    'trusted-types default',
+    // default = our policy; goog#html = reCAPTCHA; allow-duplicates for GTM/reCAPTCHA reloads
+    "trusted-types default goog#html goog#script goog#html-renderer 'allow-duplicates'",
     'upgrade-insecure-requests',
   ]
 

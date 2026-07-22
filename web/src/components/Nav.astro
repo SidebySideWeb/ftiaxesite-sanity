@@ -1,5 +1,4 @@
 ---
-import Localized from './Localized.astro'
 import type {NavLink, SiteSettingsDoc} from '../lib/types'
 import {localeAttrs, t} from '../lib/locale'
 
@@ -15,9 +14,17 @@ const ctaLabel = settings?.navCtaLabel
 <header class="nav">
   <div class="wrap nav-inner">
     <a href="/" class="logo" aria-label="ftiaxesite.gr">
-      <img src="/ftiaxesite-logo.svg" alt="ftiaxesite.gr" width="168" height="22" />
+      <img
+        src="/ftiaxesite-logo.svg"
+        alt="ftiaxesite.gr"
+        width="168"
+        height="22"
+        decoding="async"
+        fetchpriority="high"
+      />
     </a>
-    <nav class="nav-links" id="primaryNav">
+
+    <nav class="nav-links" id="primaryNav" aria-label="Primary">
       {
         navLinks.map((link: NavLink) => (
           <a class="nl" href={link.href ?? '#'} {...localeAttrs(link.label)}>
@@ -25,40 +32,85 @@ const ctaLabel = settings?.navCtaLabel
           </a>
         ))
       }
+      <div class="lang lang-mobile" role="group" aria-label="Language">
+        <button type="button" data-lang="el" class="active">EL</button>
+        <button type="button" data-lang="en">EN</button>
+      </div>
     </nav>
+
     <div class="nav-right">
-      <div class="lang" role="group" aria-label="Language">
+      <div class="lang lang-desktop" role="group" aria-label="Language">
         <button type="button" data-lang="el" class="active">EL</button>
         <button type="button" data-lang="en">EN</button>
       </div>
       {
         ctaLabel ? (
-          <button type="button" class="btn btn-primary btn-sm" data-open="quoteModal" {...localeAttrs(ctaLabel)}>
+          <button
+            type="button"
+            class="btn btn-primary btn-sm nav-cta-desktop"
+            data-open="quoteModal"
+            {...localeAttrs(ctaLabel)}
+          >
             {t(ctaLabel, 'el')}
           </button>
         ) : null
       }
+      <button
+        type="button"
+        class="burger"
+        aria-label="Menu"
+        aria-expanded="false"
+        aria-controls="primaryNav"
+        id="navBurger"
+      >
+        <span></span><span></span><span></span>
+      </button>
     </div>
-    <button type="button" class="burger" aria-label="Menu" id="navBurger">
-      <span></span><span></span><span></span>
-    </button>
   </div>
 </header>
+
+{
+  ctaLabel ? (
+    <div class="sticky-cta" id="stickyCta" role="region" aria-label="Quote CTA">
+      <button type="button" class="btn btn-primary" data-open="quoteModal" {...localeAttrs(ctaLabel)}>
+        {t(ctaLabel, 'el')}
+      </button>
+    </div>
+  ) : (
+    <div class="sticky-cta" id="stickyCta" role="region" aria-label="Quote CTA">
+      <button type="button" class="btn btn-primary" data-open="quoteModal" data-el="Ζήτησε Προσφορά" data-en="Get a quote">
+        Ζήτησε Προσφορά
+      </button>
+    </div>
+  )
+}
 
 <script>
   const burger = document.getElementById('navBurger')
   const nav = document.getElementById('primaryNav')
+
+  function closeMenu() {
+    nav?.classList.remove('is-open')
+    burger?.setAttribute('aria-expanded', 'false')
+    document.body.classList.remove('nav-open')
+  }
+
+  function openMenu() {
+    nav?.classList.add('is-open')
+    burger?.setAttribute('aria-expanded', 'true')
+    document.body.classList.add('nav-open')
+  }
+
   burger?.addEventListener('click', () => {
-    if (!nav) return
-    const open = getComputedStyle(nav).display === 'none'
-    nav.style.display = open ? 'flex' : ''
-    nav.style.flexDirection = 'column'
-    nav.style.position = 'absolute'
-    nav.style.top = '70px'
-    nav.style.left = '0'
-    nav.style.right = '0'
-    nav.style.background = 'var(--cream)'
-    nav.style.padding = '16px 24px'
-    nav.style.borderBottom = '1px solid var(--line)'
+    if (nav?.classList.contains('is-open')) closeMenu()
+    else openMenu()
+  })
+
+  nav?.querySelectorAll('a.nl').forEach((link) => {
+    link.addEventListener('click', () => closeMenu())
+  })
+
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape') closeMenu()
   })
 </script>
