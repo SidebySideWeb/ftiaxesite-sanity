@@ -1,6 +1,6 @@
 ---
 import Localized from './Localized.astro'
-import {formatPrice, localeAttrs, t} from '../lib/locale'
+import {DEFAULT_LOCALE, formatPrice, t, type Locale} from '../lib/locale'
 import type {HomePageDoc, ServicePackageDoc, SiteSettingsDoc} from '../lib/types'
 
 interface Props {
@@ -12,20 +12,16 @@ interface Props {
 }
 
 const {home, packages, settings, formId = 'quoteForm', showHeader = false} = Astro.props
+const locale: Locale = Astro.locals.locale ?? DEFAULT_LOCALE
 const copy = home?.quoteForm
 const calUrl =
   settings?.calBookingUrl ?? 'https://cal.com/dimitris-geronikolos-z3h6en/chat-for-your-project'
 const recaptchaSiteKey = (import.meta.env.PUBLIC_RECAPTCHA_SITE_KEY ?? '').trim()
 
-function packageOptionLabel(pkg: ServicePackageDoc): {el: string; en: string} {
-  const titleEl = t(pkg.title, 'el')
-  const titleEn = t(pkg.title, 'en')
-  const priceEl = pkg.price != null ? formatPrice(pkg.price, 'el') : ''
-  const priceEn = pkg.price != null ? formatPrice(pkg.price, 'en') : ''
-  return {
-    el: `${titleEl}, ${priceEl}`.trim(),
-    en: `${titleEn}, ${priceEn}`.trim(),
-  }
+function packageOptionLabel(pkg: ServicePackageDoc): string {
+  const title = t(pkg.title, locale)
+  const price = pkg.price != null ? formatPrice(pkg.price, locale) : ''
+  return `${title}, ${price}`.trim()
 }
 
 const timelineOptions = [
@@ -50,76 +46,70 @@ const timelineOptions = [
   <form id={formId} class="quote-form" novalidate>
     <div class="form-grid">
       <div class="field">
-        <label for={`${formId}-name`} {...localeAttrs(copy?.nameLabel)}>
-          {t(copy?.nameLabel, 'el')} <span class="req">*</span>
+        <label for={`${formId}-name`}>
+          {t(copy?.nameLabel, locale)} <span class="req">*</span>
         </label>
         <input type="text" id={`${formId}-name`} name="name" required autocomplete="name" />
       </div>
       <div class="field">
-        <label for={`${formId}-email`} {...localeAttrs(copy?.emailLabel)}>
-          {t(copy?.emailLabel, 'el')} <span class="req">*</span>
+        <label for={`${formId}-email`}>
+          {t(copy?.emailLabel, locale)} <span class="req">*</span>
         </label>
         <input type="email" id={`${formId}-email`} name="email" required autocomplete="email" />
       </div>
       <div class="field">
-        <label for={`${formId}-company`} {...localeAttrs(copy?.companyLabel)}>
-          {t(copy?.companyLabel, 'el')}
-        </label>
+        <label for={`${formId}-company`}>{t(copy?.companyLabel, locale)}</label>
         <input type="text" id={`${formId}-company`} name="company" autocomplete="organization" />
       </div>
       <div class="field">
-        <label for={`${formId}-package`} {...localeAttrs(copy?.packageLabel)}>
-          {t(copy?.packageLabel, 'el')} <span class="req">*</span>
+        <label for={`${formId}-package`}>
+          {t(copy?.packageLabel, locale)} <span class="req">*</span>
         </label>
         <select id={`${formId}-package`} name="package" required>
-          <option value="" {...localeAttrs(copy?.packagePlaceholder)}>{t(copy?.packagePlaceholder, 'el')}</option>
+          <option value="">{t(copy?.packagePlaceholder, locale)}</option>
           {
             packages.map((pkg) => {
-              const label = packageOptionLabel(pkg)
               const slug = pkg.slug?.current ?? ''
               return (
-                <option value={slug} data-title-el={t(pkg.title, 'el')} data-title-en={t(pkg.title, 'en')} {...localeAttrs(label)}>
-                  {label.el}
+                <option value={slug} data-title-el={t(pkg.title, 'el')} data-title-en={t(pkg.title, 'en')}>
+                  {packageOptionLabel(pkg)}
                 </option>
               )
             })
           }
-          <option value="other" {...localeAttrs(copy?.otherPackageLabel)}>{t(copy?.otherPackageLabel, 'el')}</option>
+          <option value="other">{t(copy?.otherPackageLabel, locale)}</option>
         </select>
       </div>
       <div class="field full">
         <label class="check">
           <input type="checkbox" id={`${formId}-hasSite`} name="hasSite" />
-          <span {...localeAttrs(copy?.hasSiteLabel)}>{t(copy?.hasSiteLabel, 'el')}</span>
+          <span>{t(copy?.hasSiteLabel, locale)}</span>
         </label>
       </div>
       <div class="field full hidden" id={`${formId}-urlField`}>
-        <label for={`${formId}-url`} {...localeAttrs(copy?.existingUrlLabel)}>
-          {t(copy?.existingUrlLabel, 'el')}
-        </label>
+        <label for={`${formId}-url`}>{t(copy?.existingUrlLabel, locale)}</label>
         <input type="url" id={`${formId}-url`} name="existingUrl" placeholder="https://" />
       </div>
       <div class="field full">
-        <label for={`${formId}-desc`} {...localeAttrs(copy?.descriptionLabel)}>
-          {t(copy?.descriptionLabel, 'el')} <span class="req">*</span>
+        <label for={`${formId}-desc`}>
+          {t(copy?.descriptionLabel, locale)} <span class="req">*</span>
         </label>
         <textarea id={`${formId}-desc`} name="description" required></textarea>
       </div>
       <div class="field full">
-        <label for={`${formId}-time`} {...localeAttrs(copy?.timelineLabel)}>
-          {t(copy?.timelineLabel, 'el')} <span class="req">*</span>
+        <label for={`${formId}-time`}>
+          {t(copy?.timelineLabel, locale)} <span class="req">*</span>
         </label>
         <select id={`${formId}-time`} name="timeline" required>
-          <option value="" {...localeAttrs(copy?.timelinePlaceholder)}>{t(copy?.timelinePlaceholder, 'el')}</option>
+          <option value="">{t(copy?.timelinePlaceholder, locale)}</option>
           {
             timelineOptions.map((option) => (
               <option
                 value={option.value}
                 data-label-el={t(option.label, 'el')}
                 data-label-en={t(option.label, 'en')}
-                {...localeAttrs(option.label)}
               >
-                {t(option.label, 'el')}
+                {t(option.label, locale)}
               </option>
             ))
           }
@@ -129,9 +119,7 @@ const timelineOptions = [
     <div class="form-foot">
       {
         copy?.submitLabel ? (
-          <button type="submit" class="btn btn-primary" {...localeAttrs(copy.submitLabel)}>
-            {t(copy.submitLabel, 'el')}
-          </button>
+          <button type="submit" class="btn btn-primary">{t(copy.submitLabel, locale)}</button>
         ) : null
       }
       {copy?.footnote ? <Localized value={copy.footnote} tag="span" class="note" /> : null}
@@ -146,8 +134,8 @@ const timelineOptions = [
     {copy?.successCallPrompt ? <Localized value={copy.successCallPrompt} tag="p" /> : null}
     {
       copy?.successCalLabel ? (
-        <a class="btn btn-primary" href={calUrl} target="_blank" rel="noopener noreferrer" {...localeAttrs(copy.successCalLabel)}>
-          {t(copy.successCalLabel, 'el')}
+        <a class="btn btn-primary" href={calUrl} target="_blank" rel="noopener noreferrer">
+          {t(copy.successCalLabel, locale)}
         </a>
       ) : null
     }

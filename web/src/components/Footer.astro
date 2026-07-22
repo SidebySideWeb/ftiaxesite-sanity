@@ -1,7 +1,7 @@
 ---
 import Localized from './Localized.astro'
 import type {ServicePackageDoc, SiteSettingsDoc} from '../lib/types'
-import {localeAttrs, t} from '../lib/locale'
+import {DEFAULT_LOCALE, localizeHref, t, type Locale} from '../lib/locale'
 
 interface Props {
   settings: SiteSettingsDoc | null
@@ -9,6 +9,7 @@ interface Props {
 }
 
 const {settings, packages} = Astro.props
+const locale: Locale = Astro.locals.locale ?? DEFAULT_LOCALE
 const year = new Date().getFullYear()
 const copyright = (settings?.copyrightLine ?? '© {year} ftiaxesite.gr. All rights reserved.').replace(
   '{year}',
@@ -16,13 +17,14 @@ const copyright = (settings?.copyrightLine ?? '© {year} ftiaxesite.gr. All righ
 )
 const phone = settings?.phone?.replace(/\s/g, '') ?? ''
 const telHref = phone ? `tel:${phone.startsWith('+') ? phone : `+30${phone.replace(/^0/, '')}`}` : '#'
+const homeHref = localizeHref('/', locale)
 ---
 
 <footer>
   <div class="wrap">
     <div class="foot-grid">
       <div class="foot">
-        <a href="/" class="logo" aria-label="ftiaxesite.gr">
+        <a href={homeHref} class="logo" aria-label="ftiaxesite.gr">
           <img src="/ftiaxesite-logo.svg" alt="ftiaxesite.gr" width="168" height="22" />
         </a>
         <Localized value={settings?.tagline} tag="p" class="tag" />
@@ -32,7 +34,7 @@ const telHref = phone ? `tel:${phone.startsWith('+') ? phone : `+30${phone.repla
         <Localized value={settings?.footerServicesTitle} tag="h2" />
         {
           packages.map((pkg) => (
-            <a href="#pricing" {...localeAttrs(pkg.title)}>{t(pkg.title, 'el')}</a>
+            <a href={localizeHref('#pricing', locale)}>{t(pkg.title, locale)}</a>
           ))
         }
       </div>
@@ -43,8 +45,8 @@ const telHref = phone ? `tel:${phone.startsWith('+') ? phone : `+30${phone.repla
         <Localized value={settings?.addressLine} tag="span" class="addr" />
         {
           settings?.navCtaLabel ? (
-            <button type="button" class="linklike" data-open="quoteModal" {...localeAttrs(settings.navCtaLabel)}>
-              {t(settings.navCtaLabel, 'el')}
+            <button type="button" class="linklike" data-open="quoteModal">
+              {t(settings.navCtaLabel, locale)}
             </button>
           ) : null
         }
@@ -55,19 +57,17 @@ const telHref = phone ? `tel:${phone.startsWith('+') ? phone : `+30${phone.repla
       <span class="legal-links">
         {
           settings?.privacyLinkLabel ? (
-            <a href="/privacy/" {...localeAttrs(settings.privacyLinkLabel)}>{t(settings.privacyLinkLabel, 'el')}</a>
+            <a href={localizeHref('/privacy/', locale)}>{t(settings.privacyLinkLabel, locale)}</a>
           ) : null
         }
         {
           settings?.cookiesLinkLabel ? (
-            <a href="/cookies/" {...localeAttrs(settings.cookiesLinkLabel)}>{t(settings.cookiesLinkLabel, 'el')}</a>
+            <a href={localizeHref('/cookies/', locale)}>{t(settings.cookiesLinkLabel, locale)}</a>
           ) : null
         }
         {
           settings?.cookieSettingsLabel ? (
-            <button type="button" id="cookieSettingsBtn" {...localeAttrs(settings.cookieSettingsLabel)}>
-              {t(settings.cookieSettingsLabel, 'el')}
-            </button>
+            <button type="button" id="cookieSettingsBtn">{t(settings.cookieSettingsLabel, locale)}</button>
           ) : null
         }
       </span>

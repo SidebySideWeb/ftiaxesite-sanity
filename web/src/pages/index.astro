@@ -14,12 +14,13 @@ import ModalQuote from '../components/ModalQuote.astro'
 import JsonLd from '../components/JsonLd.astro'
 import {fetchHomePageData} from '../lib/sanity'
 import {resolveSiteOrigin} from '../lib/site-url'
-import {t} from '../lib/locale'
+import {DEFAULT_LOCALE, t, type Locale} from '../lib/locale'
 
+const locale: Locale = Astro.locals.locale ?? DEFAULT_LOCALE
 const data = await fetchHomePageData()
 const siteOrigin = resolveSiteOrigin(Astro.site)
-const seoTitle = t(data.home?.seoTitle, 'el') || undefined
-const seoDescription = t(data.home?.seoDescription, 'el') || undefined
+const seoTitle = t(data.home?.seoTitle, locale) || undefined
+const seoDescription = t(data.home?.seoDescription, locale) || undefined
 ---
 
 <BaseLayout title={seoTitle} description={seoDescription} settings={data.settings}>

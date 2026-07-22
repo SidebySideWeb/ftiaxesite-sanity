@@ -1,7 +1,7 @@
 ---
 import Localized from './Localized.astro'
 import type {FaqItemDoc, HomePageDoc} from '../lib/types'
-import {localeAttrs, t} from '../lib/locale'
+import {DEFAULT_LOCALE, t, type Locale} from '../lib/locale'
 
 interface Props {
   home: HomePageDoc | null
@@ -9,6 +9,7 @@ interface Props {
 }
 
 const {home, faqs} = Astro.props
+const locale: Locale = Astro.locals.locale ?? DEFAULT_LOCALE
 ---
 
 <section id="faq" class="block">
@@ -23,10 +24,10 @@ const {home, faqs} = Astro.props
         faqs.map((item) => (
           <details class="faq-item">
             <summary>
-              <span {...localeAttrs(item.question)}>{t(item.question, 'el')}</span>
+              <span>{t(item.question, locale)}</span>
               <span class="sign">+</span>
             </summary>
-            <p class="answer" {...localeAttrs(item.answer)}>{t(item.answer, 'el')}</p>
+            <p class="answer">{t(item.answer, locale)}</p>
           </details>
         ))
       }

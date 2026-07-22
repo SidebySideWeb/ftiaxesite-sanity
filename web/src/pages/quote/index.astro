@@ -4,19 +4,21 @@ import Nav from '../../components/Nav.astro'
 import Footer from '../../components/Footer.astro'
 import QuoteForm from '../../components/QuoteForm.astro'
 import {fetchHomePage, fetchServicePackages, fetchSiteSettings} from '../../lib/sanity'
-import {t} from '../../lib/locale'
+import {DEFAULT_LOCALE, t, type Locale} from '../../lib/locale'
 
+const locale: Locale = Astro.locals.locale ?? DEFAULT_LOCALE
 const [settings, home, packages] = await Promise.all([
   fetchSiteSettings(),
   fetchHomePage(),
   fetchServicePackages(),
 ])
 const copy = home?.quoteForm
+const title = t(copy?.title, locale)
 ---
 
 <BaseLayout
-  title={t(copy?.title, 'el') ? `${t(copy?.title, 'el')} | ftiaxesite.gr` : undefined}
-  description={t(copy?.intro, 'el') || undefined}
+  title={title ? `${title} | ftiaxesite.gr` : undefined}
+  description={t(copy?.intro, locale) || undefined}
   settings={settings}
 >
   <Nav settings={settings} />

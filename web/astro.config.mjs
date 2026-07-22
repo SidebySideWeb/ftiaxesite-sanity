@@ -67,6 +67,21 @@ export default defineConfig({
     tailwind({applyBaseStyles: false}),
     sitemap({
       filter: (page) => !page.includes('/api/'),
+      i18n: {
+        defaultLocale: 'el',
+        locales: {
+          el: 'el-GR',
+          en: 'en-GB',
+        },
+      },
+      customPages: [
+        `${siteUrl}/en/`,
+        `${siteUrl}/en/quote/`,
+        `${siteUrl}/en/portfolio/`,
+        `${siteUrl}/en/blog/`,
+        `${siteUrl}/en/privacy/`,
+        `${siteUrl}/en/cookies/`,
+      ],
     }),
     sanity({
       projectId: sanityProjectId,
@@ -77,6 +92,10 @@ export default defineConfig({
   trailingSlash: 'always',
   i18n: {
     defaultLocale: 'el',
-    locales: ['el'],
+    locales: ['el', 'en'],
+    routing: {
+      prefixDefaultLocale: false,
+      redirectToDefaultLocale: false,
+    },
   },
 })

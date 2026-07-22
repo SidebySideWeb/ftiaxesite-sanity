@@ -1,7 +1,7 @@
 ---
 import Localized from './Localized.astro'
 import type {HomePageDoc, ProcessStepDoc} from '../lib/types'
-import {localeAttrs, t} from '../lib/locale'
+import {DEFAULT_LOCALE, t, type Locale} from '../lib/locale'
 
 interface Props {
   home: HomePageDoc | null
@@ -9,6 +9,7 @@ interface Props {
 }
 
 const {home, steps} = Astro.props
+const locale: Locale = Astro.locals.locale ?? DEFAULT_LOCALE
 ---
 
 <section id="process" class="block">
@@ -23,8 +24,8 @@ const {home, steps} = Astro.props
         steps.map((step) => (
           <div class="step reveal">
             <span class="n"></span>
-            <h3 {...localeAttrs(step.title)}>{t(step.title, 'el')}</h3>
-            <p {...localeAttrs(step.description)}>{t(step.description, 'el')}</p>
+            <h3>{t(step.title, locale)}</h3>
+            <p>{t(step.description, locale)}</p>
           </div>
         ))
       }

@@ -1,5 +1,5 @@
 ---
-import {hostFromUrl, localeAttrs, t} from '../lib/locale'
+import {hostFromUrl, DEFAULT_LOCALE, t, type Locale} from '../lib/locale'
 import {imageUrl} from '../lib/sanity'
 import type {ProjectDoc} from '../lib/types'
 
@@ -8,21 +8,22 @@ interface Props {
 }
 
 const {project} = Astro.props
+const locale: Locale = Astro.locals.locale ?? DEFAULT_LOCALE
 const url = project.liveUrl ?? '#'
 const screenshot = imageUrl(project.screenshot, 720)
 const gradient =
   project.gradientFrom && project.gradientTo
     ? `linear-gradient(140deg,${project.gradientFrom},${project.gradientTo})`
     : 'linear-gradient(140deg,#F2E3DC,#DFC7BD)'
-const domain = project.liveUrl ? hostFromUrl(project.liveUrl) : t(project.title, 'el')
+const domain = project.liveUrl ? hostFromUrl(project.liveUrl) : t(project.title, locale)
 ---
 
 <a class="card wcard reveal" href={url} target="_blank" rel="noopener noreferrer">
   <div class="wthumb" style={`background:${gradient}`}>
     {screenshot ? <img src={screenshot} alt="" loading="lazy" /> : <div class="frame"></div>}
   </div>
-  <span class="tag" {...localeAttrs(project.category)}>{t(project.category, 'el')}</span>
-  <h3 {...localeAttrs(project.title)}>{t(project.title, 'el')}</h3>
-  <p class="wdesc" {...localeAttrs(project.description)}>{t(project.description, 'el')}</p>
+  <span class="tag">{t(project.category, locale)}</span>
+  <h3>{t(project.title, locale)}</h3>
+  <p class="wdesc">{t(project.description, locale)}</p>
   <span class="wlink">{domain} →</span>
 </a>

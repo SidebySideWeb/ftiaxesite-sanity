@@ -5,19 +5,18 @@ import Footer from '../../components/Footer.astro'
 import LegalDoc from '../../components/LegalDoc.astro'
 import Localized from '../../components/Localized.astro'
 import {fetchLegalDoc, fetchServicePackages, fetchSiteSettings} from '../../lib/sanity'
-import {t} from '../../lib/locale'
+import {DEFAULT_LOCALE, t, type Locale} from '../../lib/locale'
 
+const locale: Locale = Astro.locals.locale ?? DEFAULT_LOCALE
 const [settings, doc, packages] = await Promise.all([
   fetchSiteSettings(),
   fetchLegalDoc('privacy'),
   fetchServicePackages(),
 ])
+const title = t(doc?.title, locale)
 ---
 
-<BaseLayout
-  title={t(doc?.title, 'el') ? `${t(doc?.title, 'el')} | ftiaxesite.gr` : undefined}
-  settings={settings}
->
+<BaseLayout title={title ? `${title} | ftiaxesite.gr` : undefined} settings={settings}>
   <Nav settings={settings} />
   <main class="wrap block">
     <div class="page-hero">

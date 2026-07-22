@@ -1,5 +1,5 @@
 ---
-import {localeAttrs, t, type LocalizedString} from '../lib/locale'
+import {t, type LocalizedString, type Locale, DEFAULT_LOCALE} from '../lib/locale'
 
 interface Props {
   value?: LocalizedString | null
@@ -8,6 +8,7 @@ interface Props {
 }
 
 const {value, tag: Tag = 'span', class: className} = Astro.props
+const locale: Locale = Astro.locals.locale ?? DEFAULT_LOCALE
 ---
 
-<Tag class={className} {...localeAttrs(value)} set:html={t(value, 'el')} />
+<Tag class={className} set:html={t(value, locale)} />

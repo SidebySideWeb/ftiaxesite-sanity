@@ -1,7 +1,7 @@
 ---
 import Localized from './Localized.astro'
-import {deliveryLabel, formatPrice, localeAttrs, t} from '../lib/locale'
-import type {LocalizedString, ServicePackageDoc} from '../lib/types'
+import {deliveryLabel, formatPrice, DEFAULT_LOCALE, t, type Locale, type LocalizedString} from '../lib/locale'
+import type {ServicePackageDoc} from '../lib/types'
 
 interface Props {
   packages: readonly ServicePackageDoc[]
@@ -9,6 +9,7 @@ interface Props {
 }
 
 const {packages, badge} = Astro.props
+const locale: Locale = Astro.locals.locale ?? DEFAULT_LOCALE
 ---
 
 <div class="mock">
@@ -18,12 +19,10 @@ const {packages, badge} = Astro.props
       packages.map((pkg) => (
         <div class="receipt-row">
           <span class="svc">
-            <span {...localeAttrs(pkg.title)}>{t(pkg.title, 'el')}</span>
-            <span class="time" {...localeAttrs({el: deliveryLabel(pkg.deliveryDaysMin, pkg.deliveryDaysMax, 'el'), en: deliveryLabel(pkg.deliveryDaysMin, pkg.deliveryDaysMax, 'en')})}>
-              {deliveryLabel(pkg.deliveryDaysMin, pkg.deliveryDaysMax, 'el')}
-            </span>
+            <span>{t(pkg.title, locale)}</span>
+            <span class="time">{deliveryLabel(pkg.deliveryDaysMin, pkg.deliveryDaysMax, locale)}</span>
           </span>
-          <span class="price">{pkg.price != null ? formatPrice(pkg.price, 'el') : ''}</span>
+          <span class="price">{pkg.price != null ? formatPrice(pkg.price, locale) : ''}</span>
         </div>
       ))
     }

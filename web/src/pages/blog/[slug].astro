@@ -4,10 +4,11 @@ import Nav from '../../components/Nav.astro'
 import Footer from '../../components/Footer.astro'
 import {PortableText} from 'astro-portabletext'
 import {fetchPostBySlug, fetchServicePackages, fetchSiteSettings} from '../../lib/sanity'
-import {t} from '../../lib/locale'
+import {DEFAULT_LOCALE, localizeHref, t, type Locale} from '../../lib/locale'
 
 export const prerender = false
 
+const locale: Locale = Astro.locals.locale ?? DEFAULT_LOCALE
 const slug = Astro.params.slug ?? ''
 const [settings, packages, post] = await Promise.all([
   fetchSiteSettings(),
@@ -16,20 +17,20 @@ const [settings, packages, post] = await Promise.all([
 ])
 
 if (!post) {
-  return Astro.redirect('/404/')
+  return Astro.redirect(localizeHref('/404/', locale))
 }
 
-const body = post.body?.el ?? post.body?.en ?? []
-const seoTitle = t(post.seoTitle, 'el') || t(post.title, 'el')
-const seoDescription = t(post.seoDescription, 'el') || t(post.excerpt, 'el')
+const body = (locale === 'en' ? post.body?.en : post.body?.el) ?? post.body?.el ?? post.body?.en ?? []
+const seoTitle = t(post.seoTitle, locale) || t(post.title, locale)
+const seoDescription = t(post.seoDescription, locale) || t(post.excerpt, locale)
 ---
 
 <BaseLayout title={`${seoTitle} | ftiaxesite.gr`} description={seoDescription} settings={settings}>
   <Nav settings={settings} />
   <main class="wrap block">
     <article class="prose reveal">
-      <h1>{t(post.title, 'el')}</h1>
-      {post.excerpt ? <p>{t(post.excerpt, 'el')}</p> : null}
+      <h1>{t(post.title, locale)}</h1>
+      {post.excerpt ? <p>{t(post.excerpt, locale)}</p> : null}
       <PortableText value={body} />
     </article>
   </main>

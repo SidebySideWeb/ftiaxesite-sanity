@@ -8,13 +8,14 @@ import 'vanilla-cookieconsent/dist/cookieconsent.css'
     window.__ftiaxesiteCookieConsentInit = true
 
     import('vanilla-cookieconsent').then((CookieConsent) => {
+      const pageLang = document.documentElement.lang === 'en' ? 'en' : 'el'
       CookieConsent.run({
         categories: {
           necessary: {enabled: true, readOnly: true},
           analytics: {},
         },
         language: {
-          default: 'el',
+          default: pageLang,
           translations: {
             el: {
               consentModal: {

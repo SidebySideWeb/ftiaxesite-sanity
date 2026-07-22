@@ -1,6 +1,5 @@
 ---
-import Localized from './Localized.astro'
-import {deliveryLabel, formatPrice, localeAttrs, t} from '../lib/locale'
+import {deliveryLabel, formatPrice, DEFAULT_LOCALE, t, type Locale} from '../lib/locale'
 import type {HomePageDoc, ServicePackageDoc} from '../lib/types'
 
 interface Props {
@@ -9,6 +8,7 @@ interface Props {
 }
 
 const {pkg, home} = Astro.props
+const locale: Locale = Astro.locals.locale ?? DEFAULT_LOCALE
 const slug = pkg.slug?.current ?? ''
 const featured = Boolean(pkg.featured)
 const btnClass = featured ? 'btn btn-primary' : 'btn btn-ghost'
@@ -17,40 +17,22 @@ const btnClass = featured ? 'btn btn-primary' : 'btn btn-ghost'
 <div class={`card pcard reveal${featured ? ' feat' : ''}`}>
   {
     featured && home?.popularBadgeLabel ? (
-      <span class="badge" {...localeAttrs(home.popularBadgeLabel)}>{t(home.popularBadgeLabel, 'el')}</span>
+      <span class="badge">{t(home.popularBadgeLabel, locale)}</span>
     ) : (
       <span class="badge ghost" aria-hidden="true">.</span>
     )
   }
-  <h3 {...localeAttrs(pkg.title)}>{t(pkg.title, 'el')}</h3>
-  <p class="desc" {...localeAttrs(pkg.description)}>{t(pkg.description, 'el')}</p>
-  <div class="amount">{pkg.price != null ? formatPrice(pkg.price, 'el') : ''}</div>
-  <div
-    class="delivery"
-    {...localeAttrs({
-      el: deliveryLabel(pkg.deliveryDaysMin, pkg.deliveryDaysMax, 'el'),
-      en: deliveryLabel(pkg.deliveryDaysMin, pkg.deliveryDaysMax, 'en'),
-    })}
-  >
-    {deliveryLabel(pkg.deliveryDaysMin, pkg.deliveryDaysMax, 'el')}
-  </div>
+  <h3>{t(pkg.title, locale)}</h3>
+  <p class="desc">{t(pkg.description, locale)}</p>
+  <div class="amount">{pkg.price != null ? formatPrice(pkg.price, locale) : ''}</div>
+  <div class="delivery">{deliveryLabel(pkg.deliveryDaysMin, pkg.deliveryDaysMax, locale)}</div>
   <ul>
-    {
-      (pkg.features ?? []).map((feature) => (
-        <li {...localeAttrs(feature)}>{t(feature, 'el')}</li>
-      ))
-    }
+    {(pkg.features ?? []).map((feature) => <li>{t(feature, locale)}</li>)}
   </ul>
   {
     home?.packageCtaLabel ? (
-      <button
-        type="button"
-        class={btnClass}
-        data-open="quoteModal"
-        data-package={slug}
-        {...localeAttrs(home.packageCtaLabel)}
-      >
-        {t(home.packageCtaLabel, 'el')}
+      <button type="button" class={btnClass} data-open="quoteModal" data-package={slug}>
+        {t(home.packageCtaLabel, locale)}
       </button>
     ) : null
   }

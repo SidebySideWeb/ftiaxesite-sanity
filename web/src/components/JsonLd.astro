@@ -1,5 +1,5 @@
 ---
-import {t} from '../lib/locale'
+import {DEFAULT_LOCALE, t, type Locale} from '../lib/locale'
 import type {FaqItemDoc, ServicePackageDoc, SiteSettingsDoc} from '../lib/types'
 
 interface Props {
@@ -10,7 +10,9 @@ interface Props {
 }
 
 const {siteOrigin, settings, packages, faqs} = Astro.props
+const locale: Locale = Astro.locals.locale ?? DEFAULT_LOCALE
 const origin = siteOrigin.replace(/\/$/, '')
+const homeUrl = locale === 'en' ? `${origin}/en/` : `${origin}/`
 
 const offers = packages.flatMap((pkg) => {
   if (pkg.price == null) return []
@@ -19,14 +21,14 @@ const offers = packages.flatMap((pkg) => {
       '@type': 'Offer',
       priceCurrency: pkg.currency ?? 'EUR',
       price: String(pkg.price),
-      itemOffered: {'@type': 'Service', name: t(pkg.title, 'el')},
+      itemOffered: {'@type': 'Service', name: t(pkg.title, locale)},
     },
   ]
 })
 
 const faqEntities = faqs.flatMap((item) => {
-  const question = t(item.question, 'el')
-  const answer = t(item.answer, 'el')
+  const question = t(item.question, locale)
+  const answer = t(item.answer, locale)
   if (!question || !answer) return []
   return [
     {
@@ -42,14 +44,16 @@ const graph = [
     '@type': 'ProfessionalService',
     '@id': `${origin}/#business`,
     name: settings?.brandName ?? 'ftiaxesite.gr',
-    description: t(settings?.tagline, 'el'),
-    url: `${origin}/`,
+    description: t(settings?.tagline, locale),
+    url: homeUrl,
     email: settings?.email,
     telephone: settings?.phone,
     priceRange: packages.length
       ? `€${Math.min(...packages.map((p) => p.price ?? 0))}-€${Math.max(...packages.map((p) => p.price ?? 0))}`
       : undefined,
-    areaServed: settings?.serviceArea?.el ? {'@type': 'Country', name: settings.serviceArea.el} : undefined,
+    areaServed: t(settings?.serviceArea, locale)
+      ? {'@type': 'Country', name: t(settings?.serviceArea, locale)}
+      : undefined,
     address: {
       '@type': 'PostalAddress',
       streetAddress: settings?.addressStreet,
@@ -66,7 +70,7 @@ const graph = [
     hasOfferCatalog: offers.length
       ? {
           '@type': 'OfferCatalog',
-          name: 'Υπηρεσίες κατασκευής ιστοσελίδων',
+          name: locale === 'en' ? 'Website development services' : 'Υπηρεσίες κατασκευής ιστοσελίδων',
           itemListElement: offers,
         }
       : undefined,

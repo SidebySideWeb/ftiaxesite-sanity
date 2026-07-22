@@ -2,7 +2,7 @@
 import Localized from './Localized.astro'
 import PriceReceipt from './PriceReceipt.astro'
 import type {HomePageDoc, ServicePackageDoc} from '../lib/types'
-import {localeAttrs, t} from '../lib/locale'
+import {DEFAULT_LOCALE, localizeHref, t, type Locale} from '../lib/locale'
 
 interface Props {
   home: HomePageDoc | null
@@ -10,6 +10,7 @@ interface Props {
 }
 
 const {home, packages} = Astro.props
+const locale: Locale = Astro.locals.locale ?? DEFAULT_LOCALE
 ---
 
 <span id="top"></span>
@@ -19,16 +20,16 @@ const {home, packages} = Astro.props
     <div class="reveal">
       <Localized value={home?.heroEyebrow} tag="span" class="eyebrow" />
       <h1>
-        <span {...localeAttrs(home?.heroHeading)}>{t(home?.heroHeading, 'el')}</span>{' '}
-        <span class="hl" {...localeAttrs(home?.heroHighlight)}>{t(home?.heroHighlight, 'el')}</span>.
+        <span>{t(home?.heroHeading, locale)}</span>{' '}
+        <span class="hl">{t(home?.heroHighlight, locale)}</span>.
       </h1>
       <Localized value={home?.heroBody} tag="p" class="lead" />
       <div class="hero-cta">
-        <a href="#pricing" class="btn btn-primary" {...localeAttrs(home?.ctaPrimaryLabel)}>
-          {t(home?.ctaPrimaryLabel, 'el')}
+        <a href={localizeHref('#pricing', locale)} class="btn btn-primary">
+          {t(home?.ctaPrimaryLabel, locale)}
         </a>
-        <button type="button" class="btn btn-ghost" data-open="quoteModal" {...localeAttrs(home?.ctaSecondaryLabel)}>
-          {t(home?.ctaSecondaryLabel, 'el')}
+        <button type="button" class="btn btn-ghost" data-open="quoteModal">
+          {t(home?.ctaSecondaryLabel, locale)}
         </button>
       </div>
       {

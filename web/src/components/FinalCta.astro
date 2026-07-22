@@ -1,7 +1,7 @@
 ---
 import Localized from './Localized.astro'
 import type {HomePageDoc, SiteSettingsDoc} from '../lib/types'
-import {localeAttrs, t} from '../lib/locale'
+import {DEFAULT_LOCALE, t, type Locale} from '../lib/locale'
 
 interface Props {
   home: HomePageDoc | null
@@ -9,6 +9,7 @@ interface Props {
 }
 
 const {home, settings} = Astro.props
+const locale: Locale = Astro.locals.locale ?? DEFAULT_LOCALE
 const phone = settings?.phone?.replace(/\s/g, '') ?? ''
 const telHref = phone ? `tel:${phone.startsWith('+') ? phone : `+30${phone.replace(/^0/, '')}`}` : '#'
 ---
@@ -21,16 +22,12 @@ const telHref = phone ? `tel:${phone.startsWith('+') ? phone : `+30${phone.repla
     <div class="cta-row">
       {
         home?.finalCtaPrimaryLabel ? (
-          <button type="button" class="btn btn-primary" data-open="quoteModal" {...localeAttrs(home.finalCtaPrimaryLabel)}>
-            {t(home.finalCtaPrimaryLabel, 'el')}
+          <button type="button" class="btn btn-primary" data-open="quoteModal">
+            {t(home.finalCtaPrimaryLabel, locale)}
           </button>
         ) : null
       }
-      {
-        settings?.phone ? (
-          <a href={telHref} class="btn btn-ghost">{settings.phone}</a>
-        ) : null
-      }
+      {settings?.phone ? <a href={telHref} class="btn btn-ghost">{settings.phone}</a> : null}
     </div>
   </div>
 </section>

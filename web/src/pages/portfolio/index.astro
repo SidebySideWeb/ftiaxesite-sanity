@@ -5,16 +5,19 @@ import Footer from '../../components/Footer.astro'
 import ProjectCard from '../../components/ProjectCard.astro'
 import Localized from '../../components/Localized.astro'
 import {fetchHomePage, fetchProjects, fetchServicePackages, fetchSiteSettings} from '../../lib/sanity'
+import {DEFAULT_LOCALE, t, type Locale} from '../../lib/locale'
 
+const locale: Locale = Astro.locals.locale ?? DEFAULT_LOCALE
 const [settings, home, projects, packages] = await Promise.all([
   fetchSiteSettings(),
   fetchHomePage(),
   fetchProjects(),
   fetchServicePackages(),
 ])
+const heading = t(home?.workHeading, locale)
 ---
 
-<BaseLayout title={home?.workHeading?.el ? `${home.workHeading.el} | ftiaxesite.gr` : undefined} settings={settings}>
+<BaseLayout title={heading ? `${heading} | ftiaxesite.gr` : undefined} settings={settings}>
   <Nav settings={settings} />
   <main class="wrap block">
     <div class="page-hero reveal">

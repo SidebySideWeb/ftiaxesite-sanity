@@ -5,8 +5,9 @@ import Footer from '../../components/Footer.astro'
 import Localized from '../../components/Localized.astro'
 import {fetchHomePage, fetchPosts, fetchServicePackages, fetchSiteSettings} from '../../lib/sanity'
 import {imageUrl} from '../../lib/sanity'
-import {localeAttrs, t} from '../../lib/locale'
+import {DEFAULT_LOCALE, localizeHref, t, type Locale} from '../../lib/locale'
 
+const locale: Locale = Astro.locals.locale ?? DEFAULT_LOCALE
 const [settings, home, posts, packages] = await Promise.all([
   fetchSiteSettings(),
   fetchHomePage(),
@@ -20,14 +21,12 @@ const [settings, home, posts, packages] = await Promise.all([
   <main class="wrap block">
     <div class="page-hero reveal">
       <Localized value={home?.workEyebrow} tag="span" class="eyebrow" />
-      <h1 data-el="Blog" data-en="Blog">Blog</h1>
+      <h1>Blog</h1>
       <Localized value={home?.workIntro} tag="p" />
     </div>
     {
       posts.length === 0 ? (
-        <p class="reveal" data-el="Δεν υπάρχουν άρθρα ακόμα." data-en="No posts yet.">
-          Δεν υπάρχουν άρθρα ακόμα.
-        </p>
+        <p class="reveal">{locale === 'en' ? 'No posts yet.' : 'Δεν υπάρχουν άρθρα ακόμα.'}</p>
       ) : (
         <div class="blog-grid">
           {
@@ -35,11 +34,11 @@ const [settings, home, posts, packages] = await Promise.all([
               const slug = post.slug?.current ?? ''
               const image = imageUrl(post.mainImage, 640)
               return (
-                <a class="blog-card reveal" href={`/blog/${slug}/`}>
+                <a class="blog-card reveal" href={localizeHref(`/blog/${slug}/`, locale)}>
                   {image ? <img src={image} alt="" loading="lazy" /> : null}
                   <div class="body">
-                    <h2 {...localeAttrs(post.title)}>{t(post.title, 'el')}</h2>
-                    <p {...localeAttrs(post.excerpt)}>{t(post.excerpt, 'el')}</p>
+                    <h2>{t(post.title, locale)}</h2>
+                    <p>{t(post.excerpt, locale)}</p>
                   </div>
                 </a>
               )

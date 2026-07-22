@@ -1,8 +1,7 @@
 ---
 import QuoteForm from './QuoteForm.astro'
-import Localized from './Localized.astro'
 import type {HomePageDoc, ServicePackageDoc, SiteSettingsDoc} from '../lib/types'
-import {localeAttrs, t} from '../lib/locale'
+import {DEFAULT_LOCALE, t, type Locale} from '../lib/locale'
 
 interface Props {
   home: HomePageDoc | null
@@ -11,6 +10,7 @@ interface Props {
 }
 
 const {home, packages, settings} = Astro.props
+const locale: Locale = Astro.locals.locale ?? DEFAULT_LOCALE
 const copy = home?.quoteForm
 ---
 
@@ -18,8 +18,8 @@ const copy = home?.quoteForm
   <div class="modal-panel">
     <div class="modal-head">
       <div>
-        <h2 id="quoteTitle" {...localeAttrs(copy?.title)}>{t(copy?.title, 'el')}</h2>
-        {copy?.intro ? <p {...localeAttrs(copy.intro)}>{t(copy.intro, 'el')}</p> : null}
+        <h2 id="quoteTitle">{t(copy?.title, locale)}</h2>
+        {copy?.intro ? <p>{t(copy.intro, locale)}</p> : null}
       </div>
       <button type="button" class="modal-close" data-close aria-label="Close">✕</button>
     </div>

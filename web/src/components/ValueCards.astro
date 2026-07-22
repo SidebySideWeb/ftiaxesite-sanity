@@ -1,13 +1,13 @@
 ---
-import Localized from './Localized.astro'
 import type {ValuePropDoc} from '../lib/types'
-import {localeAttrs, t} from '../lib/locale'
+import {DEFAULT_LOCALE, t, type Locale} from '../lib/locale'
 
 interface Props {
   items: readonly ValuePropDoc[]
 }
 
 const {items} = Astro.props
+const locale: Locale = Astro.locals.locale ?? DEFAULT_LOCALE
 ---
 
 <section class="block" style="padding-top:20px;padding-bottom:8px">
@@ -17,8 +17,8 @@ const {items} = Astro.props
         items.map((item, index) => (
           <div class="card vcard reveal">
             <span class="vnum">{String(index + 1).padStart(2, '0')}</span>
-            <h2 {...localeAttrs(item.title)}>{t(item.title, 'el')}</h2>
-            <p {...localeAttrs(item.description)}>{t(item.description, 'el')}</p>
+            <h2>{t(item.title, locale)}</h2>
+            <p>{t(item.description, locale)}</p>
           </div>
         ))
       }

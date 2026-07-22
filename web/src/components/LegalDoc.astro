@@ -1,5 +1,5 @@
 ---
-import {localeAttrs, t} from '../lib/locale'
+import {DEFAULT_LOCALE, t, type Locale} from '../lib/locale'
 import type {LegalDocDoc} from '../lib/types'
 
 interface Props {
@@ -7,6 +7,7 @@ interface Props {
 }
 
 const {doc} = Astro.props
+const locale: Locale = Astro.locals.locale ?? DEFAULT_LOCALE
 
 function formatBody(text: string): string {
   return text
@@ -23,7 +24,10 @@ function formatBody(text: string): string {
         return `${heading ? `<p>${heading}</p>` : ''}<ul>${items}</ul>`
       }
       if (block.startsWith('- ')) {
-        const items = block.split('\n').map((line) => `<li>${line.replace(/^-\s+/, '')}</li>`).join('')
+        const items = block
+          .split('\n')
+          .map((line) => `<li>${line.replace(/^-\s+/, '')}</li>`)
+          .join('')
         return `<ul>${items}</ul>`
       }
       return `<p>${block}</p>`
@@ -31,8 +35,7 @@ function formatBody(text: string): string {
     .join('')
 }
 
-const bodyEl = formatBody(t(doc?.body, 'el'))
-const bodyEn = formatBody(t(doc?.body, 'en'))
+const bodyHtml = formatBody(t(doc?.body, locale))
 ---
 
-<article class="doc" {...localeAttrs({el: bodyEl, en: bodyEn})} set:html={bodyEl} />
+<article class="doc" set:html={bodyHtml} />

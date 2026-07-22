@@ -194,15 +194,16 @@ header.nav {
   font-size: 0.78rem;
 }
 
-.lang button {
+.lang a {
   background: transparent;
   border: none;
   padding: 0.35rem 0.7rem;
   cursor: pointer;
   color: var(--muted);
+  text-decoration: none;
 }
 
-.lang button.active {
+.lang a.active {
   background: var(--ink);
   color: var(--cream);
 }

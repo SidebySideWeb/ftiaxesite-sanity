@@ -17,7 +17,7 @@ import '../styles/global.css'
 import Analytics from '../components/Analytics.astro'
 import CookieConsent from '../components/CookieConsent.astro'
 import {buildCanonicalUrl, resolveSiteOrigin} from '../lib/site-url'
-import {t} from '../lib/locale'
+import {alternateLocalePath, DEFAULT_LOCALE, ogLocale, t, type Locale} from '../lib/locale'
 import type {SiteSettingsDoc} from '../lib/types'
 
 interface Props {
@@ -28,30 +28,42 @@ interface Props {
 }
 
 const {title, description, settings = null, noindex = false} = Astro.props
+const locale: Locale = Astro.locals.locale ?? DEFAULT_LOCALE
 const siteOrigin = resolveSiteOrigin(Astro.site)
-const canonical = buildCanonicalUrl(Astro.url.pathname, siteOrigin)
+const publicPath = Astro.locals.publicPath || Astro.url.pathname
+const canonical = buildCanonicalUrl(publicPath, siteOrigin)
+const alternateEl = buildCanonicalUrl(alternateLocalePath(publicPath, 'el'), siteOrigin)
+const alternateEn = buildCanonicalUrl(alternateLocalePath(publicPath, 'en'), siteOrigin)
 
 const pageTitle =
   title ??
-  t(settings?.defaultSeoTitle, 'el') ??
-  'Κατασκευή Ιστοσελίδων & Eshop | Το Site σου σε 2 Εβδομάδες | ftiaxesite.gr'
+  t(settings?.defaultSeoTitle, locale) ??
+  (locale === 'en'
+    ? 'Website & Eshop Development | Your Site in 2 Weeks | ftiaxesite.gr'
+    : 'Κατασκευή Ιστοσελίδων & Eshop | Το Site σου σε 2 Εβδομάδες | ftiaxesite.gr')
 const pageDescription =
   description ??
-  t(settings?.defaultSeoDescription, 'el') ??
-  'Επαγγελματική κατασκευή και ανακατασκευή ιστοσελίδων για ελληνικές επιχειρήσεις. Ξεκάθαρες τιμές από 900 ευρώ, γρήγορη παράδοση σε 2 εβδομάδες, χωρίς κρυφές χρεώσεις.'
+  t(settings?.defaultSeoDescription, locale) ??
+  (locale === 'en'
+    ? 'Professional website design and rebuilds for Greek businesses. Clear pricing from €900, delivery in about 2 weeks, no hidden fees.'
+    : 'Επαγγελματική κατασκευή και ανακατασκευή ιστοσελίδων για ελληνικές επιχειρήσεις. Ξεκάθαρες τιμές από 900 ευρώ, γρήγορη παράδοση σε 2 εβδομάδες, χωρίς κρυφές χρεώσεις.')
 ---
 
 <!doctype html>
-<html lang="el" class="no-js">
+<html lang={locale} class="no-js">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{pageTitle}</title>
     <meta name="description" content={pageDescription} />
     <link rel="canonical" href={canonical} />
+    <link rel="alternate" hreflang="el" href={alternateEl} />
+    <link rel="alternate" hreflang="en" href={alternateEn} />
+    <link rel="alternate" hreflang="x-default" href={alternateEl} />
     {noindex ? <meta name="robots" content="noindex,nofollow" /> : null}
     <meta property="og:type" content="website" />
-    <meta property="og:locale" content="el_GR" />
+    <meta property="og:locale" content={ogLocale(locale)} />
+    <meta property="og:locale:alternate" content={ogLocale(locale === 'en' ? 'el' : 'en')} />
     <meta property="og:title" content={pageTitle} />
     <meta property="og:description" content={pageDescription} />
     <meta property="og:url" content={canonical} />
@@ -82,37 +94,8 @@ const pageDescription =
     <slot />
     <CookieConsent />
     <script is:inline>
-      function setLang(lang) {
-        if (lang !== 'el' && lang !== 'en') return
-        document.documentElement.lang = lang
-        try {
-          localStorage.setItem('ftiaxesite-lang', lang)
-        } catch (e) {}
-
-        document.querySelectorAll('.lang button').forEach(function (btn) {
-          btn.classList.toggle('active', btn.getAttribute('data-lang') === lang)
-        })
-
-        document.querySelectorAll('[data-el]').forEach(function (el) {
-          var val = el.getAttribute('data-' + lang)
-          if (val === null) return
-          if (val.indexOf('<') !== -1) {
-            el.innerHTML = val
-          } else {
-            el.textContent = val
-          }
-        })
-      }
-
-      document.querySelectorAll('.lang button[data-lang]').forEach(function (btn) {
-        btn.addEventListener('click', function () {
-          setLang(btn.getAttribute('data-lang'))
-        })
-      })
-
       try {
-        var saved = localStorage.getItem('ftiaxesite-lang')
-        if (saved === 'en' || saved === 'el') setLang(saved)
+        localStorage.setItem('ftiaxesite-lang', document.documentElement.lang === 'en' ? 'en' : 'el')
       } catch (e) {}
 
       var io = new IntersectionObserver(

@@ -1,19 +1,30 @@
 ---
 import type {NavLink, SiteSettingsDoc} from '../lib/types'
-import {localeAttrs, t} from '../lib/locale'
+import {
+  alternateLocalePath,
+  DEFAULT_LOCALE,
+  localizeHref,
+  t,
+  type Locale,
+} from '../lib/locale'
 
 interface Props {
   settings: SiteSettingsDoc | null
 }
 
 const {settings} = Astro.props
+const locale: Locale = Astro.locals.locale ?? DEFAULT_LOCALE
 const navLinks = settings?.navLinks ?? []
 const ctaLabel = settings?.navCtaLabel
+const homeHref = localizeHref('/', locale)
+const publicPath = Astro.locals.publicPath || Astro.url.pathname
+const elHref = alternateLocalePath(publicPath, 'el')
+const enHref = alternateLocalePath(publicPath, 'en')
 ---
 
 <header class="nav">
   <div class="wrap nav-inner">
-    <a href="/" class="logo" aria-label="ftiaxesite.gr">
+    <a href={homeHref} class="logo" aria-label="ftiaxesite.gr">
       <img
         src="/ftiaxesite-logo.svg"
         alt="ftiaxesite.gr"
@@ -27,31 +38,26 @@ const ctaLabel = settings?.navCtaLabel
     <nav class="nav-links" id="primaryNav" aria-label="Primary">
       {
         navLinks.map((link: NavLink) => (
-          <a class="nl" href={link.href ?? '#'} {...localeAttrs(link.label)}>
-            {t(link.label, 'el')}
+          <a class="nl" href={localizeHref(link.href ?? '#', locale)}>
+            {t(link.label, locale)}
           </a>
         ))
       }
       <div class="lang lang-mobile" role="group" aria-label="Language">
-        <button type="button" data-lang="el" class="active">EL</button>
-        <button type="button" data-lang="en">EN</button>
+        <a href={elHref} class={locale === 'el' ? 'active' : undefined} hreflang="el" lang="el">EL</a>
+        <a href={enHref} class={locale === 'en' ? 'active' : undefined} hreflang="en" lang="en">EN</a>
       </div>
     </nav>
 
     <div class="nav-right">
       <div class="lang lang-desktop" role="group" aria-label="Language">
-        <button type="button" data-lang="el" class="active">EL</button>
-        <button type="button" data-lang="en">EN</button>
+        <a href={elHref} class={locale === 'el' ? 'active' : undefined} hreflang="el" lang="el">EL</a>
+        <a href={enHref} class={locale === 'en' ? 'active' : undefined} hreflang="en" lang="en">EN</a>
       </div>
       {
         ctaLabel ? (
-          <button
-            type="button"
-            class="btn btn-primary btn-sm nav-cta-desktop"
-            data-open="quoteModal"
-            {...localeAttrs(ctaLabel)}
-          >
-            {t(ctaLabel, 'el')}
+          <button type="button" class="btn btn-primary btn-sm nav-cta-desktop" data-open="quoteModal">
+            {t(ctaLabel, locale)}
           </button>
         ) : null
       }
@@ -72,14 +78,14 @@ const ctaLabel = settings?.navCtaLabel
 {
   ctaLabel ? (
     <div class="sticky-cta" id="stickyCta" role="region" aria-label="Quote CTA">
-      <button type="button" class="btn btn-primary" data-open="quoteModal" {...localeAttrs(ctaLabel)}>
-        {t(ctaLabel, 'el')}
+      <button type="button" class="btn btn-primary" data-open="quoteModal">
+        {t(ctaLabel, locale)}
       </button>
     </div>
   ) : (
     <div class="sticky-cta" id="stickyCta" role="region" aria-label="Quote CTA">
-      <button type="button" class="btn btn-primary" data-open="quoteModal" data-el="Ζήτησε Προσφορά" data-en="Get a quote">
-        Ζήτησε Προσφορά
+      <button type="button" class="btn btn-primary" data-open="quoteModal">
+        {locale === 'en' ? 'Get a quote' : 'Ζήτησε Προσφορά'}
       </button>
     </div>
   )

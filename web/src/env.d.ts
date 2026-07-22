@@ -1,5 +1,12 @@
 /// <reference types="astro/client" />
 
+declare namespace App {
+  interface Locals {
+    locale: import('./lib/locale').Locale
+    publicPath: string
+  }
+}
+
 interface ImportMetaEnv {
   readonly SITE_URL?: string
   readonly PUBLIC_SANITY_PROJECT_ID?: string
