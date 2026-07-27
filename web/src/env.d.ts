@@ -37,5 +37,6 @@ interface Window {
   __ftiaxesiteShowCookiePreferences?: () => void
   __ftiaxesiteRecaptchaLoading?: Promise<void>
   dataLayer?: Record<string, unknown>[]
+  gtag?: (...args: unknown[]) => void
   grecaptcha?: Grecaptcha
 }

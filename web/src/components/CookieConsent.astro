@@ -3,6 +3,12 @@ import 'vanilla-cookieconsent/dist/cookieconsent.css'
 ---
 
 <script>
+  function syncAnalyticsFromConsent(CookieConsent) {
+    if (CookieConsent.acceptedCategory('analytics')) {
+      window.__ftiaxesiteLoadGtm?.()
+    }
+  }
+
   function bootCookieConsent() {
     if (window.__ftiaxesiteCookieConsentInit) return
     window.__ftiaxesiteCookieConsentInit = true
@@ -75,17 +81,16 @@ import 'vanilla-cookieconsent/dist/cookieconsent.css'
             },
           },
         },
-        onConsent: ({cookie}) => {
-          if (cookie.categories.includes('analytics')) {
-            window.__ftiaxesiteLoadGtm?.()
-          }
+        onConsent: () => {
+          syncAnalyticsFromConsent(CookieConsent)
         },
-        onChange: ({cookie}) => {
-          if (cookie.categories.includes('analytics')) {
-            window.__ftiaxesiteLoadGtm?.()
-          }
+        onChange: () => {
+          syncAnalyticsFromConsent(CookieConsent)
         },
       })
+
+      // Returning visitors: onConsent should fire, but also sync explicitly.
+      syncAnalyticsFromConsent(CookieConsent)
 
       window.__ftiaxesiteShowCookiePreferences = () => {
         CookieConsent.showPreferences()
@@ -93,9 +98,13 @@ import 'vanilla-cookieconsent/dist/cookieconsent.css'
     })
   }
 
-  if ('requestIdleCallback' in window) {
-    requestIdleCallback(bootCookieConsent, {timeout: 2500})
+  // Prior consent → boot immediately so GTM is not stuck behind idle delay.
+  const hasStoredConsent = document.cookie.split(';').some((part) => part.trim().startsWith('cc_cookie='))
+  if (hasStoredConsent) {
+    bootCookieConsent()
+  } else if ('requestIdleCallback' in window) {
+    requestIdleCallback(bootCookieConsent, {timeout: 1500})
   } else {
-    window.setTimeout(bootCookieConsent, 1200)
+    window.setTimeout(bootCookieConsent, 800)
   }
 </script>

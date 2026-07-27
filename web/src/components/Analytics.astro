@@ -10,19 +10,46 @@ const gtmId = (import.meta.env.PUBLIC_GTM_ID ?? '').trim()
 {
   placement === 'head' && gtmId ? (
     <script is:inline define:vars={{gtmId}}>
+      window.dataLayer = window.dataLayer || []
+      window.gtag =
+        window.gtag ||
+        function () {
+          window.dataLayer.push(arguments)
+        }
+      // Consent Mode v2 defaults (EU): deny until the banner grants analytics.
+      window.gtag('consent', 'default', {
+        ad_storage: 'denied',
+        ad_user_data: 'denied',
+        ad_personalization: 'denied',
+        analytics_storage: 'denied',
+        wait_for_update: 1500,
+      })
+
       window.__ftiaxesiteLoadGtm = function () {
-        if (window.__ftiaxesiteGtmLoaded) return
-        window.__ftiaxesiteGtmLoaded = true
-        ;(function (w, d, s, l, i) {
-          w[l] = w[l] || []
-          w[l].push({'gtm.start': new Date().getTime(), event: 'gtm.js'})
-          var f = d.getElementsByTagName(s)[0],
-            j = d.createElement(s),
-            dl = l !== 'dataLayer' ? '&l=' + l : ''
-          j.async = true
-          j.src = 'https://www.googletagmanager.com/gtm.js?id=' + i + dl
-          f.parentNode.insertBefore(j, f)
-        })(window, document, 'script', 'dataLayer', gtmId)
+        window.gtag('consent', 'update', {
+          analytics_storage: 'granted',
+        })
+
+        if (!window.__ftiaxesiteGtmLoaded) {
+          window.__ftiaxesiteGtmLoaded = true
+          ;(function (w, d, s, l, i) {
+            w[l] = w[l] || []
+            w[l].push({'gtm.start': new Date().getTime(), event: 'gtm.js'})
+            var f = d.getElementsByTagName(s)[0],
+              j = d.createElement(s),
+              dl = l !== 'dataLayer' ? '&l=' + l : ''
+            j.async = true
+            j.src = 'https://www.googletagmanager.com/gtm.js?id=' + i + dl
+            f.parentNode.insertBefore(j, f)
+          })(window, document, 'script', 'dataLayer', gtmId)
+        }
+
+        window.dataLayer.push({
+          event: 'page_view',
+          page_path: window.location.pathname,
+          page_location: window.location.href,
+          page_title: document.title,
+        })
       }
     </script>
   ) : null
@@ -30,22 +57,17 @@ const gtmId = (import.meta.env.PUBLIC_GTM_ID ?? '').trim()
 
 {
   placement === 'body' && gtmId ? (
-    <>
-      <noscript>
-        <iframe
-          height="0"
-          src={`https://www.googletagmanager.com/ns.html?id=${encodeURIComponent(gtmId)}`}
-          style="display:none;visibility:hidden"
-          title="Google Tag Manager"
-          width="0"
-        ></iframe>
-      </noscript>
-      <script is:inline>
-        document.addEventListener('astro:page-load', () => {
-          window.dataLayer = window.dataLayer || []
-          window.dataLayer.push({event: 'pageview', page: window.location.pathname})
+    <script is:inline>
+      document.addEventListener('astro:page-load', () => {
+        if (!window.__ftiaxesiteGtmLoaded) return
+        window.dataLayer = window.dataLayer || []
+        window.dataLayer.push({
+          event: 'page_view',
+          page_path: window.location.pathname,
+          page_location: window.location.href,
+          page_title: document.title,
         })
-      </script>
-    </>
+      })
+    </script>
   ) : null
 }
