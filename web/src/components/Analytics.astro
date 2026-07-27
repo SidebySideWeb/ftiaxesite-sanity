@@ -46,13 +46,6 @@ const gtmId = (import.meta.env.PUBLIC_GTM_ID ?? '').trim()
           ad_personalization: 'granted',
           analytics_storage: 'granted',
         })
-
-        window.dataLayer.push({
-          event: 'page_view',
-          page_path: window.location.pathname,
-          page_location: window.location.href,
-          page_title: document.title,
-        })
       }
     </script>
   ) : null
