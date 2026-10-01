@@ -5,7 +5,9 @@ interface Props {
 
 const {placement} = Astro.props
 const gtmId = (import.meta.env.PUBLIC_GTM_ID ?? '').trim()
-const ga4Id = (import.meta.env.PUBLIC_GA4_MEASUREMENT_ID ?? '').trim()
+// Direct GA4 disabled — fire GA4 from GTM to avoid double-counting.
+// const ga4Id = (import.meta.env.PUBLIC_GA4_MEASUREMENT_ID ?? '').trim()
+const ga4Id = ''
 const hasAnalytics = Boolean(gtmId || ga4Id)
 ---
 
@@ -42,15 +44,16 @@ const hasAnalytics = Boolean(gtmId || ga4Id)
         })(window, document, 'script', 'dataLayer', gtmId)
       }
 
-      if (ga4Id && !window.__ftiaxesiteGa4Loaded) {
-        window.__ftiaxesiteGa4Loaded = true
-        var gaScript = document.createElement('script')
-        gaScript.async = true
-        gaScript.src = 'https://www.googletagmanager.com/gtag/js?id=' + ga4Id
-        document.head.appendChild(gaScript)
-        window.gtag('js', new Date())
-        window.gtag('config', ga4Id, {anonymize_ip: true, send_page_view: false})
-      }
+      // Direct GA4 gtag — keep commented while GA4 is configured inside GTM.
+      // if (ga4Id && !window.__ftiaxesiteGa4Loaded) {
+      //   window.__ftiaxesiteGa4Loaded = true
+      //   var gaScript = document.createElement('script')
+      //   gaScript.async = true
+      //   gaScript.src = 'https://www.googletagmanager.com/gtag/js?id=' + ga4Id
+      //   document.head.appendChild(gaScript)
+      //   window.gtag('js', new Date())
+      //   window.gtag('config', ga4Id, {anonymize_ip: true, send_page_view: false})
+      // }
 
       window.__ftiaxesiteLoadGtm = function () {
         window.gtag('consent', 'update', {
@@ -61,6 +64,20 @@ const hasAnalytics = Boolean(gtmId || ga4Id)
         })
       }
     </script>
+  ) : null
+}
+
+{
+  placement === 'body' && gtmId ? (
+    <noscript>
+      <iframe
+        src={`https://www.googletagmanager.com/ns.html?id=${gtmId}`}
+        height="0"
+        width="0"
+        style="display:none;visibility:hidden"
+        title="Google Tag Manager"
+      ></iframe>
+    </noscript>
   ) : null
 }
 
@@ -76,13 +93,14 @@ const hasAnalytics = Boolean(gtmId || ga4Id)
           page_location: window.location.href,
           page_title: document.title,
         })
-        if (ga4Id && window.gtag) {
-          window.gtag('event', 'page_view', {
-            page_path: window.location.pathname,
-            page_location: window.location.href,
-            page_title: document.title,
-          })
-        }
+        // Direct GA4 page_view — keep commented while GA4 is configured inside GTM.
+        // if (ga4Id && window.gtag) {
+        //   window.gtag('event', 'page_view', {
+        //     page_path: window.location.pathname,
+        //     page_location: window.location.href,
+        //     page_title: document.title,
+        //   })
+        // }
       })
     </script>
   ) : null
