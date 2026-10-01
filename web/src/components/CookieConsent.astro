@@ -1,6 +1,29 @@
 ---
 import 'vanilla-cookieconsent/dist/cookieconsent.css'
+
+const pageLang = Astro.locals.locale === 'en' ? 'en' : 'el'
+const reopenLabel = pageLang === 'en' ? 'Cookie settings' : 'Ρυθμίσεις cookies'
 ---
+
+<button
+  type="button"
+  class="cookie-settings-fab"
+  data-cookie-settings
+  aria-label={reopenLabel}
+  title={reopenLabel}
+>
+  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+    <path
+      d="M12 2a10 10 0 1 0 10 10 1.5 1.5 0 0 0-1.7-1.5 2.5 2.5 0 0 1-2.4-3.3A1.5 1.5 0 0 0 16.4 5 10 10 0 0 0 12 2Z"
+      stroke="currentColor"
+      stroke-width="1.6"
+      stroke-linejoin="round"></path>
+    <circle cx="8.5" cy="10" r="1.1" fill="currentColor"></circle>
+    <circle cx="12.5" cy="14.5" r="1.1" fill="currentColor"></circle>
+    <circle cx="15.5" cy="9.5" r="1.1" fill="currentColor"></circle>
+  </svg>
+  <span class="cookie-settings-fab__text">{reopenLabel}</span>
+</button>
 
 <script>
   function syncAnalyticsFromConsent(CookieConsent) {
@@ -98,6 +121,23 @@ import 'vanilla-cookieconsent/dist/cookieconsent.css'
     })
   }
 
+  if (!window.__ftiaxesiteCookieSettingsClickBound) {
+    window.__ftiaxesiteCookieSettingsClickBound = true
+    document.addEventListener('click', (event) => {
+      const target = event.target
+      if (!(target instanceof Element)) return
+      if (!target.closest('[data-cookie-settings]')) return
+      // Prefer library data-cc handler once booted; fallback for early clicks.
+      if (typeof window.__ftiaxesiteShowCookiePreferences === 'function') {
+        event.preventDefault()
+        window.__ftiaxesiteShowCookiePreferences()
+      } else {
+        bootCookieConsent()
+        window.setTimeout(() => window.__ftiaxesiteShowCookiePreferences?.(), 50)
+      }
+    })
+  }
+
   // Prior consent → boot immediately so GTM is not stuck behind idle delay.
   const hasStoredConsent = document.cookie.split(';').some((part) => part.trim().startsWith('cc_cookie='))
   if (hasStoredConsent) {
@@ -108,3 +148,54 @@ import 'vanilla-cookieconsent/dist/cookieconsent.css'
     window.setTimeout(bootCookieConsent, 800)
   }
 </script>
+
+<style is:global>
+  .cookie-settings-fab {
+    position: fixed;
+    left: 16px;
+    bottom: 16px;
+    z-index: 9990;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 14px;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    background: var(--white);
+    color: var(--ink);
+    font-family: inherit;
+    font-size: 0.82rem;
+    font-weight: 600;
+    line-height: 1;
+    box-shadow: var(--shadow);
+    cursor: pointer;
+  }
+
+  .cookie-settings-fab:hover {
+    color: var(--green);
+    border-color: color-mix(in srgb, var(--green) 35%, var(--line));
+  }
+
+  .cookie-settings-fab:focus-visible {
+    outline: 2px solid var(--green);
+    outline-offset: 2px;
+  }
+
+  @media (max-width: 640px) {
+    .cookie-settings-fab__text {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    .cookie-settings-fab {
+      padding: 12px;
+    }
+  }
+</style>

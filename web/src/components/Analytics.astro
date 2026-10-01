@@ -5,17 +5,20 @@ interface Props {
 
 const {placement} = Astro.props
 const gtmId = (import.meta.env.PUBLIC_GTM_ID ?? '').trim()
+const ga4Id = (import.meta.env.PUBLIC_GA4_MEASUREMENT_ID ?? '').trim()
+const hasAnalytics = Boolean(gtmId || ga4Id)
 ---
 
 {
-  placement === 'head' && gtmId ? (
-    <script is:inline define:vars={{gtmId}}>
+  placement === 'head' && hasAnalytics ? (
+    <script is:inline define:vars={{gtmId, ga4Id}}>
       window.dataLayer = window.dataLayer || []
       window.gtag =
         window.gtag ||
         function () {
           window.dataLayer.push(arguments)
         }
+
       // Consent Mode v2 defaults (EU): deny until the banner grants analytics.
       window.gtag('consent', 'default', {
         ad_storage: 'denied',
@@ -25,7 +28,7 @@ const gtmId = (import.meta.env.PUBLIC_GTM_ID ?? '').trim()
         wait_for_update: 1500,
       })
 
-      if (!window.__ftiaxesiteGtmLoaded) {
+      if (gtmId && !window.__ftiaxesiteGtmLoaded) {
         window.__ftiaxesiteGtmLoaded = true
         ;(function (w, d, s, l, i) {
           w[l] = w[l] || []
@@ -37,6 +40,16 @@ const gtmId = (import.meta.env.PUBLIC_GTM_ID ?? '').trim()
           j.src = 'https://www.googletagmanager.com/gtm.js?id=' + i + dl
           f.parentNode.insertBefore(j, f)
         })(window, document, 'script', 'dataLayer', gtmId)
+      }
+
+      if (ga4Id && !window.__ftiaxesiteGa4Loaded) {
+        window.__ftiaxesiteGa4Loaded = true
+        var gaScript = document.createElement('script')
+        gaScript.async = true
+        gaScript.src = 'https://www.googletagmanager.com/gtag/js?id=' + ga4Id
+        document.head.appendChild(gaScript)
+        window.gtag('js', new Date())
+        window.gtag('config', ga4Id, {anonymize_ip: true, send_page_view: false})
       }
 
       window.__ftiaxesiteLoadGtm = function () {
@@ -52,10 +65,10 @@ const gtmId = (import.meta.env.PUBLIC_GTM_ID ?? '').trim()
 }
 
 {
-  placement === 'body' && gtmId ? (
-    <script is:inline>
+  placement === 'body' && hasAnalytics ? (
+    <script is:inline define:vars={{ga4Id}}>
       document.addEventListener('astro:page-load', () => {
-        if (!window.__ftiaxesiteGtmLoaded) return
+        if (!window.__ftiaxesiteGtmLoaded && !window.__ftiaxesiteGa4Loaded) return
         window.dataLayer = window.dataLayer || []
         window.dataLayer.push({
           event: 'page_view',
@@ -63,6 +76,13 @@ const gtmId = (import.meta.env.PUBLIC_GTM_ID ?? '').trim()
           page_location: window.location.href,
           page_title: document.title,
         })
+        if (ga4Id && window.gtag) {
+          window.gtag('event', 'page_view', {
+            page_path: window.location.pathname,
+            page_location: window.location.href,
+            page_title: document.title,
+          })
+        }
       })
     </script>
   ) : null

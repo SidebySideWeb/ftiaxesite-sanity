@@ -45,6 +45,12 @@ export default defineConfig({
         optional: true,
         default: env.PUBLIC_GTM_ID ?? '',
       }),
+      PUBLIC_GA4_MEASUREMENT_ID: envField.string({
+        context: 'client',
+        access: 'public',
+        optional: true,
+        default: env.PUBLIC_GA4_MEASUREMENT_ID ?? '',
+      }),
       PUBLIC_RECAPTCHA_SITE_KEY: envField.string({
         context: 'client',
         access: 'public',

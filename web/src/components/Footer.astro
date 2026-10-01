@@ -18,6 +18,10 @@ const copyright = (settings?.copyrightLine ?? '© {year} ftiaxesite.gr. All righ
 const phone = settings?.phone?.replace(/\s/g, '') ?? ''
 const telHref = phone ? `tel:${phone.startsWith('+') ? phone : `+30${phone.replace(/^0/, '')}`}` : '#'
 const homeHref = localizeHref('/', locale)
+const privacyLabel = t(settings?.privacyLinkLabel, locale) || (locale === 'en' ? 'Privacy Policy' : 'Πολιτική Απορρήτου')
+const cookiesLabel = t(settings?.cookiesLinkLabel, locale) || (locale === 'en' ? 'Cookie Policy' : 'Πολιτική Cookies')
+const cookieSettingsLabel =
+  t(settings?.cookieSettingsLabel, locale) || (locale === 'en' ? 'Cookie settings' : 'Ρυθμίσεις cookies')
 ---
 
 <footer>
@@ -55,28 +59,12 @@ const homeHref = localizeHref('/', locale)
     <div class="foot-bottom">
       <span>{copyright}</span>
       <span class="legal-links">
-        {
-          settings?.privacyLinkLabel ? (
-            <a href={localizeHref('/privacy/', locale)}>{t(settings.privacyLinkLabel, locale)}</a>
-          ) : null
-        }
-        {
-          settings?.cookiesLinkLabel ? (
-            <a href={localizeHref('/cookies/', locale)}>{t(settings.cookiesLinkLabel, locale)}</a>
-          ) : null
-        }
-        {
-          settings?.cookieSettingsLabel ? (
-            <button type="button" id="cookieSettingsBtn">{t(settings.cookieSettingsLabel, locale)}</button>
-          ) : null
-        }
+        <a href={localizeHref('/privacy/', locale)}>{privacyLabel}</a>
+        <a href={localizeHref('/cookies/', locale)}>{cookiesLabel}</a>
+        <button type="button" data-cookie-settings>
+          {cookieSettingsLabel}
+        </button>
       </span>
     </div>
   </div>
 </footer>
-
-<script>
-  document.getElementById('cookieSettingsBtn')?.addEventListener('click', () => {
-    window.__ftiaxesiteShowCookiePreferences?.()
-  })
-</script>

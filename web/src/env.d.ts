@@ -12,6 +12,7 @@ interface ImportMetaEnv {
   readonly PUBLIC_SANITY_PROJECT_ID?: string
   readonly PUBLIC_SANITY_DATASET?: string
   readonly PUBLIC_GTM_ID?: string
+  readonly PUBLIC_GA4_MEASUREMENT_ID?: string
   readonly PUBLIC_RECAPTCHA_SITE_KEY?: string
   readonly SANITY_WRITE_TOKEN?: string
   readonly RESEND_API_KEY?: string
@@ -32,8 +33,10 @@ interface Grecaptcha {
 
 interface Window {
   __ftiaxesiteGtmLoaded?: boolean
+  __ftiaxesiteGa4Loaded?: boolean
   __ftiaxesiteLoadGtm?: () => void
   __ftiaxesiteCookieConsentInit?: boolean
+  __ftiaxesiteCookieSettingsClickBound?: boolean
   __ftiaxesiteShowCookiePreferences?: () => void
   __ftiaxesiteRecaptchaLoading?: Promise<void>
   dataLayer?: Record<string, unknown>[]
