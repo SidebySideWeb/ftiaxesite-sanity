@@ -217,13 +217,11 @@ const timelineOptions = [
     })
   }
 
-  function pushFormSubmit(formId, packageValue) {
+  function pushGenerateLead() {
     window.dataLayer = window.dataLayer || []
     window.dataLayer.push({
-      event: 'Form_submit',
-      form_id: formId || '',
-      form_name: 'quote_request',
-      quote_package: packageValue || '',
+      event: 'generate_lead',
+      form_id: 'quote_form',
     })
   }
 
@@ -252,6 +250,9 @@ const timelineOptions = [
       event.preventDefault()
       event.stopPropagation()
       if (!form.reportValidity()) return
+      // Prevent double-clicks / re-entrant submits before the request finishes.
+      if (form.dataset.submitting === 'true' || form.dataset.leadTracked === 'true') return
+      form.dataset.submitting = 'true'
 
       const selectedPackage = packageSelect?.selectedOptions?.[0]
       const selectedTimeline = timelineSelect?.selectedOptions?.[0]
@@ -312,13 +313,17 @@ const timelineOptions = [
           throw new Error(result?.error || 'Submit failed')
         }
 
-        // Fire only after a successful save so GTM/Ads conversion tags can trigger.
-        pushFormSubmit(id, packageSelect?.value || '')
+        // Explicit GTM event — only after successful save, once, with no PII.
+        if (form.dataset.leadTracked !== 'true') {
+          form.dataset.leadTracked = 'true'
+          pushGenerateLead()
+        }
 
         form.classList.add('hidden')
         success?.classList.remove('hidden')
       } catch (error) {
         console.error(error)
+        form.dataset.submitting = 'false'
         if (submitBtn instanceof HTMLButtonElement) submitBtn.disabled = false
         alert(
           error instanceof Error && error.message

@@ -26,6 +26,7 @@ function buildContentSecurityPolicy(): string {
     'https://*.google-analytics.com',
     'https://region1.google-analytics.com',
     'https://www.google.com',
+    'https://www.google.gr',
     'https://*.google.com',
     'https://google.com',
     'https://www.gstatic.com',
@@ -47,6 +48,7 @@ function buildContentSecurityPolicy(): string {
     'https://*.g.doubleclick.net',
     'https://ad.doubleclick.net',
     'https://www.google.com',
+    'https://www.google.gr',
     'https://*.google.com',
     'https://google.com',
     'https://www.gstatic.com',
@@ -57,6 +59,7 @@ function buildContentSecurityPolicy(): string {
   const googleFrames = [
     'https://www.googletagmanager.com',
     'https://www.google.com',
+    'https://www.googleadservices.com',
     'https://recaptcha.google.com',
     'https://td.doubleclick.net',
     'https://bid.g.doubleclick.net',
