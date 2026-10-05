@@ -1,11 +1,68 @@
 /**
  * Security headers for ftiaxesite.gr.
  *
- * CSP allows GTM/GA4, Sanity CDN, Cal.com, and reCAPTCHA.
+ * CSP allows GTM/GA4/Google Ads, Sanity CDN, Cal.com, and reCAPTCHA.
  * Trusted Types: permissive default policy created in BaseLayout
  * keeps GTM/Cal.com/lang toggle working while blocking unsanitized DOM XSS sinks.
+ *
+ * Ads endpoints follow Google Tag Platform CSP guidance:
+ * https://developers.google.com/tag-platform/security/guides/csp
  */
 function buildContentSecurityPolicy(): string {
+  const googleScripts = [
+    'https://www.googletagmanager.com',
+    'https://*.googletagmanager.com',
+    'https://www.google-analytics.com',
+    'https://www.google.com',
+    'https://www.gstatic.com',
+    'https://www.googleadservices.com',
+    'https://googleads.g.doubleclick.net',
+    'https://pagead2.googlesyndication.com',
+  ]
+  const googleImages = [
+    'https://www.googletagmanager.com',
+    'https://*.googletagmanager.com',
+    'https://www.google-analytics.com',
+    'https://*.google-analytics.com',
+    'https://region1.google-analytics.com',
+    'https://www.google.com',
+    'https://*.google.com',
+    'https://google.com',
+    'https://www.gstatic.com',
+    'https://maps.google.com',
+    'https://www.googleadservices.com',
+    'https://googleads.g.doubleclick.net',
+    'https://*.g.doubleclick.net',
+    'https://pagead2.googlesyndication.com',
+  ]
+  const googleConnect = [
+    'https://www.googletagmanager.com',
+    'https://*.googletagmanager.com',
+    'https://www.google-analytics.com',
+    'https://*.google-analytics.com',
+    'https://region1.google-analytics.com',
+    'https://analytics.google.com',
+    'https://*.analytics.google.com',
+    'https://stats.g.doubleclick.net',
+    'https://*.g.doubleclick.net',
+    'https://ad.doubleclick.net',
+    'https://www.google.com',
+    'https://*.google.com',
+    'https://google.com',
+    'https://www.gstatic.com',
+    'https://www.googleadservices.com',
+    'https://googleads.g.doubleclick.net',
+    'https://pagead2.googlesyndication.com',
+  ]
+  const googleFrames = [
+    'https://www.googletagmanager.com',
+    'https://www.google.com',
+    'https://recaptcha.google.com',
+    'https://td.doubleclick.net',
+    'https://bid.g.doubleclick.net',
+    'https://pagead2.googlesyndication.com',
+  ]
+
   const directives = [
     "default-src 'self'",
     "base-uri 'self'",
@@ -13,51 +70,22 @@ function buildContentSecurityPolicy(): string {
     "frame-ancestors 'none'",
     "object-src 'none'",
     [
-      "script-src",
+      'script-src',
       "'self'",
       "'unsafe-inline'",
-      'https://www.googletagmanager.com',
-      'https://www.google-analytics.com',
-      'https://www.google.com',
-      'https://www.gstatic.com',
+      ...googleScripts,
       'https://app.cal.com',
       'https://cal.com',
       'https://embed.cal.com',
     ].join(' '),
     ["style-src", "'self'", "'unsafe-inline'", 'https://www.gstatic.com'].join(' '),
     ["font-src", "'self'", 'data:'].join(' '),
-    [
-      'img-src',
-      "'self'",
-      'data:',
-      'blob:',
-      'https://cdn.sanity.io',
-      'https://www.googletagmanager.com',
-      'https://www.google-analytics.com',
-      'https://region1.google-analytics.com',
-      'https://www.google.com',
-      'https://www.gstatic.com',
-      'https://maps.google.com',
-    ].join(' '),
-    [
-      'connect-src',
-      "'self'",
-      'https://*.sanity.io',
-      'https://www.googletagmanager.com',
-      'https://www.google-analytics.com',
-      'https://region1.google-analytics.com',
-      'https://analytics.google.com',
-      'https://stats.g.doubleclick.net',
-      'https://www.google.com',
-      'https://www.gstatic.com',
-      'https://api.cal.com',
-    ].join(' '),
+    ['img-src', "'self'", 'data:', 'blob:', 'https://cdn.sanity.io', ...googleImages].join(' '),
+    ['connect-src', "'self'", 'https://*.sanity.io', ...googleConnect, 'https://api.cal.com'].join(' '),
     [
       'frame-src',
       "'self'",
-      'https://www.googletagmanager.com',
-      'https://www.google.com',
-      'https://recaptcha.google.com',
+      ...googleFrames,
       'https://app.cal.com',
       'https://cal.com',
       'https://embed.cal.com',

@@ -43,7 +43,7 @@ const timelineOptions = [
     ) : null
   }
 
-  <form id={formId} class="quote-form" novalidate>
+  <form id={formId} class="quote-form" name="quote_request" data-ftiaxesite-quote-form novalidate>
     <div class="form-grid">
       <div class="field">
         <label for={`${formId}-name`}>
@@ -142,7 +142,7 @@ const timelineOptions = [
   </div>
 </div>
 
-<script define:vars={{formId, recaptchaSiteKey}}>
+<script define:vars={{recaptchaSiteKey}}>
   function loadRecaptchaScript() {
     if (!recaptchaSiteKey) return Promise.resolve()
     if (window.grecaptcha?.execute) return Promise.resolve()
@@ -217,11 +217,21 @@ const timelineOptions = [
     })
   }
 
-  function initQuoteForm(id) {
-    const form = document.getElementById(id)
-    if (!form || form.dataset.bound === 'true') return
+  function pushFormSubmit(formId, packageValue) {
+    window.dataLayer = window.dataLayer || []
+    window.dataLayer.push({
+      event: 'Form_submit',
+      form_id: formId || '',
+      form_name: 'quote_request',
+      quote_package: packageValue || '',
+    })
+  }
+
+  function initQuoteForm(form) {
+    if (!(form instanceof HTMLFormElement) || form.dataset.bound === 'true') return
     form.dataset.bound = 'true'
 
+    const id = form.id
     const hasSite = document.getElementById(`${id}-hasSite`)
     const urlField = document.getElementById(`${id}-urlField`)
     const success = document.getElementById(`${id}-success`)
@@ -240,6 +250,7 @@ const timelineOptions = [
 
     form.addEventListener('submit', async (event) => {
       event.preventDefault()
+      event.stopPropagation()
       if (!form.reportValidity()) return
 
       const selectedPackage = packageSelect?.selectedOptions?.[0]
@@ -262,7 +273,7 @@ const timelineOptions = [
           : selectedTimeline?.getAttribute('data-label-el') || selectedTimeline?.textContent?.trim() || ''
 
       const submitBtn = form.querySelector('[type="submit"]')
-      if (submitBtn) submitBtn.disabled = true
+      if (submitBtn instanceof HTMLButtonElement) submitBtn.disabled = true
 
       try {
         const recaptchaToken = await executeRecaptcha()
@@ -291,22 +302,24 @@ const timelineOptions = [
           headers: {'Content-Type': 'application/json'},
           body: JSON.stringify(payload),
         })
-        const result = await response.json()
-        if (!response.ok || !result.success) {
-          throw new Error(result.error || 'Submit failed')
+        let result = null
+        try {
+          result = await response.json()
+        } catch {
+          result = null
+        }
+        if (!response.ok || !result?.success) {
+          throw new Error(result?.error || 'Submit failed')
         }
 
-        window.dataLayer = window.dataLayer || []
-        window.dataLayer.push({
-          event: 'Form_submit',
-          quote_package: packageSelect?.value || '',
-        })
+        // Fire only after a successful save so GTM/Ads conversion tags can trigger.
+        pushFormSubmit(id, packageSelect?.value || '')
 
         form.classList.add('hidden')
         success?.classList.remove('hidden')
       } catch (error) {
         console.error(error)
-        if (submitBtn) submitBtn.disabled = false
+        if (submitBtn instanceof HTMLButtonElement) submitBtn.disabled = false
         alert(
           error instanceof Error && error.message
             ? error.message
@@ -318,6 +331,10 @@ const timelineOptions = [
     })
   }
 
-  initQuoteForm(formId)
-  document.addEventListener('astro:page-load', () => initQuoteForm(formId))
+  function initAllQuoteForms() {
+    document.querySelectorAll('form[data-ftiaxesite-quote-form]').forEach((form) => initQuoteForm(form))
+  }
+
+  initAllQuoteForms()
+  document.addEventListener('astro:page-load', initAllQuoteForms)
 </script>
