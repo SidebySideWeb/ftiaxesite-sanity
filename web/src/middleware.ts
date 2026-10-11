@@ -1,4 +1,5 @@
 import {defineMiddleware} from 'astro:middleware'
+import {loadHomeForRequest, runWithHomeContent} from './data/content'
 import {getLocaleFromPath, stripLocalePrefix, type Locale} from './lib/locale'
 import {buildSecurityHeaders} from './lib/security-headers'
 
@@ -24,22 +25,29 @@ export const onRequest = defineMiddleware(async (context, next) => {
   context.locals.locale = locale
   context.locals.publicPath = context.request.headers.get(PATH_HEADER) || pathname
 
-  let response: Response
-  if (locale === 'en' && !headerLocale) {
-    // Rewrite /en/... → /... while keeping browser URL and locale across the inner pass.
-    const target = stripLocalePrefix(pathname)
-    const rewriteUrl = new URL(target + context.url.search, context.url)
-    const headers = new Headers(context.request.headers)
-    headers.set(LOCALE_HEADER, 'en')
-    headers.set(PATH_HEADER, pathname)
-    response = await context.rewrite(new Request(rewriteUrl, {method: context.request.method, headers}))
-  } else {
-    response = await next()
+  const home = await loadHomeForRequest(locale)
+  context.locals.homeContent = home
+
+  const respond = async () => {
+    let response: Response
+    if (locale === 'en' && !headerLocale) {
+      const target = stripLocalePrefix(pathname)
+      const rewriteUrl = new URL(target + context.url.search, context.url)
+      const headers = new Headers(context.request.headers)
+      headers.set(LOCALE_HEADER, 'en')
+      headers.set(PATH_HEADER, pathname)
+      response = await context.rewrite(
+        new Request(rewriteUrl, {method: context.request.method, headers}),
+      )
+    } else {
+      response = await next()
+    }
+
+    for (const [name, value] of Object.entries(securityHeaders)) {
+      response.headers.set(name, value)
+    }
+    return response
   }
 
-  for (const [name, value] of Object.entries(securityHeaders)) {
-    response.headers.set(name, value)
-  }
-
-  return response
+  return runWithHomeContent(home, respond)
 })

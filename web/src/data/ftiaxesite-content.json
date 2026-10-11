@@ -235,6 +235,8 @@
       "success": {
         "title": "Το πήραμε. Ευχαριστούμε.",
         "text": "Σου απαντάμε το ίδιο βράδυ ή την επόμενη μέρα.",
+        "textHtml": "Σου απαντάμε <b>το ίδιο βράδυ ή την επόμενη μέρα.</b>",
+        "prompt": "Θες να κερδίσεις χρόνο; Κλείσε τώρα ένα τηλεφώνημα 15 λεπτών.",
         "callCta": "Κλείσε τηλεφώνημα 15 λεπτών"
       }
     },
@@ -266,6 +268,8 @@
       "success": {
         "title": "Got it. Thank you.",
         "text": "We reply the same evening or the next day.",
+        "textHtml": "We reply <b>the same evening or the next day.</b>",
+        "prompt": "Want to save time? Book a 15 minute call now.",
         "callCta": "Book a 15 minute call"
       }
     }

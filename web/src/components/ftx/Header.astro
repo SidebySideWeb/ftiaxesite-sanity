@@ -4,7 +4,7 @@ import {PHONE_DISPLAY, PHONE_TEL} from '../../data/site'
 import {DEFAULT_LOCALE, alternateLocalePath, type Locale} from '../../lib/locale'
 
 const locale: Locale = Astro.locals.locale ?? DEFAULT_LOCALE
-const header = getLocaleBlock('header', locale)
+const header = getLocaleBlock('header', locale, Astro.locals.homeContent)
 const otherLocale: Locale = locale === 'el' ? 'en' : 'el'
 const switchHref = alternateLocalePath(Astro.locals.publicPath || '/', otherLocale)
 const switchLabel = otherLocale === 'en' ? 'EN' : 'ΕΛ'

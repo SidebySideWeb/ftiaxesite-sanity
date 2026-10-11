@@ -4,7 +4,7 @@ import {PHONE_TEL} from '../../data/site'
 import {DEFAULT_LOCALE, type Locale} from '../../lib/locale'
 
 const locale: Locale = Astro.locals.locale ?? DEFAULT_LOCALE
-const header = getLocaleBlock('header', locale)
+const header = getLocaleBlock('header', locale, Astro.locals.homeContent)
 ---
 
 <div class="sticky-cta" id="ftx-sticky-cta" data-component="StickyCta">

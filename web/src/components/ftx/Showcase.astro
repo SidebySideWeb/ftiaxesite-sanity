@@ -3,27 +3,12 @@ import {getLocaleBlock} from '../../data/content'
 import {DEFAULT_LOCALE, type Locale} from '../../lib/locale'
 
 const locale: Locale = Astro.locals.locale ?? DEFAULT_LOCALE
-const showcase = getLocaleBlock('showcase', locale)
-const header = getLocaleBlock('header', locale)
+const showcase = getLocaleBlock('showcase', locale, Astro.locals.homeContent)
+const header = getLocaleBlock('header', locale, Astro.locals.homeContent)
 const ctaSub = locale === 'en' ? 'Want your own?' : 'Θέλεις το δικό σου;'
 const scrollHint = locale === 'en' ? 'SWIPE FOR MORE' : 'ΣΥΡΕ ΓΙΑ ΤΑ ΥΠΟΛΟΙΠΑ'
-
-const projects =
-  locale === 'en'
-    ? [
-        {id: 'baroque', name: 'Baroque le Bistrot', type: 'FOOD & DRINK', url: 'https://baroquelebistrot.gr', host: 'baroquelebistrot.gr', xl: true},
-        {id: 'casa-enastron', name: 'Casa Enastron', type: 'VILLA', url: 'https://casaenastron.gr', host: 'casaenastron.gr'},
-        {id: 'al-anastasiou', name: 'Al. Anastasiou', type: 'ALUMINIUM JOINERY', url: 'https://al-anastasiou.gr', host: 'al-anastasiou.gr'},
-        {id: 'kallitechnia', name: 'Kallitechnia', type: 'CLUB', url: 'https://kallitechnia.gr', host: 'kallitechnia.gr'},
-        {id: 'moutaki', name: 'Moutaki', type: 'FASHION', url: 'https://moutaki.com', host: 'moutaki.com'},
-      ]
-    : [
-        {id: 'baroque', name: 'Baroque le Bistrot', type: 'ΕΣΤΙΑΣΗ', url: 'https://baroquelebistrot.gr', host: 'baroquelebistrot.gr', xl: true},
-        {id: 'casa-enastron', name: 'Casa Enastron', type: 'ΒΙΛΑ', url: 'https://casaenastron.gr', host: 'casaenastron.gr'},
-        {id: 'al-anastasiou', name: 'Al. Anastasiou', type: 'ΚΟΥΦΩΜΑΤΑ ΑΛΟΥΜΙΝΙΟΥ', url: 'https://al-anastasiou.gr', host: 'al-anastasiou.gr'},
-        {id: 'kallitechnia', name: 'Kallitechnia', type: 'ΣΥΛΛΟΓΟΣ', url: 'https://kallitechnia.gr', host: 'kallitechnia.gr'},
-        {id: 'moutaki', name: 'Moutaki', type: 'ΡΟΥΧΑ', url: 'https://moutaki.com', host: 'moutaki.com'},
-      ]
+const projects = showcase.items
+const fxClass = ['', 'v-villa', 'v-alu', 'v-club', 'v-shop'] as const
 ---
 
 <section class="sec" id="deigmata" data-component="Showcase">
@@ -37,123 +22,146 @@ const projects =
     </div>
 
     <div class="work">
-      <article class="wk xl rv" data-project="baroque">
-        <div class="wk-shot">
-          <div class="bbar"><i></i><i></i><i></i><span>{projects[0].host}</span></div>
-          <div class="screen">
-            <div class="fx">
-              <div class="fx-nav"><b></b><i></i><i></i><i></i><i></i></div>
-              <div class="fx-hero"><span class="fx-t">{projects[0].name}</span><i></i><span class="fx-btn"></span></div>
-              <div class="fx-lines"><i></i><i></i><i></i></div>
-              <div class="fx-row"><i></i><i></i><i></i></div>
-              <div class="fx-split"><i></i><div><i></i><i></i><i></i></div></div>
-              <div class="fx-row"><i></i><i></i><i></i></div>
-              <div class="fx-foot"></div>
+      {
+        projects.map((project, index) => (
+          <article class:list={['wk', 'rv', {xl: project.xl}]} data-project={project.id}>
+            <div class="wk-shot">
+              <div class="bbar">
+                <i></i>
+                <i></i>
+                <i></i>
+                <span>{project.host}</span>
+              </div>
+              <div class="screen">
+                <div class:list={['fx', fxClass[index] || '']}>
+                  <div class="fx-nav">
+                    <b></b>
+                    <i></i>
+                    <i></i>
+                    <i></i>
+                    {index === 0 ? <i></i> : null}
+                  </div>
+                  <div class="fx-hero">
+                    <span class="fx-t">{project.name}</span>
+                    <i></i>
+                    <span class="fx-btn"></span>
+                  </div>
+                  {index === 0 || index === 3 ? (
+                    <>
+                      <div class="fx-lines">
+                        <i></i>
+                        <i></i>
+                        <i></i>
+                      </div>
+                      <div class="fx-row">
+                        <i></i>
+                        <i></i>
+                        <i></i>
+                      </div>
+                      <div class="fx-split">
+                        <i></i>
+                        <div>
+                          <i></i>
+                          <i></i>
+                          <i></i>
+                        </div>
+                      </div>
+                      {index === 0 ? (
+                        <div class="fx-row">
+                          <i></i>
+                          <i></i>
+                          <i></i>
+                        </div>
+                      ) : null}
+                      <div class="fx-foot"></div>
+                    </>
+                  ) : index === 4 ? (
+                    <>
+                      <div class="fx-row">
+                        <i></i>
+                        <i></i>
+                        <i></i>
+                        <i></i>
+                      </div>
+                      <div class="fx-row">
+                        <i></i>
+                        <i></i>
+                        <i></i>
+                        <i></i>
+                      </div>
+                      <div class="fx-lines">
+                        <i></i>
+                        <i></i>
+                        <i></i>
+                      </div>
+                      <div class="fx-foot"></div>
+                    </>
+                  ) : (
+                    <>
+                      <div class="fx-row">
+                        <i></i>
+                        <i></i>
+                        <i></i>
+                      </div>
+                      <div class="fx-lines">
+                        <i></i>
+                        <i></i>
+                        <i></i>
+                      </div>
+                      {index === 1 ? (
+                        <div class="fx-split">
+                          <i></i>
+                          <div>
+                            <i></i>
+                            <i></i>
+                            <i></i>
+                          </div>
+                        </div>
+                      ) : (
+                        <div class="fx-row">
+                          <i></i>
+                          <i></i>
+                          <i></i>
+                        </div>
+                      )}
+                      <div class="fx-foot"></div>
+                    </>
+                  )}
+                </div>
+                <span class="shot-tag">
+                  {index === 0 ? `SCREENSHOT · ${project.host.toUpperCase()}` : 'SCREENSHOT'}
+                </span>
+              </div>
             </div>
-            <span class="shot-tag">SCREENSHOT · BAROQUELEBISTROT.GR</span>
-          </div>
-        </div>
-        <div class="wk-meta">
-          <div><h3>{projects[0].name}</h3><span class="wk-type">{projects[0].type}</span></div>
-          <a class="wk-link" href={projects[0].url} target="_blank" rel="noopener" id="showcase-baroque" data-cta="showcase-baroque">
-            {showcase.open} <span class="c"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"></path></svg></span>
-          </a>
-        </div>
-      </article>
-
-      <article class="wk rv" data-project="casa-enastron">
-        <div class="wk-shot">
-          <div class="bbar"><i></i><i></i><i></i><span>{projects[1].host}</span></div>
-          <div class="screen">
-            <div class="fx v-villa">
-              <div class="fx-nav"><b></b><i></i><i></i><i></i></div>
-              <div class="fx-hero"><span class="fx-t">{projects[1].name}</span><i></i><span class="fx-btn"></span></div>
-              <div class="fx-row"><i></i><i></i><i></i></div>
-              <div class="fx-lines"><i></i><i></i><i></i></div>
-              <div class="fx-split"><i></i><div><i></i><i></i><i></i></div></div>
-              <div class="fx-foot"></div>
+            <div class="wk-meta">
+              <div>
+                <h3>{project.name}</h3>
+                <span class="wk-type">{project.type}</span>
+              </div>
+              <a
+                class="wk-link"
+                href={project.url}
+                target="_blank"
+                rel="noopener"
+                id={`showcase-${project.id}`}
+                data-cta={`showcase-${project.id}`}
+              >
+                {showcase.open}{' '}
+                <span class="c">
+                  <svg class="ico" viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M5 12h14M13 6l6 6-6 6"></path>
+                  </svg>
+                </span>
+              </a>
             </div>
-            <span class="shot-tag">SCREENSHOT</span>
-          </div>
-        </div>
-        <div class="wk-meta">
-          <div><h3>{projects[1].name}</h3><span class="wk-type">{projects[1].type}</span></div>
-          <a class="wk-link" href={projects[1].url} target="_blank" rel="noopener" id="showcase-casa-enastron" data-cta="showcase-casa-enastron">
-            {showcase.open} <span class="c"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"></path></svg></span>
-          </a>
-        </div>
-      </article>
-
-      <article class="wk rv" data-project="al-anastasiou">
-        <div class="wk-shot">
-          <div class="bbar"><i></i><i></i><i></i><span>{projects[2].host}</span></div>
-          <div class="screen">
-            <div class="fx v-alu">
-              <div class="fx-nav"><b></b><i></i><i></i><i></i></div>
-              <div class="fx-hero"><span class="fx-t">{projects[2].name}</span><i></i><span class="fx-btn"></span></div>
-              <div class="fx-row"><i></i><i></i><i></i></div>
-              <div class="fx-lines"><i></i><i></i><i></i></div>
-              <div class="fx-row"><i></i><i></i><i></i></div>
-              <div class="fx-foot"></div>
-            </div>
-            <span class="shot-tag">SCREENSHOT</span>
-          </div>
-        </div>
-        <div class="wk-meta">
-          <div><h3>{projects[2].name}</h3><span class="wk-type">{projects[2].type}</span></div>
-          <a class="wk-link" href={projects[2].url} target="_blank" rel="noopener" id="showcase-al-anastasiou" data-cta="showcase-al-anastasiou">
-            {showcase.open} <span class="c"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"></path></svg></span>
-          </a>
-        </div>
-      </article>
-
-      <article class="wk rv" data-project="kallitechnia">
-        <div class="wk-shot">
-          <div class="bbar"><i></i><i></i><i></i><span>{projects[3].host}</span></div>
-          <div class="screen">
-            <div class="fx v-club">
-              <div class="fx-nav"><b></b><i></i><i></i><i></i></div>
-              <div class="fx-hero"><span class="fx-t">{projects[3].name}</span><i></i><span class="fx-btn"></span></div>
-              <div class="fx-lines"><i></i><i></i><i></i></div>
-              <div class="fx-row"><i></i><i></i><i></i></div>
-              <div class="fx-split"><i></i><div><i></i><i></i><i></i></div></div>
-              <div class="fx-foot"></div>
-            </div>
-            <span class="shot-tag">SCREENSHOT</span>
-          </div>
-        </div>
-        <div class="wk-meta">
-          <div><h3>{projects[3].name}</h3><span class="wk-type">{projects[3].type}</span></div>
-          <a class="wk-link" href={projects[3].url} target="_blank" rel="noopener" id="showcase-kallitechnia" data-cta="showcase-kallitechnia">
-            {showcase.open} <span class="c"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"></path></svg></span>
-          </a>
-        </div>
-      </article>
-
-      <article class="wk rv" data-project="moutaki">
-        <div class="wk-shot">
-          <div class="bbar"><i></i><i></i><i></i><span>{projects[4].host}</span></div>
-          <div class="screen">
-            <div class="fx v-shop">
-              <div class="fx-nav"><b></b><i></i><i></i><i></i></div>
-              <div class="fx-hero"><span class="fx-t">{projects[4].name}</span><i></i><span class="fx-btn"></span></div>
-              <div class="fx-row"><i></i><i></i><i></i><i></i></div>
-              <div class="fx-row"><i></i><i></i><i></i><i></i></div>
-              <div class="fx-lines"><i></i><i></i><i></i></div>
-              <div class="fx-foot"></div>
-            </div>
-            <span class="shot-tag">SCREENSHOT</span>
-          </div>
-        </div>
-        <div class="wk-meta">
-          <div><h3>{projects[4].name}</h3><span class="wk-type">{projects[4].type}</span></div>
-          <a class="wk-link" href={projects[4].url} target="_blank" rel="noopener" id="showcase-moutaki" data-cta="showcase-moutaki">
-            {showcase.open} <span class="c"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"></path></svg></span>
-          </a>
-        </div>
-      </article>
+          </article>
+        ))
+      }
     </div>
-    <div class="wk-hint" aria-hidden="true"><i><b></b><b></b><b></b><b></b><b></b></i>{scrollHint}</div>
+    <div class="wk-hint" aria-hidden="true">
+      <i><b></b><b></b><b></b><b></b><b></b></i>
+      {scrollHint}
+    </div>
 
     <div class="sec-cta">
       <p>{ctaSub}</p>

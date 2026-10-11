@@ -1,39 +1,9 @@
 ---
+import {getLocaleBlock} from '../../data/content'
 import {DEFAULT_LOCALE, type Locale} from '../../lib/locale'
 
 const locale: Locale = Astro.locals.locale ?? DEFAULT_LOCALE
-
-/** Design uses a fixed 3-column step story (Main.html) — not the 4 JSON items. */
-const copy =
-  locale === 'en'
-    ? {
-        eyebrow: 'HOW IT WORKS',
-        title: 'Three steps. Two days.',
-        items: [
-          {time: '2 MIN', title: 'You send us your details in 2 minutes.', ill: 'ill-form'},
-          {time: '24 HOURS', title: 'In 24 hours you see the first version.', ill: 'ill-prev'},
-          {time: '48 HOURS', title: 'You approve and it goes live.', ill: 'ill-live'},
-        ],
-        noteBefore: 'The 48-hour timer starts ',
-        noteBold: 'when we receive your texts and photos.',
-        cta: 'Start with step 1',
-        marks: ['0 HOURS', '24 HOURS', '48 HOURS'],
-        liveUrl: 'yoursite.gr',
-      }
-    : {
-        eyebrow: 'ΠΩΣ ΔΟΥΛΕΥΕΙ',
-        title: 'Τρία βήματα. Δύο μέρες.',
-        items: [
-          {time: '2 ΛΕΠΤΑ', title: 'Μας στέλνεις τα στοιχεία σου σε 2 λεπτά.', ill: 'ill-form'},
-          {time: '24 ΩΡΕΣ', title: 'Σε 24 ώρες βλέπεις την πρώτη έκδοση.', ill: 'ill-prev'},
-          {time: '48 ΩΡΕΣ', title: 'Την εγκρίνεις και βγαίνει online.', ill: 'ill-live'},
-        ],
-        noteBefore: 'Το χρονόμετρο των 48 ωρών ξεκινά ',
-        noteBold: 'όταν παραλάβουμε κείμενα και φωτογραφίες.',
-        cta: 'Ξεκίνα με το βήμα 1',
-        marks: ['0 ΩΡΕΣ', '24 ΩΡΕΣ', '48 ΩΡΕΣ'],
-        liveUrl: 'tositesou.gr',
-      }
+const copy = getLocaleBlock('steps', locale, Astro.locals.homeContent)
 ---
 
 <section class="sec paper" id="vimata" data-component="Steps">
@@ -45,26 +15,48 @@ const copy =
       </div>
     </div>
     <ol class="steps">
-      <li class="step rv">
-        <div class="st-top"><span class="st-n">01</span><span class="st-time">{copy.items[0].time}</span></div>
-        <div class="ill ill-form" aria-hidden="true"><span class="r"></span><span class="r"></span><span class="r"></span><span class="go"></span></div>
-        <h3>{copy.items[0].title}</h3>
-      </li>
-      <li class="step rv">
-        <div class="st-top"><span class="st-n">02</span><span class="st-time">{copy.items[1].time}</span></div>
-        <div class="ill ill-prev" aria-hidden="true">
-          <div class="pw"><span class="t"></span><span class="h"></span><span class="c"><i></i><i></i><i></i></span></div>
-        </div>
-        <h3>{copy.items[1].title}</h3>
-      </li>
-      <li class="step rv">
-        <div class="st-top"><span class="st-n">03</span><span class="st-time">{copy.items[2].time}</span></div>
-        <div class="ill ill-live" aria-hidden="true">
-          <span class="sw"><b></b><span></span></span>
-          <span class="live-url"><i></i>{copy.liveUrl}</span>
-        </div>
-        <h3>{copy.items[2].title}</h3>
-      </li>
+      {
+        copy.items.slice(0, 3).map((item, index) => (
+          <li class="step rv">
+            <div class="st-top">
+              <span class="st-n">{String(index + 1).padStart(2, '0')}</span>
+              <span class="st-time">{item.time}</span>
+            </div>
+            {item.ill === 'ill-prev' ? (
+              <div class="ill ill-prev" aria-hidden="true">
+                <div class="pw">
+                  <span class="t"></span>
+                  <span class="h"></span>
+                  <span class="c">
+                    <i></i>
+                    <i></i>
+                    <i></i>
+                  </span>
+                </div>
+              </div>
+            ) : item.ill === 'ill-live' ? (
+              <div class="ill ill-live" aria-hidden="true">
+                <span class="sw">
+                  <b></b>
+                  <span></span>
+                </span>
+                <span class="live-url">
+                  <i></i>
+                  {copy.liveUrl}
+                </span>
+              </div>
+            ) : (
+              <div class="ill ill-form" aria-hidden="true">
+                <span class="r"></span>
+                <span class="r"></span>
+                <span class="r"></span>
+                <span class="go"></span>
+              </div>
+            )}
+            <h3>{item.title}</h3>
+          </li>
+        ))
+      }
     </ol>
 
     <div class="tl" aria-hidden="true">

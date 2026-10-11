@@ -3,18 +3,17 @@ import {getLocaleBlock} from '../../data/content'
 import {DEFAULT_LOCALE, type Locale} from '../../lib/locale'
 
 const locale: Locale = Astro.locals.locale ?? DEFAULT_LOCALE
-const packages = getLocaleBlock('packages', locale)
+const packages = getLocaleBlock('packages', locale, Astro.locals.homeContent)
 
 const packageIds = ['corporate', 'functions', 'eshop'] as const
-const eyebrow = locale === 'en' ? 'LARGER PROJECTS' : 'ΜΕΓΑΛΥΤΕΡΑ ΕΡΓΑ'
-const askLabel = locale === 'en' ? 'Ask us' : 'Ρώτησέ μας'
+const askLabel = packages.askLabel || (locale === 'en' ? 'Ask us' : 'Ρώτησέ μας')
 ---
 
 <section class="sec paper pk-sec" id="megalytera" data-component="Packages">
   <div class="wrap">
     <div class="pk-hd">
       <div>
-        <span class="eyebrow"><i><b></b><b></b></i>{eyebrow}</span>
+        <span class="eyebrow"><i><b></b><b></b></i>{packages.eyebrow}</span>
         <h2>{packages.title}</h2>
       </div>
       <p>{packages.note}</p>

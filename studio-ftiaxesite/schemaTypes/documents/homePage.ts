@@ -1,5 +1,125 @@
-import {defineType, defineField} from 'sanity'
+import {defineArrayMember, defineField, defineType} from 'sanity'
 import {HomeIcon} from '@sanity/icons'
+
+const navItem = defineArrayMember({
+  type: 'object',
+  name: 'navItem',
+  fields: [
+    defineField({name: 'label', title: 'Label', type: 'localeString'}),
+    defineField({name: 'href', title: 'Link', type: 'string'}),
+  ],
+  preview: {select: {title: 'label.el', subtitle: 'href'}},
+})
+
+const stepItem = defineArrayMember({
+  type: 'object',
+  name: 'stepItem',
+  fields: [
+    defineField({name: 'time', title: 'Time label', type: 'localeString'}),
+    defineField({name: 'title', title: 'Title', type: 'localeString'}),
+    defineField({
+      name: 'ill',
+      title: 'Illustration',
+      type: 'string',
+      options: {
+        list: [
+          {title: 'Form', value: 'ill-form'},
+          {title: 'Preview', value: 'ill-prev'},
+          {title: 'Live', value: 'ill-live'},
+        ],
+        layout: 'radio',
+      },
+    }),
+  ],
+  preview: {select: {title: 'title.el', subtitle: 'time.el'}},
+})
+
+const showcaseItem = defineArrayMember({
+  type: 'object',
+  name: 'showcaseItem',
+  fields: [
+    defineField({name: 'name', title: 'Name', type: 'string'}),
+    defineField({name: 'url', title: 'URL', type: 'url'}),
+    defineField({name: 'type', title: 'Type / location', type: 'localeString'}),
+  ],
+  preview: {select: {title: 'name', subtitle: 'url'}},
+})
+
+const includedYesItem = defineArrayMember({
+  type: 'object',
+  name: 'includedYesItem',
+  fields: [
+    defineField({name: 'label', title: 'Label', type: 'localeString'}),
+    defineField({
+      name: 'icon',
+      title: 'Icon',
+      type: 'string',
+      options: {
+        list: ['layers', 'phone', 'mail', 'pin', 'search', 'lock'],
+      },
+    }),
+  ],
+  preview: {select: {title: 'label.el', subtitle: 'icon'}},
+})
+
+const includedNoItem = defineArrayMember({
+  type: 'object',
+  name: 'includedNoItem',
+  fields: [
+    defineField({name: 'title', title: 'Title', type: 'localeString'}),
+    defineField({name: 'note', title: 'Note', type: 'localeString'}),
+  ],
+  preview: {select: {title: 'title.el', subtitle: 'note.el'}},
+})
+
+const formField = (name: string, title: string) =>
+  defineField({
+    name,
+    title,
+    type: 'object',
+    fields: [
+      defineField({name: 'label', title: 'Label', type: 'localeString'}),
+      defineField({name: 'placeholder', title: 'Placeholder', type: 'localeString'}),
+      defineField({name: 'error', title: 'Error', type: 'localeString'}),
+    ],
+  })
+
+const faqItem = defineArrayMember({
+  type: 'object',
+  name: 'homeFaqItem',
+  fields: [
+    defineField({name: 'id', title: 'Anchor id', type: 'string'}),
+    defineField({name: 'q', title: 'Question', type: 'localeString'}),
+    defineField({
+      name: 'a',
+      title: 'Answer (HTML ok)',
+      type: 'localeText',
+      description: 'Simple HTML allowed: <b>, <a>, <span class="ph">',
+    }),
+  ],
+  preview: {select: {title: 'q.el', subtitle: 'id'}},
+})
+
+const packageItem = defineArrayMember({
+  type: 'object',
+  name: 'homePackageItem',
+  fields: [
+    defineField({name: 'name', title: 'Name', type: 'localeString'}),
+    defineField({name: 'price', title: 'Price', type: 'localeString'}),
+    defineField({name: 'text', title: 'Description', type: 'localeText'}),
+  ],
+  preview: {select: {title: 'name.el', subtitle: 'price.el'}},
+})
+
+const footerLink = defineArrayMember({
+  type: 'object',
+  name: 'footerLink',
+  fields: [
+    defineField({name: 'label', title: 'Label', type: 'localeString'}),
+    defineField({name: 'href', title: 'Path', type: 'string'}),
+  ],
+  preview: {select: {title: 'label.el', subtitle: 'href'}},
+})
 
 export const homePage = defineType({
   name: 'homePage',
@@ -7,182 +127,266 @@ export const homePage = defineType({
   type: 'document',
   icon: HomeIcon,
   groups: [
-    {name: 'hero', title: 'Hero'},
-    {name: 'values', title: 'Value props'},
-    {name: 'pricing', title: 'Pricing'},
-    {name: 'process', title: 'Process'},
-    {name: 'stack', title: 'Tech stack'},
-    {name: 'work', title: 'Portfolio'},
-    {name: 'faq', title: 'FAQ'},
-    {name: 'finalCta', title: 'Final CTA'},
-    {name: 'quoteForm', title: 'Quote form'},
     {name: 'seo', title: 'SEO'},
+    {name: 'header', title: 'Header'},
+    {name: 'hero', title: 'Hero'},
+    {name: 'marquee', title: 'Marquee'},
+    {name: 'steps', title: 'Steps'},
+    {name: 'showcase', title: 'Showcase'},
+    {name: 'included', title: '48h package'},
+    {name: 'form', title: 'Lead form'},
+    {name: 'faq', title: 'FAQ'},
+    {name: 'packages', title: 'Larger packages'},
+    {name: 'footer', title: 'Footer'},
+    {name: 'archive', title: 'Blog / Portfolio chrome'},
   ],
   fields: [
-    // ----- Hero -----
-    defineField({name: 'heroEyebrow', title: 'Eyebrow', type: 'localeString', group: 'hero'}),
+    defineField({name: 'seoTitle', title: 'SEO title', type: 'localeString', group: 'seo'}),
     defineField({
-      name: 'heroHeading',
-      title: 'Heading (before highlight)',
-      type: 'localeString',
-      description: 'Text before the green highlighted phrase, e.g. "Το site σου, έτοιμο και λειτουργικό σε"',
-      group: 'hero',
-    }),
-    defineField({
-      name: 'heroHighlight',
-      title: 'Heading highlight (green phrase)',
-      type: 'localeString',
-      description: 'e.g. "2 εβδομάδες"',
-      group: 'hero',
-    }),
-    defineField({name: 'heroBody', title: 'Body', type: 'localeText', group: 'hero'}),
-    defineField({name: 'ctaPrimaryLabel', title: 'Primary CTA label', type: 'localeString', group: 'hero'}),
-    defineField({name: 'ctaSecondaryLabel', title: 'Secondary CTA label', type: 'localeString', group: 'hero'}),
-    defineField({
-      name: 'receiptBadge',
-      title: 'Receipt mock badge',
-      type: 'localeString',
-      description: 'e.g. "✓ Τελικές τιμές, χωρίς κρυφές χρεώσεις"',
-      group: 'hero',
-    }),
-    defineField({
-      name: 'heroToolsLine',
-      title: 'Tools line',
-      type: 'string',
-      description: 'e.g. "WordPress · Astro · React · Next.js · Sanity CMS"',
-      group: 'hero',
-    }),
-
-    // ----- Values (cards from valueProp collection; section copy only) -----
-    defineField({
-      name: 'valuesEyebrow',
-      title: 'Eyebrow',
-      type: 'localeString',
-      group: 'values',
-    }),
-    defineField({name: 'valuesHeading', title: 'Heading', type: 'localeString', group: 'values'}),
-    defineField({name: 'valuesIntro', title: 'Intro', type: 'localeText', group: 'values'}),
-
-    // ----- Pricing (packages from servicePackage collection) -----
-    defineField({name: 'pricingEyebrow', title: 'Eyebrow', type: 'localeString', group: 'pricing'}),
-    defineField({name: 'pricingHeading', title: 'Heading', type: 'localeString', group: 'pricing'}),
-    defineField({name: 'pricingIntro', title: 'Intro', type: 'localeText', group: 'pricing'}),
-    defineField({
-      name: 'pricingNote',
-      title: 'Footnote',
+      name: 'seoDescription',
+      title: 'SEO description',
       type: 'localeText',
-      description: 'Delivery timeline disclaimer below pricing cards',
-      group: 'pricing',
-    }),
-    defineField({
-      name: 'popularBadgeLabel',
-      title: 'Popular badge label',
-      type: 'localeString',
-      group: 'pricing',
-    }),
-    defineField({
-      name: 'packageCtaLabel',
-      title: 'Package card CTA label',
-      type: 'localeString',
-      group: 'pricing',
+      group: 'seo',
     }),
 
-    // ----- Process (steps from processStep collection) -----
-    defineField({name: 'processEyebrow', title: 'Eyebrow', type: 'localeString', group: 'process'}),
-    defineField({name: 'processHeading', title: 'Heading', type: 'localeString', group: 'process'}),
-    defineField({name: 'processIntro', title: 'Intro', type: 'localeText', group: 'process'}),
-
-    // ----- Stack (chips from techItem collection) -----
-    defineField({name: 'stackEyebrow', title: 'Eyebrow', type: 'localeString', group: 'stack'}),
-    defineField({name: 'stackHeading', title: 'Heading', type: 'localeString', group: 'stack'}),
-    defineField({name: 'stackIntro', title: 'Intro', type: 'localeText', group: 'stack'}),
     defineField({
-      name: 'stackTechHeading',
-      title: 'Technologies column heading',
-      type: 'localeString',
-      group: 'stack',
-    }),
-    defineField({
-      name: 'stackTechIntro',
-      title: 'Technologies column intro',
-      type: 'localeText',
-      group: 'stack',
-    }),
-    defineField({
-      name: 'stackHostingHeading',
-      title: 'Hosting column heading',
-      type: 'localeString',
-      group: 'stack',
-    }),
-    defineField({
-      name: 'stackHostingIntro',
-      title: 'Hosting column intro',
-      type: 'localeText',
-      group: 'stack',
-    }),
-
-    // ----- Work (projects from project collection) -----
-    defineField({name: 'workEyebrow', title: 'Eyebrow', type: 'localeString', group: 'work'}),
-    defineField({name: 'workHeading', title: 'Heading', type: 'localeString', group: 'work'}),
-    defineField({name: 'workIntro', title: 'Intro', type: 'localeText', group: 'work'}),
-
-    // ----- FAQ (items from faqItem collection) -----
-    defineField({name: 'faqEyebrow', title: 'Eyebrow', type: 'localeString', group: 'faq'}),
-    defineField({name: 'faqHeading', title: 'Heading', type: 'localeString', group: 'faq'}),
-    defineField({name: 'faqIntro', title: 'Intro', type: 'localeText', group: 'faq'}),
-
-    // ----- Final CTA -----
-    defineField({name: 'finalCtaEyebrow', title: 'Eyebrow', type: 'localeString', group: 'finalCta'}),
-    defineField({name: 'finalCtaHeading', title: 'Heading', type: 'localeString', group: 'finalCta'}),
-    defineField({name: 'finalCtaBody', title: 'Body', type: 'localeText', group: 'finalCta'}),
-    defineField({
-      name: 'finalCtaPrimaryLabel',
-      title: 'Primary CTA label',
-      type: 'localeString',
-      group: 'finalCta',
-    }),
-    defineField({
-      name: 'finalCtaSecondaryLabel',
-      title: 'Secondary CTA label (phone)',
-      type: 'localeString',
-      group: 'finalCta',
-    }),
-
-    // ----- Quote form (modal + /quote/ page) -----
-    defineField({
-      name: 'quoteForm',
-      title: 'Quote form copy',
+      name: 'header',
+      title: 'Header',
       type: 'object',
-      group: 'quoteForm',
+      group: 'header',
       fields: [
-        defineField({name: 'title', title: 'Title', type: 'localeString'}),
-        defineField({name: 'intro', title: 'Intro', type: 'localeText'}),
-        defineField({name: 'nameLabel', title: 'Name label', type: 'localeString'}),
-        defineField({name: 'emailLabel', title: 'Email label', type: 'localeString'}),
-        defineField({name: 'companyLabel', title: 'Company label', type: 'localeString'}),
-        defineField({name: 'packageLabel', title: 'Package label', type: 'localeString'}),
-        defineField({name: 'packagePlaceholder', title: 'Package placeholder', type: 'localeString'}),
-        defineField({name: 'otherPackageLabel', title: '"Other" package option', type: 'localeString'}),
-        defineField({name: 'hasSiteLabel', title: 'Has existing site checkbox', type: 'localeString'}),
-        defineField({name: 'existingUrlLabel', title: 'Existing URL label', type: 'localeString'}),
-        defineField({name: 'descriptionLabel', title: 'Description label', type: 'localeString'}),
-        defineField({name: 'timelineLabel', title: 'Timeline label', type: 'localeString'}),
-        defineField({name: 'timelinePlaceholder', title: 'Timeline placeholder', type: 'localeString'}),
-        defineField({name: 'timelineAsap', title: 'Timeline: ASAP', type: 'localeString'}),
-        defineField({name: 'timelineSoon', title: 'Timeline: soon', type: 'localeString'}),
-        defineField({name: 'timelineFlexible', title: 'Timeline: flexible', type: 'localeString'}),
-        defineField({name: 'submitLabel', title: 'Submit button', type: 'localeString'}),
-        defineField({name: 'footnote', title: 'Form footnote', type: 'localeText'}),
-        defineField({name: 'successTitle', title: 'Success title', type: 'localeString'}),
-        defineField({name: 'successBody', title: 'Success body', type: 'localeText'}),
-        defineField({name: 'successCallPrompt', title: 'Success call prompt', type: 'localeString'}),
-        defineField({name: 'successCalLabel', title: 'Success Cal.com button', type: 'localeString'}),
+        defineField({name: 'cta', title: 'CTA label', type: 'localeString'}),
+        defineField({name: 'callLabel', title: 'Call label', type: 'localeString'}),
+        defineField({name: 'nav', title: 'Nav links', type: 'array', of: [navItem]}),
       ],
     }),
 
-    // ----- SEO -----
-    defineField({name: 'seoTitle', title: 'SEO title override', type: 'localeString', group: 'seo'}),
-    defineField({name: 'seoDescription', title: 'SEO description override', type: 'localeText', group: 'seo'}),
+    defineField({
+      name: 'hero',
+      title: 'Hero',
+      type: 'object',
+      group: 'hero',
+      fields: [
+        defineField({name: 'eyebrow', title: 'Eyebrow', type: 'localeString'}),
+        defineField({name: 'h1', title: 'Heading', type: 'localeString'}),
+        defineField({
+          name: 'sub',
+          title: 'Sub (HTML ok)',
+          type: 'localeText',
+          description: 'Use <b> for emphasis',
+        }),
+        defineField({name: 'cta', title: 'CTA', type: 'localeString'}),
+        defineField({name: 'micro', title: 'Micro copy', type: 'localeString'}),
+        defineField({name: 'conditionNote', title: 'Condition note', type: 'localeText'}),
+      ],
+    }),
+
+    defineField({
+      name: 'marquee',
+      title: 'Marquee',
+      type: 'object',
+      group: 'marquee',
+      fields: [
+        defineField({
+          name: 'bandA',
+          title: 'Band A labels',
+          type: 'array',
+          of: [defineArrayMember({type: 'localeString'})],
+        }),
+        defineField({
+          name: 'bandB',
+          title: 'Band B labels',
+          type: 'array',
+          of: [defineArrayMember({type: 'localeString'})],
+        }),
+        defineField({name: 'sr', title: 'Screen-reader summary', type: 'localeText'}),
+      ],
+    }),
+
+    defineField({
+      name: 'steps',
+      title: 'Steps',
+      type: 'object',
+      group: 'steps',
+      fields: [
+        defineField({name: 'eyebrow', title: 'Eyebrow', type: 'localeString'}),
+        defineField({name: 'title', title: 'Title', type: 'localeString'}),
+        defineField({name: 'noteBefore', title: 'Note before bold', type: 'localeString'}),
+        defineField({name: 'noteBold', title: 'Note bold part', type: 'localeString'}),
+        defineField({name: 'cta', title: 'CTA', type: 'localeString'}),
+        defineField({
+          name: 'marks',
+          title: 'Timeline marks',
+          type: 'array',
+          of: [defineArrayMember({type: 'localeString'})],
+        }),
+        defineField({name: 'liveUrl', title: 'Sample live URL label', type: 'localeString'}),
+        defineField({name: 'items', title: 'Steps', type: 'array', of: [stepItem]}),
+      ],
+    }),
+
+    defineField({
+      name: 'showcase',
+      title: 'Showcase',
+      type: 'object',
+      group: 'showcase',
+      fields: [
+        defineField({name: 'title', title: 'Title', type: 'localeString'}),
+        defineField({name: 'sub', title: 'Sub', type: 'localeText'}),
+        defineField({name: 'open', title: 'Open link label', type: 'localeString'}),
+        defineField({name: 'items', title: 'Sites', type: 'array', of: [showcaseItem]}),
+      ],
+    }),
+
+    defineField({
+      name: 'included',
+      title: '48h package',
+      type: 'object',
+      group: 'included',
+      fields: [
+        defineField({name: 'eyebrow', title: 'Eyebrow', type: 'localeString'}),
+        defineField({name: 'title', title: 'Title', type: 'localeString'}),
+        defineField({name: 'yesTitle', title: 'Included heading', type: 'localeString'}),
+        defineField({name: 'noTitle', title: 'Not included heading', type: 'localeString'}),
+        defineField({name: 'yes', title: 'Included items', type: 'array', of: [includedYesItem]}),
+        defineField({name: 'no', title: 'Not included items', type: 'array', of: [includedNoItem]}),
+        defineField({name: 'noFoot', title: 'Not-included footer', type: 'localeString'}),
+        defineField({name: 'biggerLink', title: 'Larger packages link', type: 'localeString'}),
+        defineField({name: 'yearlyBefore', title: 'Yearly cost before price', type: 'localeString'}),
+        defineField({name: 'yearlyAfter', title: 'Yearly cost after price', type: 'localeString'}),
+        defineField({name: 'yearlyTail', title: 'Yearly cost tail', type: 'localeString'}),
+        defineField({name: 'yearlyTag', title: 'Yearly tag', type: 'localeString'}),
+        defineField({name: 'yearlyPrice', title: 'Yearly price display', type: 'string'}),
+        defineField({name: 'priceTag', title: 'Price tag', type: 'localeString'}),
+        defineField({name: 'cta', title: 'CTA', type: 'localeString'}),
+      ],
+    }),
+
+    defineField({
+      name: 'form',
+      title: 'Lead form',
+      type: 'object',
+      group: 'form',
+      fields: [
+        defineField({name: 'title', title: 'Title', type: 'localeString'}),
+        defineField({name: 'sub', title: 'Subheading', type: 'localeString'}),
+        defineField({name: 'eyebrow', title: 'Eyebrow', type: 'localeString'}),
+        formField('nameField', 'Name field'),
+        formField('contactField', 'Contact field'),
+        defineField({
+          name: 'businessField',
+          title: 'Business field',
+          type: 'object',
+          fields: [
+            defineField({name: 'label', title: 'Label', type: 'localeString'}),
+            defineField({name: 'placeholder', title: 'Placeholder', type: 'localeString'}),
+          ],
+        }),
+        defineField({name: 'submit', title: 'Submit', type: 'localeString'}),
+        defineField({name: 'sending', title: 'Sending', type: 'localeString'}),
+        defineField({
+          name: 'consentLabel',
+          title: 'Consent (HTML ok)',
+          type: 'localeText',
+        }),
+        defineField({name: 'consentError', title: 'Consent error', type: 'localeString'}),
+        defineField({
+          name: 'privacyNotice',
+          title: 'Privacy notice (HTML ok)',
+          type: 'localeText',
+        }),
+        defineField({name: 'genericError', title: 'Generic error', type: 'localeText'}),
+        defineField({
+          name: 'chips',
+          title: 'Business chips',
+          type: 'array',
+          of: [defineArrayMember({type: 'localeString'})],
+        }),
+        defineField({
+          name: 'assure',
+          title: 'Assurance lines',
+          type: 'array',
+          of: [defineArrayMember({type: 'localeString'})],
+        }),
+        defineField({
+          name: 'success',
+          title: 'Success state',
+          type: 'object',
+          fields: [
+            defineField({name: 'title', title: 'Title', type: 'localeString'}),
+            defineField({name: 'text', title: 'Text', type: 'localeText'}),
+            defineField({
+              name: 'textHtml',
+              title: 'Text HTML',
+              type: 'localeText',
+            }),
+            defineField({name: 'prompt', title: 'Prompt', type: 'localeText'}),
+            defineField({name: 'callCta', title: 'Call CTA', type: 'localeString'}),
+          ],
+        }),
+      ],
+    }),
+
+    defineField({
+      name: 'faq',
+      title: 'FAQ',
+      type: 'object',
+      group: 'faq',
+      fields: [
+        defineField({name: 'eyebrow', title: 'Eyebrow', type: 'localeString'}),
+        defineField({name: 'sideTitle', title: 'Side title', type: 'localeString'}),
+        defineField({name: 'sidePrompt', title: 'Side prompt', type: 'localeText'}),
+        defineField({name: 'items', title: 'Questions', type: 'array', of: [faqItem]}),
+      ],
+    }),
+
+    defineField({
+      name: 'packages',
+      title: 'Larger packages',
+      type: 'object',
+      group: 'packages',
+      fields: [
+        defineField({name: 'eyebrow', title: 'Eyebrow', type: 'localeString'}),
+        defineField({name: 'title', title: 'Title', type: 'localeString'}),
+        defineField({name: 'note', title: 'Note', type: 'localeText'}),
+        defineField({name: 'cta', title: 'CTA', type: 'localeString'}),
+        defineField({name: 'askLabel', title: 'Ask label', type: 'localeString'}),
+        defineField({name: 'items', title: 'Packages', type: 'array', of: [packageItem]}),
+      ],
+    }),
+
+    defineField({
+      name: 'footer',
+      title: 'Footer',
+      type: 'object',
+      group: 'footer',
+      fields: [
+        defineField({name: 'identity', title: 'Identity', type: 'localeString'}),
+        defineField({name: 'address', title: 'Address', type: 'localeString'}),
+        defineField({name: 'contact', title: 'Contact line', type: 'localeText'}),
+        defineField({name: 'family', title: 'Family line', type: 'localeString'}),
+        defineField({name: 'links', title: 'Legal links', type: 'array', of: [footerLink]}),
+      ],
+    }),
+
+    defineField({
+      name: 'workEyebrow',
+      title: 'Blog / Portfolio eyebrow',
+      type: 'localeString',
+      group: 'archive',
+    }),
+    defineField({
+      name: 'workHeading',
+      title: 'Portfolio heading',
+      type: 'localeString',
+      group: 'archive',
+    }),
+    defineField({
+      name: 'workIntro',
+      title: 'Portfolio intro',
+      type: 'localeText',
+      group: 'archive',
+    }),
   ],
   preview: {
     prepare() {

@@ -4,8 +4,8 @@ import {PHONE_TEL, EMAIL} from '../../data/site'
 import {DEFAULT_LOCALE, localizeHref, type Locale} from '../../lib/locale'
 
 const locale: Locale = Astro.locals.locale ?? DEFAULT_LOCALE
-const footer = getLocaleBlock('footer', locale)
-const header = getLocaleBlock('header', locale)
+const footer = getLocaleBlock('footer', locale, Astro.locals.homeContent)
+const header = getLocaleBlock('header', locale, Astro.locals.homeContent)
 const homeHref = locale === 'en' ? '/en/' : '/'
 
 const footerCta =

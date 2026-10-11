@@ -17,7 +17,7 @@ import {DEFAULT_LOCALE, type Locale} from '../lib/locale'
 import {resolveSiteOrigin} from '../lib/site-url'
 
 const locale: Locale = Astro.locals.locale ?? DEFAULT_LOCALE
-const meta = getLocaleBlock('meta', locale)
+const meta = getLocaleBlock('meta', locale, Astro.locals.homeContent)
 const siteOrigin = resolveSiteOrigin(Astro.site)
 ---
 

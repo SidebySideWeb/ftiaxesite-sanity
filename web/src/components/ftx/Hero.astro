@@ -4,7 +4,7 @@ import {PRICE_FROM} from '../../data/site'
 import {DEFAULT_LOCALE, type Locale} from '../../lib/locale'
 
 const locale: Locale = Astro.locals.locale ?? DEFAULT_LOCALE
-const hero = getLocaleBlock('hero', locale)
+const hero = getLocaleBlock('hero', locale, Astro.locals.homeContent)
 
 function splitHeroTitle(h1: string): {line1: string; line2Html: string} {
   const comma = h1.indexOf(',')

@@ -1,65 +1,10 @@
 ---
+import {getLocaleBlock} from '../../data/content'
 import {PRICE_FROM} from '../../data/site'
 import {DEFAULT_LOCALE, type Locale} from '../../lib/locale'
 
 const locale: Locale = Astro.locals.locale ?? DEFAULT_LOCALE
-
-const copy =
-  locale === 'en'
-    ? {
-        eyebrow: 'THE 48 HOUR PACKAGE',
-        title: 'What the price includes.',
-        yesTitle: 'INCLUDED',
-        noTitle: 'NOT INCLUDED',
-        yes: [
-          {label: 'Up to 5 sections', icon: 'layers'},
-          {label: 'Looks right on mobile', icon: 'phone'},
-          {label: 'Contact form', icon: 'mail'},
-          {label: 'Google Map', icon: 'pin'},
-          {label: 'Basic SEO', icon: 'search'},
-          {label: 'SSL', icon: 'lock'},
-        ],
-        no: [
-          {title: 'Texts and photos', note: 'You provide them.'},
-          {title: 'Online store', note: 'Offered separately.'},
-          {title: 'Special features', note: 'Offered separately.'},
-        ],
-        noFoot: 'Need one of these?',
-        biggerLink: 'See the larger packages',
-        yearlyBefore: 'Domain and hosting: ',
-        yearlyAfter: '/year',
-        yearlyTail: ', we write it up front.',
-        yearlyTag: 'YEARLY COST',
-        priceTag: 'FIXED PRICE · LIVE IN 48 HOURS',
-        cta: 'I want this for my business',
-      }
-    : {
-        eyebrow: 'ΤΟ ΠΑΚΕΤΟ 48 ΩΡΩΝ',
-        title: 'Τι περιλαμβάνει η τιμή.',
-        yesTitle: 'ΠΕΡΙΛΑΜΒΑΝΕΤΑΙ',
-        noTitle: 'ΔΕΝ ΠΕΡΙΛΑΜΒΑΝΕΤΑΙ',
-        yes: [
-          {label: 'Έως 5 ενότητες', icon: 'layers'},
-          {label: 'Σωστή εμφάνιση στο κινητό', icon: 'phone'},
-          {label: 'Φόρμα επικοινωνίας', icon: 'mail'},
-          {label: 'Χάρτης Google', icon: 'pin'},
-          {label: 'Βασικό SEO', icon: 'search'},
-          {label: 'SSL', icon: 'lock'},
-        ],
-        no: [
-          {title: 'Κείμενα και φωτογραφίες', note: 'Τα φέρνεις εσύ.'},
-          {title: 'Ηλεκτρονικό κατάστημα', note: 'Προσφέρεται ξεχωριστά.'},
-          {title: 'Ειδικές λειτουργίες', note: 'Προσφέρονται ξεχωριστά.'},
-        ],
-        noFoot: 'Χρειάζεσαι κάτι από αυτά;',
-        biggerLink: 'Δες τα μεγαλύτερα πακέτα',
-        yearlyBefore: 'Domain και hosting: ',
-        yearlyAfter: '/έτος',
-        yearlyTail: ', το γράφουμε από την αρχή.',
-        yearlyTag: 'ΕΤΗΣΙΟ ΚΟΣΤΟΣ',
-        priceTag: 'ΣΤΑΘΕΡΗ ΤΙΜΗ · ΕΤΟΙΜΟ ΣΕ 48 ΩΡΕΣ',
-        cta: 'Το θέλω για τη δουλειά μου',
-      }
+const copy = getLocaleBlock('included', locale, Astro.locals.homeContent)
 
 /** Odometer target: 490 (matches Main.html `.odo.n4` / `.n9` / `.n0`). */
 const digits = (PRICE_FROM.replace(/\D/g, '').padStart(3, '0').slice(-3) || '490').split('') as [
@@ -67,7 +12,7 @@ const digits = (PRICE_FROM.replace(/\D/g, '').padStart(3, '0').slice(-3) || '490
   string,
   string,
 ]
-const yearlyDisplay = '150 €'
+const yearlyDisplay = copy.yearlyPrice || '150 €'
 
 const icons: Record<string, string> = {
   layers:
@@ -88,7 +33,7 @@ const icons: Record<string, string> = {
         <span class="eyebrow"><i><b></b><b></b></i>{copy.eyebrow}</span>
         <h2 class="rv-l">{copy.title}</h2>
       </div>
-      <div class="price">
+      <div class="price" id="paketo-price">
         <span class="sr">{PRICE_FROM}</span>
         <span class="big" aria-hidden="true">
           <span class={`odo n${digits[0]}`}>
@@ -180,3 +125,35 @@ const icons: Record<string, string> = {
     </div>
   </div>
 </section>
+
+<script>
+  function initPriceOdo() {
+    const price = document.getElementById('paketo-price')
+    if (!price || price.dataset.odoBound === 'true') return
+    price.dataset.odoBound = 'true'
+
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    if (reduce) {
+      price.classList.add('is-on')
+      return
+    }
+
+    if (!('IntersectionObserver' in window)) {
+      price.classList.add('is-on')
+      return
+    }
+
+    const io = new IntersectionObserver(
+      (entries) => {
+        if (!entries.some((e) => e.isIntersecting)) return
+        price.classList.add('is-on')
+        io.disconnect()
+      },
+      {threshold: 0.45},
+    )
+    io.observe(price)
+  }
+
+  initPriceOdo()
+  document.addEventListener('astro:page-load', initPriceOdo)
+</script>

@@ -1,76 +1,11 @@
 ---
+import {getLocaleBlock} from '../../data/content'
 import {PHONE_DISPLAY, PHONE_TEL} from '../../data/site'
 import {DEFAULT_LOCALE, type Locale} from '../../lib/locale'
 
 const locale: Locale = Astro.locals.locale ?? DEFAULT_LOCALE
-const headerCta = locale === 'en' ? 'Request your site' : 'Ζήτησε το site σου'
-
-const copy =
-  locale === 'en'
-    ? {
-        eyebrow: 'QUESTIONS',
-        sideTitle: 'Before you start.',
-        sidePrompt: 'Another question? Call us.',
-        items: [
-          {
-            id: 'faq-kostos',
-            q: 'What is the total cost?',
-            a: '<b>490 € for the website, once.</b> After that you only pay domain and hosting, <span class="ph">150 €</span> a year. We write it up front so you know what you will pay.',
-          },
-          {
-            id: 'faq-ylika',
-            q: 'What do I need to send you?',
-            a: 'The texts for each section, your photos, and your logo if you have one. Plus the contact details you want shown. Once we have everything, the 48-hour timer starts.',
-          },
-          {
-            id: 'faq-allages',
-            q: 'Can I ask for changes?',
-            a: 'Yes. When you see the first version, tell us what you want changed and we fix it before it goes live.',
-          },
-          {
-            id: 'faq-domain',
-            q: 'Who owns the domain?',
-            a: '<b>You.</b> The domain is registered in your name.',
-          },
-          {
-            id: 'faq-megalytero',
-            q: 'What if I need something bigger?',
-            a: 'For more pages, an online store, or special features, see the <a href="#megalytera">larger packages</a> or write it in the form. We will tell you what fits.',
-          },
-        ],
-      }
-    : {
-        eyebrow: 'ΕΡΩΤΗΣΕΙΣ',
-        sideTitle: 'Πριν ξεκινήσεις.',
-        sidePrompt: 'Έχεις άλλη ερώτηση; Πάρε μας τηλέφωνο.',
-        items: [
-          {
-            id: 'faq-kostos',
-            q: 'Πόσο κοστίζει συνολικά;',
-            a: '<b>490 € για την ιστοσελίδα, μία φορά.</b> Μετά πληρώνεις μόνο domain και hosting, <span class="ph">150 €</span> τον χρόνο. Σου το γράφουμε από την αρχή, για να ξέρεις τι θα δώσεις.',
-          },
-          {
-            id: 'faq-ylika',
-            q: 'Τι χρειάζεται να σας στείλω;',
-            a: 'Τα κείμενα για κάθε ενότητα, τις φωτογραφίες σου και το λογότυπο, αν έχεις. Και τα στοιχεία επικοινωνίας που θέλεις να φαίνονται. Μόλις τα έχουμε όλα, ξεκινά το χρονόμετρο των 48 ωρών.',
-          },
-          {
-            id: 'faq-allages',
-            q: 'Μπορώ να ζητήσω αλλαγές;',
-            a: 'Ναι. Όταν δεις την πρώτη έκδοση, μας λες τι θέλεις να αλλάξει και το διορθώνουμε πριν βγει online.',
-          },
-          {
-            id: 'faq-domain',
-            q: 'Ποιος κατέχει το domain;',
-            a: '<b>Εσύ.</b> Το domain κατοχυρώνεται στο όνομά σου.',
-          },
-          {
-            id: 'faq-megalytero',
-            q: 'Τι γίνεται αν θέλω κάτι μεγαλύτερο;',
-            a: 'Για περισσότερες σελίδες, ηλεκτρονικό κατάστημα ή ειδικές λειτουργίες, δες τα <a href="#megalytera">μεγαλύτερα πακέτα</a> ή γράψ\' το στη φόρμα. Θα σου πούμε τι ταιριάζει.',
-          },
-        ],
-      }
+const copy = getLocaleBlock('faq', locale, Astro.locals.homeContent)
+const header = getLocaleBlock('header', locale, Astro.locals.homeContent)
 ---
 
 <section class="sec" id="erotiseis" data-component="Faq">
@@ -88,7 +23,7 @@ const copy =
           </svg>
           <span class="ph">{PHONE_DISPLAY}</span>
         </a>
-        <a class="btn btn-cta btn-sm" href="#forma" id="cta-faq" data-cta="faq">{headerCta}</a>
+        <a class="btn btn-cta btn-sm" href="#forma" id="cta-faq" data-cta="faq">{header.cta}</a>
       </div>
     </div>
     <div class="faq">

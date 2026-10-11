@@ -45,8 +45,9 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);-
 .btn:hover .bars b+b{transform:translateY(0)}
 .btn .arr{width:20px;height:20px;transition:transform .35s var(--ease)}
 .btn:hover .arr{transform:translateX(4px)}
-.btn-ink{background:var(--ink);color:var(--paper);box-shadow:5px 5px 0 var(--mari)}
-.btn-ink:hover{transform:translate(-2px,-2px);box-shadow:7px 7px 0 var(--mari)}
+.btn-ink{background:var(--ink);color:var(--paper);box-shadow:5px 5px 0 var(--mari);border-radius:6px}
+.btn-ink:hover{transform:translate(-2px,-2px);box-shadow:7px 7px 0 var(--mari);color:var(--paper)}
+.btn-ink .ico{color:var(--paper);stroke:var(--paper)}
 .btn-ghost{background:transparent;color:var(--ink);border-color:var(--ink)}
 .btn-ghost:hover{background:var(--ink);color:var(--paper)}
 .on-dark .btn-cta{border-color:var(--night);box-shadow:5px 5px 0 var(--paper)}
@@ -260,13 +261,17 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);-
 .inc-hd{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:32px;align-items:end;margin-bottom:48px}
 .inc-hd h2{font-size:clamp(38px,5.4cqi,76px);line-height:.98;letter-spacing:-.045em;margin-top:18px}
 .price{display:grid;justify-items:end;gap:10px}
-.price .big{display:flex;align-items:flex-start;font-weight:900;letter-spacing:-.06em;font-size:clamp(72px,10cqi,150px);line-height:.85;font-variant-numeric:tabular-nums}
+.price .big{display:flex;align-items:flex-start;font-weight:900;letter-spacing:-.06em;font-size:clamp(72px,10cqi,150px);line-height:1;font-variant-numeric:tabular-nums}
 .price .big .eur{font-size:.42em;margin:.12em 0 0 .08em;letter-spacing:0}
 .odo{display:inline-block;height:1em;overflow:hidden;line-height:1;--odo-y:0em}
 .odo.n0{--odo-y:0em}.odo.n1{--odo-y:-1em}.odo.n2{--odo-y:-2em}.odo.n3{--odo-y:-3em}.odo.n4{--odo-y:-4em}
 .odo.n5{--odo-y:-5em}.odo.n6{--odo-y:-6em}.odo.n7{--odo-y:-7em}.odo.n8{--odo-y:-8em}.odo.n9{--odo-y:-9em}
-.odo>span{display:flex;flex-direction:column;transform:translateY(var(--odo-y))}
-.odo>span>b{height:1em;line-height:1;font-weight:900}
+/* Start at 0; `.price.is-on` snaps each reel to its digit (one-shot, not scroll-scrubbed). */
+.odo>span{display:flex;flex-direction:column;transform:translateY(0);will-change:transform}
+.price.is-on .odo>span{transform:translateY(var(--odo-y));transition:transform 1.05s var(--ease)}
+.price.is-on .odo.n9>span{transition-delay:.08s}
+.price.is-on .odo.n0>span{transition-delay:.16s}
+.odo>span>b{display:block;height:1em;line-height:1;font-weight:900}
 .price .tag{font:500 12px var(--mono);letter-spacing:.12em;color:var(--slate);display:flex;gap:10px;align-items:center}
 .price .tag i{width:6px;height:6px;border-radius:50%;background:var(--mari)}
 .inc-grid{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);gap:20px}
@@ -357,10 +362,11 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);-
 .burst{position:absolute;left:42px;top:42px;width:0;height:0}
 .burst b{position:absolute;left:-3px;top:-9px;width:6px;height:18px;border-radius:2px;background:var(--mari);opacity:0}
 .burst b:nth-child(even){background:var(--ink)}
-.lf-success h3{font-size:clamp(30px,9cqi,42px);letter-spacing:-.045em;line-height:1}
+.lf-success h3{font-size:clamp(30px,9cqi,42px);letter-spacing:-.045em;line-height:1;color:var(--ink)}
 .lf-success p{font-size:17px;color:var(--slate);max-width:36ch}
 .lf-success p b{color:var(--ink)}
-.lf-success .btn{margin-top:6px}
+.lf-success .btn{margin-top:6px;opacity:1;transform:none;color:var(--paper);background:var(--ink);border-radius:6px;white-space:normal;text-align:center;max-width:100%}
+.lf-success .btn-ink{color:var(--paper)}
 .lf-reset{background:none;border:0;font:600 14.5px var(--sans);color:var(--slate);text-decoration:underline;text-underline-offset:3px;cursor:pointer;padding:8px 0}
 .gtm-flag{display:inline-flex;align-items:center;gap:8px;font:500 11px var(--mono);letter-spacing:.08em;color:var(--slate);border:1px dashed #AEB9B5;border-radius:4px;padding:6px 8px;margin-top:6px}
 
@@ -567,7 +573,6 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);-
     .rv-s{animation:ftxRvS linear both;animation-timeline:view();animation-range:entry 0% cover 40%}
     .tl-fill{animation:ftxScale linear both;animation-timeline:view();animation-range:entry 30% cover 55%}
     .tl-dot{animation:ftxDotMove linear both;animation-timeline:view();animation-range:entry 30% cover 55%}
-    .odo>span{animation:ftxOdo linear both;animation-timeline:view();animation-range:entry 10% cover 40%}
     .yes-list .ok svg{animation:ftxDrawS linear both;animation-timeline:view();animation-range:entry 40% entry 100%}
     .lf-deco{animation:ftxDrift linear both;animation-timeline:view()}
     .giant{animation:ftxGiant linear both;animation-timeline:view();animation-range:entry 0% entry 90%}
@@ -576,7 +581,7 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);-
 }
 @keyframes ftxUp{from{transform:translateY(108%) rotate(3deg)}}
 @keyframes ftxSwipe{from{transform:scaleX(0)}}
-@keyframes ftxFade{from{opacity:0;transform:translateY(16px)}}
+@keyframes ftxFade{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
 @keyframes ftxRise{from{opacity:0;transform:translateY(60px) scale(.96)}}
 @keyframes ftxFloat{50%{transform:translateY(-10px)}}
 @keyframes ftxFloatP{0%,100%{transform:translateZ(60px) translateY(0)}50%{transform:translateZ(60px) translateY(-16px)}}
@@ -606,8 +611,6 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);-
 @keyframes ftxRvL{from{opacity:0;transform:translateX(-64px)}}
 @keyframes ftxRvS{from{opacity:0;transform:scale(.9) rotate(-1deg)}}
 @keyframes ftxDotMove{from{left:0}to{left:100%}}
-/* Explicit `to` so fill-mode doesn't leave digits stuck at 0 (000 instead of 490). */
-@keyframes ftxOdo{from{transform:translateY(0)}to{transform:translateY(var(--odo-y))}}
 @keyframes ftxDrift{from{transform:translateY(-80px)}to{transform:translateY(120px)}}
 @keyframes ftxGiant{from{opacity:0;transform:translateY(30%)}}
 @keyframes ftxSticky{from{transform:translateY(110%)}to{transform:none}}
@@ -615,6 +618,7 @@ body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);-
 @media (prefers-reduced-motion:reduce){
   .ftx *,.lf-root *{animation:none!important;transition:none!important}
   .hv-stage{transform:none!important}
+  .odo>span,.price.is-on .odo>span{transform:translateY(var(--odo-y))!important;transition:none!important}
 }
 
 /* ---------- secondary pages (blog / portfolio / legal / 404) ---------- */

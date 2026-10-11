@@ -1,5 +1,8 @@
+import {AsyncLocalStorage} from 'node:async_hooks'
 import raw from './ftiaxesite-content.json'
+import {resolveHomePage, type HomeSection, type ResolvedHome} from './map-home'
 import type {Locale} from '../lib/locale'
+import {fetchHomePage} from '../lib/sanity'
 import {
   EMAIL,
   FAQ_DOMAIN_OWNERSHIP_EL,
@@ -18,14 +21,11 @@ function resolveString(value: string, locale: Locale): string {
     .replaceAll('{{PHONE}}', PHONE)
     .replaceAll('{{EMAIL}}', EMAIL)
 
-  // FAQ ownership placeholders from content JSON (el + en variants).
   out = out.replace(
     /\{\{ΣΥΜΠΛΗΡΩΣΕ ΜΕ ΤΟΝ ΤΡΟΠΟ ΠΟΥ ΔΟΥΛΕΥΕΤΕ ΠΡΑΓΜΑΤΙΚΑ:[^}]*\}\}/g,
     FAQ_DOMAIN_OWNERSHIP_EL,
   )
   out = out.replace(/\{\{FILL IN ACCORDING TO HOW YOU ACTUALLY WORK[^}]*\}\}/g, FAQ_DOMAIN_OWNERSHIP_EN)
-
-  // Catch leftover Greek fill-in tokens for phone/email if present in constants block text.
   out = out.replace(/\{\{ΣΥΜΠΛΗΡΩΣΕ ελληνικό τηλέφωνο\}\}/g, PHONE)
   out = out.replace(/\{\{ΣΥΜΠΛΗΡΩΣΕ email\}\}/g, EMAIL)
 
@@ -69,30 +69,62 @@ function collectTokens(value: unknown, found: Set<string>): void {
   }
 }
 
+/** JSON fallback shape (legacy bilingual file). */
 export type SiteContent = typeof raw
 
-/** Resolved homepage content for a locale (no unresolved {{...}} when constants are set). */
+type RequestStore = {
+  home: ResolvedHome | null
+}
+
+const als = new AsyncLocalStorage<RequestStore>()
+
+export async function loadHomeForRequest(locale: Locale): Promise<ResolvedHome | null> {
+  try {
+    const doc = await fetchHomePage()
+    if (!doc?.hero?.h1?.el && !doc?.hero?.h1?.en) return null
+    return resolveHomePage(doc, locale)
+  } catch {
+    return null
+  }
+}
+
+export function runWithHomeContent<T>(home: ResolvedHome | null, fn: () => T): T {
+  return als.run({home}, fn)
+}
+
+function jsonLocaleBlock<T extends keyof SiteContent>(key: T, locale: Locale): unknown {
+  const content = walk(raw as unknown as JsonValue, locale) as SiteContent
+  const block = content[key] as {el?: unknown; en?: unknown} & SiteContent[T]
+  if (block && typeof block === 'object' && ('el' in block || 'en' in block)) {
+    const localePart = locale === 'en' ? block.en ?? block.el : block.el ?? block.en
+    if (key === 'showcase' && 'items' in block) {
+      return {...(localePart as object), items: (block as {items: unknown}).items}
+    }
+    return localePart
+  }
+  return block
+}
+
+/**
+ * Section copy for the current request.
+ * Prefers Sanity homePage (via middleware ALS / override); falls back to JSON.
+ */
+export function getLocaleBlock<K extends HomeSection>(
+  key: K,
+  locale: Locale,
+  override?: ResolvedHome | null,
+): ResolvedHome[K] {
+  const fromSanity = override ?? als.getStore()?.home
+  if (fromSanity?.[key] != null) return fromSanity[key]
+
+  // JSON fallback — best-effort mapping for shared keys
+  return jsonLocaleBlock(key as keyof SiteContent, locale) as ResolvedHome[K]
+}
+
 export function getContent(locale: Locale): SiteContent {
   return walk(raw as unknown as JsonValue, locale) as SiteContent
 }
 
-export function getLocaleBlock<T extends keyof SiteContent>(
-  key: T,
-  locale: Locale,
-): SiteContent[T] extends {el: infer E; en: infer N}
-  ? Locale extends 'en'
-    ? N
-    : E
-  : SiteContent[T] {
-  const content = getContent(locale)
-  const block = content[key] as {el?: unknown; en?: unknown} & SiteContent[T]
-  if (block && typeof block === 'object' && ('el' in block || 'en' in block)) {
-    return (locale === 'en' ? block.en ?? block.el : block.el ?? block.en) as never
-  }
-  return block as never
-}
-
-/** Returns remaining `{{...}}` tokens after resolution. Empty = safe to ship. */
 export function findUnresolvedTokens(locale: Locale = 'el'): string[] {
   const found = new Set<string>()
   collectTokens(getContent(locale), found)

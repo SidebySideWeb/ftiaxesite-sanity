@@ -4,6 +4,7 @@ declare namespace App {
   interface Locals {
     locale: import('./lib/locale').Locale
     publicPath: string
+    homeContent: import('./data/map-home').ResolvedHome | null
   }
 }
 

@@ -17,8 +17,8 @@ interface Props {
 }
 
 const {siteOrigin, locale} = Astro.props
-const faq = getLocaleBlock('faq', locale)
-const meta = getLocaleBlock('meta', locale)
+const faq = getLocaleBlock('faq', locale, Astro.locals.homeContent)
+const meta = getLocaleBlock('meta', locale, Astro.locals.homeContent)
 
 const localBusiness = {
   '@context': 'https://schema.org',
