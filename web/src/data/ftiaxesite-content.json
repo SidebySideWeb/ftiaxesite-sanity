@@ -22,25 +22,25 @@
       "nav": [
         {
           "label": "Πακέτα",
-          "href": "#packages"
+          "href": "#paketo"
         },
         {
           "label": "Ερωτήσεις",
-          "href": "#faq"
+          "href": "#erotiseis"
         }
       ],
-      "callLabel": "Κάλεσε μας"
+      "callLabel": "Κάλεσέ μας"
     },
     "en": {
       "cta": "Request your site",
       "nav": [
         {
           "label": "Packages",
-          "href": "#packages"
+          "href": "#paketo"
         },
         {
           "label": "FAQ",
-          "href": "#faq"
+          "href": "#erotiseis"
         }
       ],
       "callLabel": "Call us"
@@ -48,20 +48,20 @@
   },
   "hero": {
     "el": {
-      "eyebrow": "Για μικρές επιχειρήσεις και επαγγελματίες",
+      "eyebrow": "ΚΑΤΑΣΚΕΥΗ ΙΣΤΟΣΕΛΙΔΑΣ · ΣΤΑΘΕΡΗ ΤΙΜΗ",
       "h1": "Η ιστοσελίδα σου, έτοιμη σε 48 ώρες",
-      "sub": "Από {{PRICE_FROM}} με σταθερή τιμή. Στείλε μας τα στοιχεία σου και δες το site σου online μέσα σε 48 ώρες από την παραλαβή τους.",
+      "sub": "Από <b>{{PRICE_FROM}}</b>, σταθερή τιμή, χωρίς εκπλήξεις. Στείλε μας τα στοιχεία σου και δες το site σου online μέσα σε δύο μέρες.",
       "cta": "Ζήτησε το site σου",
-      "micro": "Χωρίς δέσμευση. Συνήθως απαντάμε μέσα σε μία εργάσιμη μέρα.",
-      "conditionNote": "Τα 48 ώρες μετρούν από τη στιγμή που θα παραλάβουμε κείμενα και φωτογραφίες, σε εργάσιμες ημέρες. Οι τιμές δεν περιλαμβάνουν ΦΠΑ."
+      "micro": "Χωρίς δέσμευση. Απαντάμε μέσα σε λίγες ώρες.",
+      "conditionNote": "Τα 48 ώρες μετρούν από τη στιγμή που θα παραλάβουμε κείμενα και φωτογραφίες."
     },
     "en": {
-      "eyebrow": "For small businesses and professionals",
+      "eyebrow": "WEBSITE BUILD · FIXED PRICE",
       "h1": "Your website, ready in 48 hours",
-      "sub": "From {{PRICE_FROM}} at a fixed price. Send us your details and see your site online within 48 hours of us receiving them.",
+      "sub": "From <b>{{PRICE_FROM}}</b>, fixed price, no surprises. Send us your details and see your site online within two days.",
       "cta": "Request your site",
-      "micro": "No commitment. We usually reply within one working day.",
-      "conditionNote": "The 48 hours start when we receive your texts and photos, on working days. Prices do not include VAT."
+      "micro": "No commitment. We reply within a few hours.",
+      "conditionNote": "The 48 hours start when we receive your texts and photos."
     }
   },
   "steps": {
@@ -110,13 +110,13 @@
   },
   "showcase": {
     "el": {
-      "title": "Έργα που έχουμε φτιάξει",
-      "sub": "Πραγματικά sites επιχειρήσεων. Άνοιξέ τα και δες πώς δουλεύουν.",
+      "title": "Sites που έχουμε φτιάξει",
+      "sub": "Πραγματικά έργα, online. Άνοιξέ τα και δες τα και στο κινητό σου.",
       "open": "Δες το site"
     },
     "en": {
       "title": "Sites we have built",
-      "sub": "Real business websites. Open them and see how they work.",
+      "sub": "Real projects, online. Open them and check them on your phone too.",
       "open": "View the site"
     },
     "items": [
@@ -208,57 +208,65 @@
   },
   "form": {
     "el": {
-      "title": "Ζήτησε το site σου",
-      "sub": "Τρία πεδία και είσαι έτοιμος.",
+      "title": "Αίτημα για ιστοσελίδα",
+      "sub": "Τρία πεδία. Δύο λεπτά",
       "fields": {
         "name": {
           "label": "Όνομα",
+          "placeholder": "Πώς σε λένε;",
           "error": "Γράψε το όνομά σου."
         },
         "contact": {
           "label": "Τηλέφωνο ή email",
+          "placeholder": "69xx xxx xxx ή το email σου",
           "error": "Γράψε ένα τηλέφωνο ή ένα email για να σε βρούμε."
         },
         "business": {
-          "label": "Τι δουλειά κάνεις; (προαιρετικό)",
-          "placeholder": "π.χ. εστιατόριο, υδραυλικός, σύλλογος"
+          "label": "Τι δουλειά κάνεις;",
+          "placeholder": "π.χ. ταβέρνα, ηλεκτρολόγος, ενοικιαζόμενα"
         }
       },
       "submit": "Στείλε το αίτημα",
-      "sending": "Αποστολή...",
+      "sending": "Στέλνεται…",
+      "consentLabel": "Συμφωνώ να χρησιμοποιηθούν τα στοιχεία μου μόνο για να απαντήσετε στο αίτημά μου. <a href=\"/privacy/\">Πολιτική Απορρήτου</a>",
+      "consentError": "Χρειάζεται η συγκατάθεσή σου για να στείλουμε το αίτημα.",
       "privacyNotice": "Στέλνοντας τη φόρμα, τα στοιχεία σου χρησιμοποιούνται μόνο για να απαντήσουμε στο αίτημά σου. Δες την <a href=\"/privacy/\">Πολιτική Απορρήτου</a>.",
       "genericError": "Δεν στάλθηκε το αίτημα. Δοκίμασε ξανά ή κάλεσε μας στο {{PHONE}}.",
       "success": {
-        "title": "Λάβαμε το αίτημά σου",
-        "text": "Θα επικοινωνήσουμε μαζί σου συνήθως μέσα σε μία εργάσιμη μέρα.",
-        "callCta": "Προτιμάς να μιλήσουμε τώρα; Κλείσε ένα τηλεφώνημα 15 λεπτών"
+        "title": "Το πήραμε. Ευχαριστούμε.",
+        "text": "Σου απαντάμε το ίδιο βράδυ ή την επόμενη μέρα.",
+        "callCta": "Κλείσε τηλεφώνημα 15 λεπτών"
       }
     },
     "en": {
-      "title": "Request your site",
-      "sub": "Three fields and you are done.",
+      "title": "Website request",
+      "sub": "Three fields. Two minutes",
       "fields": {
         "name": {
           "label": "Name",
+          "placeholder": "What should we call you?",
           "error": "Please enter your name."
         },
         "contact": {
           "label": "Phone or email",
+          "placeholder": "69xx xxx xxx or your email",
           "error": "Please enter a phone number or an email so we can reach you."
         },
         "business": {
-          "label": "What do you do? (optional)",
-          "placeholder": "e.g. restaurant, plumber, club"
+          "label": "What do you do?",
+          "placeholder": "e.g. tavern, electrician, rooms to let"
         }
       },
       "submit": "Send the request",
-      "sending": "Sending...",
+      "sending": "Sending…",
+      "consentLabel": "I agree that my details may be used only to reply to my request. <a href=\"/en/privacy/\">Privacy Policy</a>",
+      "consentError": "Your consent is required to send the request.",
       "privacyNotice": "By sending this form, your details are used only to reply to your request. See our <a href=\"/en/privacy/\">Privacy Policy</a>.",
       "genericError": "Your request was not sent. Please try again or call us on {{PHONE}}.",
       "success": {
-        "title": "We received your request",
-        "text": "We will contact you, usually within one working day.",
-        "callCta": "Prefer to talk now? Book a 15 minute call"
+        "title": "Got it. Thank you.",
+        "text": "We reply the same evening or the next day.",
+        "callCta": "Book a 15 minute call"
       }
     }
   },
@@ -325,45 +333,45 @@
   "packages": {
     "el": {
       "title": "Χρειάζεσαι κάτι μεγαλύτερο;",
-      "note": "Οι τιμές είναι ενδεικτικές. Η τελική τιμή δίνεται γραπτά, πριν ξεκινήσουμε. Οι τιμές δεν περιλαμβάνουν ΦΠΑ.",
+      "note": "Για εταιρείες, ειδικές λειτουργίες και ηλεκτρονικά καταστήματα.",
       "cta": "Ζήτησε προσφορά",
       "items": [
         {
-          "name": "Εταιρική ιστοσελίδα",
-          "price": "από 1.500 €",
-          "text": "Έως 6 σελίδες, διαχείριση περιεχομένου, blog."
+          "name": "Corporate Site",
+          "price": "1.500 €",
+          "text": "Για εταιρείες με περισσότερες σελίδες."
         },
         {
           "name": "Site με λειτουργίες",
-          "price": "από 2.500 €",
-          "text": "Online κρατήσεις, σύνδεση με CRM, δύο γλώσσες."
+          "price": "2.500 €",
+          "text": "Με ειδικές λειτουργίες για τη δουλειά σου."
         },
         {
-          "name": "Ηλεκτρονικό κατάστημα",
-          "price": "από 3.500 €",
-          "text": "Πληρωμές με κάρτα, διαχείριση προϊόντων, εκπαίδευση."
+          "name": "eShop",
+          "price": "3.500 €",
+          "text": "Ηλεκτρονικό κατάστημα για να πουλάς online."
         }
       ]
     },
     "en": {
       "title": "Need something bigger?",
-      "note": "Prices are indicative. The final price is given in writing before we start. Prices do not include VAT.",
+      "note": "For companies, special features, and online stores.",
       "cta": "Request a quote",
       "items": [
         {
-          "name": "Corporate website",
-          "price": "from €1,500",
-          "text": "Up to 6 pages, content management, blog."
+          "name": "Corporate Site",
+          "price": "€1,500",
+          "text": "For companies with more pages."
         },
         {
-          "name": "Website with features",
-          "price": "from €2,500",
-          "text": "Online bookings, CRM connection, two languages."
+          "name": "Site with features",
+          "price": "€2,500",
+          "text": "With special features for your work."
         },
         {
-          "name": "Online store",
-          "price": "from €3,500",
-          "text": "Card payments, product management, training."
+          "name": "eShop",
+          "price": "€3,500",
+          "text": "An online store so you can sell online."
         }
       ]
     }

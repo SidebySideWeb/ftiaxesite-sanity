@@ -226,6 +226,8 @@
       },
       "submit": "Στείλε το αίτημα",
       "sending": "Αποστολή...",
+      "consentLabel": "Συμφωνώ να χρησιμοποιηθούν τα στοιχεία μου μόνο για να απαντήσετε στο αίτημά μου. <a href=\"/privacy/\">Πολιτική Απορρήτου</a>",
+      "consentError": "Χρειάζεται η συγκατάθεσή σου για να στείλουμε το αίτημα.",
       "privacyNotice": "Στέλνοντας τη φόρμα, τα στοιχεία σου χρησιμοποιούνται μόνο για να απαντήσουμε στο αίτημά σου. Δες την <a href=\"/privacy/\">Πολιτική Απορρήτου</a>.",
       "genericError": "Δεν στάλθηκε το αίτημα. Δοκίμασε ξανά ή κάλεσε μας στο {{PHONE}}.",
       "success": {
@@ -253,6 +255,8 @@
       },
       "submit": "Send the request",
       "sending": "Sending...",
+      "consentLabel": "I agree that my details may be used only to reply to my request. <a href=\"/en/privacy/\">Privacy Policy</a>",
+      "consentError": "Your consent is required to send the request.",
       "privacyNotice": "By sending this form, your details are used only to reply to your request. See our <a href=\"/en/privacy/\">Privacy Policy</a>.",
       "genericError": "Your request was not sent. Please try again or call us on {{PHONE}}.",
       "success": {

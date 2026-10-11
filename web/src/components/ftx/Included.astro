@@ -1,32 +1,87 @@
 ---
-import {getLocaleBlock} from '../../data/content'
 import {PRICE_FROM} from '../../data/site'
 import {DEFAULT_LOCALE, type Locale} from '../../lib/locale'
 
 const locale: Locale = Astro.locals.locale ?? DEFAULT_LOCALE
-const included = getLocaleBlock('included', locale)
-const eyebrow = locale === 'en' ? 'THE 48 HOUR PACKAGE' : 'ΤΟ ΠΑΚΕΤΟ 48 ΩΡΩΝ'
-const priceTag =
-  locale === 'en' ? 'FIXED PRICE · LIVE IN 48 HOURS' : 'ΣΤΑΘΕΡΗ ΤΙΜΗ · ΕΤΟΙΜΟ ΣΕ 48 ΩΡΕΣ'
-const yearlyTag = locale === 'en' ? 'YEARLY COST' : 'ΕΤΗΣΙΟ ΚΟΣΤΟΣ'
-const biggerLink =
-  locale === 'en' ? 'See the larger packages' : 'Δες τα μεγαλύτερα πακέτα'
-const notFoot =
+
+const copy =
   locale === 'en'
-    ? 'Need one of these?'
-    : 'Χρειάζεσαι κάτι από αυτά;'
-const ctaLabel =
-  locale === 'en' ? 'I want this for my business' : 'Το θέλω για τη δουλειά μου'
+    ? {
+        eyebrow: 'THE 48 HOUR PACKAGE',
+        title: 'What the price includes.',
+        yesTitle: 'INCLUDED',
+        noTitle: 'NOT INCLUDED',
+        yes: [
+          {label: 'Up to 5 sections', icon: 'layers'},
+          {label: 'Looks right on mobile', icon: 'phone'},
+          {label: 'Contact form', icon: 'mail'},
+          {label: 'Google Map', icon: 'pin'},
+          {label: 'Basic SEO', icon: 'search'},
+          {label: 'SSL', icon: 'lock'},
+        ],
+        no: [
+          {title: 'Texts and photos', note: 'You provide them.'},
+          {title: 'Online store', note: 'Offered separately.'},
+          {title: 'Special features', note: 'Offered separately.'},
+        ],
+        noFoot: 'Need one of these?',
+        biggerLink: 'See the larger packages',
+        yearlyBefore: 'Domain and hosting: ',
+        yearlyAfter: '/year',
+        yearlyTail: ', we write it up front.',
+        yearlyTag: 'YEARLY COST',
+        priceTag: 'FIXED PRICE · LIVE IN 48 HOURS',
+        cta: 'I want this for my business',
+      }
+    : {
+        eyebrow: 'ΤΟ ΠΑΚΕΤΟ 48 ΩΡΩΝ',
+        title: 'Τι περιλαμβάνει η τιμή.',
+        yesTitle: 'ΠΕΡΙΛΑΜΒΑΝΕΤΑΙ',
+        noTitle: 'ΔΕΝ ΠΕΡΙΛΑΜΒΑΝΕΤΑΙ',
+        yes: [
+          {label: 'Έως 5 ενότητες', icon: 'layers'},
+          {label: 'Σωστή εμφάνιση στο κινητό', icon: 'phone'},
+          {label: 'Φόρμα επικοινωνίας', icon: 'mail'},
+          {label: 'Χάρτης Google', icon: 'pin'},
+          {label: 'Βασικό SEO', icon: 'search'},
+          {label: 'SSL', icon: 'lock'},
+        ],
+        no: [
+          {title: 'Κείμενα και φωτογραφίες', note: 'Τα φέρνεις εσύ.'},
+          {title: 'Ηλεκτρονικό κατάστημα', note: 'Προσφέρεται ξεχωριστά.'},
+          {title: 'Ειδικές λειτουργίες', note: 'Προσφέρονται ξεχωριστά.'},
+        ],
+        noFoot: 'Χρειάζεσαι κάτι από αυτά;',
+        biggerLink: 'Δες τα μεγαλύτερα πακέτα',
+        yearlyBefore: 'Domain και hosting: ',
+        yearlyAfter: '/έτος',
+        yearlyTail: ', το γράφουμε από την αρχή.',
+        yearlyTag: 'ΕΤΗΣΙΟ ΚΟΣΤΟΣ',
+        priceTag: 'ΣΤΑΘΕΡΗ ΤΙΜΗ · ΕΤΟΙΜΟ ΣΕ 48 ΩΡΕΣ',
+        cta: 'Το θέλω για τη δουλειά μου',
+      }
 
 const digits = PRICE_FROM.replace(/\D/g, '').padStart(3, '0').slice(-3)
+const yearlyDisplay = '150 €'
+
+const icons: Record<string, string> = {
+  layers:
+    '<path d="M12 3l9 5-9 5-9-5 9-5z"></path><path d="M3 13l9 5 9-5"></path>',
+  phone:
+    '<rect x="7" y="2.5" width="10" height="19" rx="2"></rect><path d="M11 18h2"></path>',
+  mail: '<rect x="3" y="5" width="18" height="14" rx="2"></rect><path d="M3 7l9 6 9-6"></path>',
+  pin: '<path d="M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21z"></path><circle cx="12" cy="9.5" r="2.5"></circle>',
+  search: '<circle cx="11" cy="11" r="7"></circle><path d="M20 20l-3.5-3.5"></path>',
+  lock: '<rect x="4.5" y="10.5" width="15" height="10" rx="2"></rect><path d="M8 10.5V7.5a4 4 0 0 1 8 0v3"></path>',
+}
 ---
 
-<section class="sec paper" id="packages" data-legacy-id="paketo" data-component="Included">
+<section class="sec paper" id="paketo" data-component="Included">
   <div class="wrap">
     <div class="inc-hd">
       <div>
-        <span class="eyebrow"><i><b></b><b></b></i>{eyebrow}</span>
-        <h2 class="rv-l">{included.title}</h2>
+        <span class="eyebrow"><i><b></b><b></b></i>{copy.eyebrow}</span>
+        <h2 class="rv-l">{copy.title}</h2>
       </div>
       <div class="price">
         <span class="sr">{PRICE_FROM}</span>
@@ -42,7 +97,7 @@ const digits = PRICE_FROM.replace(/\D/g, '').padStart(3, '0').slice(-3)
           </span>
           <span class="eur">€</span>
         </span>
-        <span class="tag"><i></i>{priceTag}</span>
+        <span class="tag"><i></i>{copy.priceTag}</span>
       </div>
     </div>
 
@@ -53,22 +108,20 @@ const digits = PRICE_FROM.replace(/\D/g, '').padStart(3, '0').slice(-3)
             <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"
               ><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg
             >
-            {included.includedTitle.toUpperCase()}
           </span>
+          {copy.yesTitle}
         </div>
         <ul class="yes-list">
           {
-            included.included.map((line) => (
+            copy.yes.map((item) => (
               <li>
                 <span class="ic">
-                  <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"
-                    ><path d="M12 3l9 5-9 5-9-5 9-5z"></path><path d="M3 13l9 5 9-5"></path></svg
-                  >
+                  <svg class="ico" viewBox="0 0 24 24" aria-hidden="true" set:html={icons[item.icon]} />
                   <span class="ok">
                     <svg viewBox="0 0 12 12"><path d="M2.5 6.2l2.2 2.2 4.8-4.8"></path></svg>
                   </span>
                 </span>
-                {line}
+                {item.label}
               </li>
             ))
           }
@@ -79,24 +132,25 @@ const digits = PRICE_FROM.replace(/\D/g, '').padStart(3, '0').slice(-3)
         <div class="inc-t">
           <span class="pill">
             <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 12h12"></path></svg>
-            {included.notIncludedTitle.toUpperCase()}
           </span>
+          {copy.noTitle}
         </div>
         <ul class="no-list">
           {
-            included.notIncluded.map((line) => (
+            copy.no.map((item) => (
               <li>
                 <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 12h12"></path></svg>
-                <span>{line}</span>
+                <span>
+                  {item.title}
+                  <small>{item.note}</small>
+                </span>
               </li>
             ))
           }
         </ul>
         <p class="no-foot">
-          {notFoot}{' '}
-          <a href="#megalytera" id="link-bigger-packages">
-            {biggerLink}
-          </a>
+          {copy.noFoot}{' '}
+          <a href="#megalytera" id="link-bigger-packages">{copy.biggerLink}</a>
         </p>
       </div>
     </div>
@@ -106,25 +160,18 @@ const digits = PRICE_FROM.replace(/\D/g, '').padStart(3, '0').slice(-3)
         <rect x="3.5" y="5" width="17" height="15" rx="2"></rect>
         <path d="M3.5 10h17M8 3v4M16 3v4"></path>
       </svg>
-      <p class="on-dark">{included.yearlyCost}</p>
-      <span class="tagm">{yearlyTag}</span>
+      <p class="on-dark">
+        {copy.yearlyBefore}<b><span class="ph">{yearlyDisplay}</span>{copy.yearlyAfter}</b
+        >{copy.yearlyTail}
+      </p>
+      <span class="tagm">{copy.yearlyTag}</span>
     </div>
 
-    <p class="vat-note">{included.vat}</p>
-
     <div class="sec-cta">
-      <a class="btn btn-cta" href="#request" data-cta="included">
-        {ctaLabel}
+      <a class="btn btn-cta" href="#forma" id="cta-included" data-cta="included">
+        {copy.cta}
         <span class="bars" aria-hidden="true"><b></b><b></b></span>
       </a>
     </div>
   </div>
 </section>
-
-<style>
-  .vat-note {
-    margin: 12px 0 0;
-    font-size: 0.9rem;
-    color: var(--slate, #52616b);
-  }
-</style>

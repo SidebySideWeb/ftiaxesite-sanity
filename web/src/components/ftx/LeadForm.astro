@@ -37,7 +37,8 @@ const sentBanner = locale === 'en' ? 'REQUEST SENT' : 'ΤΟ ΑΙΤΗΜΑ ΣΤΑ�
 const resetLabel = locale === 'en' ? 'Send another request' : 'Στείλε νέο αίτημα'
 ---
 
-<section class="sec lf-sec on-dark" id="request" data-legacy-id="forma" data-component="LeadForm">
+<section class="sec lf-sec on-dark" id="forma" data-component="LeadForm">
+  <span id="request" class="sr" aria-hidden="true"></span>
   <div class="lf-deco" aria-hidden="true"><b></b><b></b></div>
   <div class="wrap lf-grid">
     <div class="lf-copy">
@@ -113,6 +114,7 @@ const resetLabel = locale === 'en' ? 'Send another request' : 'Στείλε νέ
                 name="name"
                 type="text"
                 autocomplete="name"
+                placeholder={form.fields.name.placeholder}
                 aria-describedby="lead-name-error"
               />
               <span class="tick hidden" id="tick-name" aria-hidden="true">
@@ -136,6 +138,7 @@ const resetLabel = locale === 'en' ? 'Send another request' : 'Στείλε νέ
                 name="contact"
                 type="text"
                 autocomplete="email tel"
+                placeholder={form.fields.contact.placeholder}
                 aria-describedby="lead-contact-error"
               />
               <span class="tick hidden" id="tick-contact" aria-hidden="true">
@@ -170,6 +173,27 @@ const resetLabel = locale === 'en' ? 'Send another request' : 'Στείλε νέ
                   </button>
                 ))
               }
+            </div>
+          </div>
+
+          <div class="lf-consent" id="fld-consent">
+            <input
+              type="checkbox"
+              id="lead-consent"
+              name="consent"
+              value="1"
+              required
+              aria-describedby="lead-consent-error"
+            />
+            <div>
+              <label for="lead-consent" set:html={form.consentLabel} />
+              <p class="fld-err hidden" id="lead-consent-error">
+                <svg class="ico" viewBox="0 0 24 24" aria-hidden="true">
+                  <circle cx="12" cy="12" r="9"></circle>
+                  <path d="M12 7.5v5.5M12 16.5v.01"></path>
+                </svg>
+                {form.consentError}
+              </p>
             </div>
           </div>
 
@@ -210,9 +234,42 @@ const resetLabel = locale === 'en' ? 'Send another request' : 'Στείλε νέ
   .fld.ok .inp input {
     border-color: var(--ink, #13232e);
   }
-  .chip.on {
-    background: var(--mari, #f0b429);
+  .chip {
+    color: var(--ink, #13232e) !important;
     border-color: var(--ink, #13232e);
+  }
+  .chip.on {
+    background: var(--mari, #f0b429) !important;
+    color: var(--ink, #13232e) !important;
+    border-color: var(--ink, #13232e) !important;
+  }
+  .lf-consent {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    margin: 4px 0 8px;
+    text-align: left;
+  }
+  .lf-consent input {
+    margin-top: 3px;
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+    accent-color: var(--ink, #13232e);
+  }
+  .lf-consent label {
+    font-size: 13px;
+    line-height: 1.45;
+    color: var(--ink, #13232e);
+    font-weight: 500;
+  }
+  .lf-consent label a {
+    color: var(--ink, #13232e);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+  .lf-consent.err label {
+    color: var(--err, #b42318);
   }
   .lf-form[data-state='error'] {
     animation: ftxShake 0.45s ease;
@@ -229,6 +286,7 @@ const resetLabel = locale === 'en' ? 'Send another request' : 'Στείλε νέ
     sendingLabel: form.sending,
     submitLabel: form.submit,
     contactEmpty: form.fields.contact.error,
+    consentError: form.consentError,
   }}
 >
   function loadRecaptchaScript() {
@@ -287,6 +345,7 @@ const resetLabel = locale === 'en' ? 'Send another request' : 'Στείλε νέ
     const isPhone = /^[+\d\s().-]+$/.test(c) && digits.length >= 10
     if (!c) errors.contact = 'empty'
     else if (!(isEmail || isPhone)) errors.contact = 'invalid'
+    if (!values.consent) errors.consent = 'empty'
     return errors
   }
 
@@ -312,6 +371,7 @@ const resetLabel = locale === 'en' ? 'Send another request' : 'Στείλε νέ
     const summary = document.getElementById('lead-error-summary')
     const summaryText = document.getElementById('lead-error-summary-text')
     const contactErrText = document.getElementById('lead-contact-error-text')
+    const consentInput = document.getElementById('lead-consent')
     const resetBtn = document.getElementById('lead-reset')
 
     let liveValidate = false
@@ -320,6 +380,7 @@ const resetLabel = locale === 'en' ? 'Send another request' : 'Στείλε νέ
       name: nameInput instanceof HTMLInputElement ? nameInput.value : '',
       contact: contactInput instanceof HTMLInputElement ? contactInput.value : '',
       business: businessInput instanceof HTMLInputElement ? businessInput.value : '',
+      consent: consentInput instanceof HTMLInputElement ? consentInput.checked : false,
     })
 
     const applyPackagePrefill = () => {
@@ -345,16 +406,19 @@ const resetLabel = locale === 'en' ? 'Send another request' : 'Στείλε νέ
       const fldName = document.getElementById('fld-name')
       const fldContact = document.getElementById('fld-contact')
       const fldBusiness = document.getElementById('fld-business')
+      const fldConsent = document.getElementById('fld-consent')
       fldName?.classList.toggle('err', Boolean(errors.name))
       fldName?.classList.toggle('ok', !errors.name && okName)
       fldContact?.classList.toggle('err', Boolean(errors.contact))
       fldContact?.classList.toggle('ok', !errors.contact && okContact)
       fldBusiness?.classList.toggle('ok', okBiz)
+      fldConsent?.classList.toggle('err', Boolean(errors.consent))
 
       setVisible(document.getElementById('tick-name'), !errors.name && okName)
       setVisible(document.getElementById('tick-contact'), !errors.contact && okContact)
       setVisible(document.getElementById('lead-name-error'), Boolean(errors.name))
       setVisible(document.getElementById('lead-contact-error'), Boolean(errors.contact))
+      setVisible(document.getElementById('lead-consent-error'), Boolean(errors.consent))
 
       if (contactErrText) {
         contactErrText.textContent =
@@ -366,6 +430,9 @@ const resetLabel = locale === 'en' ? 'Send another request' : 'Στείλε νέ
       if (contactInput instanceof HTMLInputElement) {
         contactInput.setAttribute('aria-invalid', errors.contact ? 'true' : 'false')
       }
+      if (consentInput instanceof HTMLInputElement) {
+        consentInput.setAttribute('aria-invalid', errors.consent ? 'true' : 'false')
+      }
 
       document.getElementById('lf-dot-1')?.classList.toggle('on', okName)
       document.getElementById('lf-dot-2')?.classList.toggle('on', okContact)
@@ -374,7 +441,11 @@ const resetLabel = locale === 'en' ? 'Send another request' : 'Στείλε νέ
       const errCount = Object.keys(errors).length
       if (summary && summaryText) {
         setVisible(summary, errCount > 0)
-        summaryText.textContent = errCount > 1 ? alertTwo : alertOne
+        if (errCount === 1 && errors.consent) {
+          summaryText.textContent = consentError
+        } else {
+          summaryText.textContent = errCount > 1 ? alertTwo : alertOne
+        }
       }
     }
 
@@ -386,6 +457,7 @@ const resetLabel = locale === 'en' ? 'Send another request' : 'Στείλε νέ
     nameInput?.addEventListener('input', onInput)
     contactInput?.addEventListener('input', onInput)
     businessInput?.addEventListener('input', onInput)
+    consentInput?.addEventListener('change', onInput)
 
     document.querySelectorAll('[data-chip]').forEach((btn) => {
       btn.addEventListener('click', () => {
@@ -429,7 +501,11 @@ const resetLabel = locale === 'en' ? 'Send another request' : 'Στείλε νέ
       card?.setAttribute('data-state', Object.keys(errors).length ? 'error' : 'idle')
 
       if (Object.keys(errors).length) {
-        const first = errors.name ? nameInput : contactInput
+        const first = errors.name
+          ? nameInput
+          : errors.contact
+            ? contactInput
+            : consentInput
         if (first instanceof HTMLElement) first.focus()
         return
       }

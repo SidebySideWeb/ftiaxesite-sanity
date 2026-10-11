@@ -52,9 +52,9 @@ const mockAlt =
           ) : null
         }
       </h1>
-      <p class="sub fade" style="--d: 250">{hero.sub}</p>
+      <p class="sub fade" style="--d: 250" set:html={hero.sub} />
       <div class="cta-row fade" style="--d: 400">
-        <a class="btn btn-cta" href="#request" data-cta="hero"
+        <a class="btn btn-cta" href="#forma" id="cta-hero" data-cta="hero"
           >{hero.cta}
           <span class="bars" aria-hidden="true"><b></b><b></b></span></a
         >
@@ -65,7 +65,6 @@ const mockAlt =
           {hero.micro}
         </span>
       </div>
-      <p class="hero-note fade" style="--d: 520">{hero.conditionNote}</p>
     </div>
 
     <div class="hv" id="hero-visual" aria-label={mockAlt} role="img">

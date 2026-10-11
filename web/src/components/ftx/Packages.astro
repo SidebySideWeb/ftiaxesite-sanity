@@ -24,7 +24,8 @@ const askLabel = locale === 'en' ? 'Ask us' : 'Ρώτησέ μας'
         packages.items.map((item, index) => (
           <a
             class="pk rv"
-            href="#request"
+            href="#forma"
+            id={`package-${packageIds[index] ?? index}`}
             data-cta={`package-${packageIds[index] ?? index}`}
             data-package={packageIds[index] ?? `package-${index + 1}`}
           >

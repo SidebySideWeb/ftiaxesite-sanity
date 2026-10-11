@@ -1,40 +1,100 @@
 ---
-import {getLocaleBlock} from '../../data/content'
 import {PHONE_DISPLAY, PHONE_TEL} from '../../data/site'
 import {DEFAULT_LOCALE, type Locale} from '../../lib/locale'
 
 const locale: Locale = Astro.locals.locale ?? DEFAULT_LOCALE
-const faq = getLocaleBlock('faq', locale)
-const header = getLocaleBlock('header', locale)
+const headerCta = locale === 'en' ? 'Request your site' : 'Ζήτησε το site σου'
 
-const eyebrow = locale === 'en' ? 'QUESTIONS' : 'ΕΡΩΤΗΣΕΙΣ'
-const sideTitle = locale === 'en' ? 'Before you start.' : 'Πριν ξεκινήσεις.'
-const sidePrompt = locale === 'en' ? 'Another question? Call us.' : 'Έχεις άλλη ερώτηση; Πάρε μας τηλέφωνο.'
+const copy =
+  locale === 'en'
+    ? {
+        eyebrow: 'QUESTIONS',
+        sideTitle: 'Before you start.',
+        sidePrompt: 'Another question? Call us.',
+        items: [
+          {
+            id: 'faq-kostos',
+            q: 'What is the total cost?',
+            a: '<b>490 € for the website, once.</b> After that you only pay domain and hosting, <span class="ph">150 €</span> a year. We write it up front so you know what you will pay.',
+          },
+          {
+            id: 'faq-ylika',
+            q: 'What do I need to send you?',
+            a: 'The texts for each section, your photos, and your logo if you have one. Plus the contact details you want shown. Once we have everything, the 48-hour timer starts.',
+          },
+          {
+            id: 'faq-allages',
+            q: 'Can I ask for changes?',
+            a: 'Yes. When you see the first version, tell us what you want changed and we fix it before it goes live.',
+          },
+          {
+            id: 'faq-domain',
+            q: 'Who owns the domain?',
+            a: '<b>You.</b> The domain is registered in your name.',
+          },
+          {
+            id: 'faq-megalytero',
+            q: 'What if I need something bigger?',
+            a: 'For more pages, an online store, or special features, see the <a href="#megalytera">larger packages</a> or write it in the form. We will tell you what fits.',
+          },
+        ],
+      }
+    : {
+        eyebrow: 'ΕΡΩΤΗΣΕΙΣ',
+        sideTitle: 'Πριν ξεκινήσεις.',
+        sidePrompt: 'Έχεις άλλη ερώτηση; Πάρε μας τηλέφωνο.',
+        items: [
+          {
+            id: 'faq-kostos',
+            q: 'Πόσο κοστίζει συνολικά;',
+            a: '<b>490 € για την ιστοσελίδα, μία φορά.</b> Μετά πληρώνεις μόνο domain και hosting, <span class="ph">150 €</span> τον χρόνο. Σου το γράφουμε από την αρχή, για να ξέρεις τι θα δώσεις.',
+          },
+          {
+            id: 'faq-ylika',
+            q: 'Τι χρειάζεται να σας στείλω;',
+            a: 'Τα κείμενα για κάθε ενότητα, τις φωτογραφίες σου και το λογότυπο, αν έχεις. Και τα στοιχεία επικοινωνίας που θέλεις να φαίνονται. Μόλις τα έχουμε όλα, ξεκινά το χρονόμετρο των 48 ωρών.',
+          },
+          {
+            id: 'faq-allages',
+            q: 'Μπορώ να ζητήσω αλλαγές;',
+            a: 'Ναι. Όταν δεις την πρώτη έκδοση, μας λες τι θέλεις να αλλάξει και το διορθώνουμε πριν βγει online.',
+          },
+          {
+            id: 'faq-domain',
+            q: 'Ποιος κατέχει το domain;',
+            a: '<b>Εσύ.</b> Το domain κατοχυρώνεται στο όνομά σου.',
+          },
+          {
+            id: 'faq-megalytero',
+            q: 'Τι γίνεται αν θέλω κάτι μεγαλύτερο;',
+            a: 'Για περισσότερες σελίδες, ηλεκτρονικό κατάστημα ή ειδικές λειτουργίες, δες τα <a href="#megalytera">μεγαλύτερα πακέτα</a> ή γράψ\' το στη φόρμα. Θα σου πούμε τι ταιριάζει.',
+          },
+        ],
+      }
 ---
 
-<section class="sec" id="faq" data-component="Faq">
+<section class="sec" id="erotiseis" data-component="Faq">
   <div class="wrap faq-grid">
     <div class="faq-side">
       <div>
-        <span class="eyebrow"><i><b></b><b></b></i>{eyebrow}</span>
-        <h2>{sideTitle}</h2>
-        <p class="faq-title-alt">{faq.title}</p>
+        <span class="eyebrow"><i><b></b><b></b></i>{copy.eyebrow}</span>
+        <h2>{copy.sideTitle}</h2>
       </div>
       <div class="ask">
-        <p>{sidePrompt}</p>
-        <a class="tel" href={PHONE_TEL} data-cta="call-faq">
+        <p>{copy.sidePrompt}</p>
+        <a class="tel" href={PHONE_TEL} id="tel-faq" data-cta="call-faq">
           <svg class="ico" viewBox="0 0 24 24" aria-hidden="true">
             <path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2"></path>
           </svg>
           <span class="ph">{PHONE_DISPLAY}</span>
         </a>
-        <a class="btn btn-cta btn-sm" href="#request" data-cta="faq">{header.cta}</a>
+        <a class="btn btn-cta btn-sm" href="#forma" id="cta-faq" data-cta="faq">{headerCta}</a>
       </div>
     </div>
     <div class="faq">
       {
-        faq.items.map((item, index) => (
-          <details open={index === 0} id={`faq-item-${index + 1}`}>
+        copy.items.map((item, index) => (
+          <details open={index === 0} id={item.id}>
             <summary>
               <span class="q">
                 <small>{String(index + 1).padStart(2, '0')}</small>
@@ -42,18 +102,10 @@ const sidePrompt = locale === 'en' ? 'Another question? Call us.' : 'Έχεις 
               </span>
               <span class="pm" aria-hidden="true"></span>
             </summary>
-            <p class="ans">{item.a}</p>
+            <p class="ans" set:html={item.a} />
           </details>
         ))
       }
     </div>
   </div>
 </section>
-
-<style>
-  .faq-title-alt {
-    margin: 8px 0 0;
-    color: var(--slate, #52616b);
-    font-size: 1rem;
-  }
-</style>

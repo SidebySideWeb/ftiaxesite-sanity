@@ -337,9 +337,9 @@
 .fld-err{display:flex;gap:8px;align-items:center;color:var(--err);font-size:14.5px;font-weight:600}
 .fld-err .ico{width:16px;height:16px}
 .chips{display:flex;flex-wrap:wrap;gap:8px}
-.chip{font:600 14px/1 var(--sans);padding:10px 14px;min-height:40px;border-radius:30px;border:1.5px solid var(--mist);background:var(--white);color:var(--ink);cursor:pointer;transition:border-color .2s,background .2s,transform .3s var(--spring)}
-.chip:hover{border-color:var(--ink);transform:translateY(-2px)}
-.chip.on{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.chip{font:600 14px/1 var(--sans);padding:10px 14px;min-height:40px;border-radius:30px;border:1.5px solid var(--ink);background:var(--white);color:var(--ink);cursor:pointer;transition:border-color .2s,background .2s,color .2s,transform .3s var(--spring)}
+.chip:hover{border-color:var(--ink);background:var(--paper);color:var(--ink);transform:translateY(-2px)}
+.chip.on{background:var(--mari);color:var(--ink);border-color:var(--ink)}
 .lf-note{display:flex;align-items:center;justify-content:center;gap:8px;font-size:14.5px;color:var(--slate);text-align:center}
 .lf-note .ico{width:17px;height:17px;color:var(--mari-t)}
 .lf-legal{font-size:12.5px;color:var(--slate);text-align:center;line-height:1.5}
