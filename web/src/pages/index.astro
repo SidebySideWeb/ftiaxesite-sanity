@@ -1,47 +1,41 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro'
-import Nav from '../components/Nav.astro'
-import Hero from '../components/Hero.astro'
-import ValueCards from '../components/ValueCards.astro'
-import PricingGrid from '../components/PricingGrid.astro'
-import ProcessSteps from '../components/ProcessSteps.astro'
-import TechStack from '../components/TechStack.astro'
-import PortfolioGrid from '../components/PortfolioGrid.astro'
-import FaqAccordion from '../components/FaqAccordion.astro'
-import FinalCta from '../components/FinalCta.astro'
-import Footer from '../components/Footer.astro'
-import ModalQuote from '../components/ModalQuote.astro'
-import JsonLd from '../components/JsonLd.astro'
-import {fetchHomePageData} from '../lib/sanity'
+import Header from '../components/ftx/Header.astro'
+import Hero from '../components/ftx/Hero.astro'
+import Marquee from '../components/ftx/Marquee.astro'
+import Steps from '../components/ftx/Steps.astro'
+import Showcase from '../components/ftx/Showcase.astro'
+import Included from '../components/ftx/Included.astro'
+import LeadForm from '../components/ftx/LeadForm.astro'
+import Faq from '../components/ftx/Faq.astro'
+import Packages from '../components/ftx/Packages.astro'
+import Footer from '../components/ftx/Footer.astro'
+import StickyCta from '../components/ftx/StickyCta.astro'
+import HomeJsonLd from '../components/ftx/HomeJsonLd.astro'
+import {getLocaleBlock} from '../data/content'
+import {DEFAULT_LOCALE, type Locale} from '../lib/locale'
 import {resolveSiteOrigin} from '../lib/site-url'
-import {DEFAULT_LOCALE, t, type Locale} from '../lib/locale'
 
 const locale: Locale = Astro.locals.locale ?? DEFAULT_LOCALE
-const data = await fetchHomePageData()
+const meta = getLocaleBlock('meta', locale)
 const siteOrigin = resolveSiteOrigin(Astro.site)
-const seoTitle = t(data.home?.seoTitle, locale) || undefined
-const seoDescription = t(data.home?.seoDescription, locale) || undefined
 ---
 
-<BaseLayout title={seoTitle} description={seoDescription} settings={data.settings}>
-  <JsonLd
-    slot="head"
-    siteOrigin={siteOrigin}
-    settings={data.settings}
-    packages={data.packages}
-    faqs={data.faqs}
-  />
-  <Nav settings={data.settings} />
-  <main>
-    <Hero home={data.home} packages={data.packages} />
-    <ValueCards items={data.valueProps} />
-    <PricingGrid home={data.home} packages={data.packages} />
-    <ProcessSteps home={data.home} steps={data.processSteps} />
-    <TechStack home={data.home} techItems={data.techItems} />
-    <PortfolioGrid home={data.home} projects={data.projects} />
-    <FaqAccordion home={data.home} faqs={data.faqs} />
-    <FinalCta home={data.home} settings={data.settings} />
-  </main>
-  <Footer settings={data.settings} packages={data.packages} />
-  <ModalQuote home={data.home} packages={data.packages} settings={data.settings} />
+<BaseLayout title={meta.title} description={meta.description} variant="ftx">
+  <HomeJsonLd slot="head" siteOrigin={siteOrigin} locale={locale} />
+  <div class="ftx" id="top">
+    <Header />
+    <main>
+      <Hero />
+      <Marquee />
+      <Steps />
+      <Showcase />
+      <Included />
+      <LeadForm />
+      <Faq />
+      <Packages />
+    </main>
+    <Footer />
+    <StickyCta />
+  </div>
 </BaseLayout>

@@ -1,29 +1,11 @@
 ---
-import BaseLayout from '../../layouts/BaseLayout.astro'
-import Nav from '../../components/Nav.astro'
-import Footer from '../../components/Footer.astro'
-import QuoteForm from '../../components/QuoteForm.astro'
-import {fetchHomePage, fetchServicePackages, fetchSiteSettings} from '../../lib/sanity'
-import {DEFAULT_LOCALE, t, type Locale} from '../../lib/locale'
+/**
+ * Legacy ads / bookmarks pointed at /quote/.
+ * Same-origin redirect to the homepage form anchor.
+ */
+export const prerender = false
 
-const locale: Locale = Astro.locals.locale ?? DEFAULT_LOCALE
-const [settings, home, packages] = await Promise.all([
-  fetchSiteSettings(),
-  fetchHomePage(),
-  fetchServicePackages(),
-])
-const copy = home?.quoteForm
-const title = t(copy?.title, locale)
+const locale = Astro.locals.locale ?? 'el'
+const target = locale === 'en' ? '/en/#request' : '/#request'
+return Astro.redirect(target, 301)
 ---
-
-<BaseLayout
-  title={title ? `${title} | ftiaxesite.gr` : undefined}
-  description={t(copy?.intro, locale) || undefined}
-  settings={settings}
->
-  <Nav settings={settings} />
-  <main class="wrap" style="padding:48px 0 88px">
-    <QuoteForm home={home} packages={packages} settings={settings} formId="quotePageForm" showHeader={true} />
-  </main>
-  <Footer settings={settings} packages={packages} />
-</BaseLayout>

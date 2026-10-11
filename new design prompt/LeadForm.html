@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="el">
+<head>
+<meta charset="utf-8">
+<title>LeadForm</title>
+<script src="./support.js"></script>
+<link rel="stylesheet" href="ftx.css">
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Commissioner:wght@200..900&amp;family=JetBrains+Mono:wght@400;500;600&amp;display=swap">
+<style>body{margin:0}</style>
+</helmet>
+<div class="lf-root" data-component="LeadForm" data-state="{{status}}" style="padding: 0 12px 12px 0; font-family: 'Commissioner', 'Segoe UI', system-ui, sans-serif; color: #13232E">
+  <div class="lf-card" id="lead-form-card">
+
+    <sc-if value="{{isSuccess}}" hint-placeholder-val="{{no}}">
+      <div class="lf-success" id="lead-success" role="status" aria-live="polite" data-gtm-event="generate_lead">
+        <div class="ok-mark"><svg viewBox="0 0 40 40" aria-hidden="true"><path d="M9 21l7.5 7.5L31 13"></path></svg></div>
+        <div class="burst" aria-hidden="true"><b></b><b></b><b></b><b></b><b></b><b></b><b></b><b></b><b></b><b></b><b></b><b></b></div>
+        <span class="lf-k" style="--d: 0"><i></i>ΤΟ ΑΙΤΗΜΑ ΣΤΑΛΘΗΚΕ</span>
+        <h3 style="--d: 80">Το πήραμε. Ευχαριστούμε.</h3>
+        <p style="--d: 160">Σου απαντάμε <b>το ίδιο βράδυ ή την επόμενη μέρα.</b></p>
+        <p style="--d: 240">Θες να κερδίσεις χρόνο; Κλείσε τώρα ένα τηλεφώνημα 15 λεπτών.</p>
+        <a class="btn btn-ink" href="#book-call" id="cta-book-call" data-cta="book-call" style="--d: 320">Κλείσε τηλεφώνημα 15 λεπτών <svg class="ico arr" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"></path></svg></a>
+        <button type="button" class="lf-reset" id="lead-reset" onClick="{{reset}}" style="--d: 400">Στείλε νέο αίτημα</button>
+        <span class="gtm-flag" style="--d: 480">dataLayer · event: generate_lead</span>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{notSuccess}}" hint-placeholder-val="{{yes}}">
+      <form class="lf-form" id="lead-form" name="lead-form" onSubmit="{{submit}}" data-state="{{status}}">
+        <div class="lf-head">
+          <span class="lf-k"><i></i>ΑΙΤΗΜΑ ΓΙΑ ΙΣΤΟΣΕΛΙΔΑ</span>
+          <span class="lf-dots" aria-hidden="true"><b class="{{d1}}"></b><b class="{{d2}}"></b><b class="{{d3}}"></b></span>
+        </div>
+
+        <sc-if value="{{showAlert}}" hint-placeholder-val="{{no}}">
+          <div class="lf-alert" role="alert" id="lead-error-summary">
+            <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 7.5v5.5M12 16.5v.01"></path></svg>
+            <span>{{alertText}}</span>
+          </div>
+        </sc-if>
+
+        <div class="fld {{nameCls}}">
+          <label for="lead-name">Όνομα</label>
+          <div class="inp">
+            <input id="lead-name" name="name" type="text" placeholder="Πώς σε λένε;" value="{{name}}" onChange="{{onName}}" aria-invalid="{{nameInvalid}}" aria-describedby="lead-name-error">
+            <sc-if value="{{nameOk}}" hint-placeholder-val="{{no}}"><span class="tick" aria-hidden="true"><svg viewBox="0 0 14 14"><path d="M3 7.2l2.6 2.6L11 4.4"></path></svg></span></sc-if>
+          </div>
+          <sc-if value="{{nameErr}}" hint-placeholder-val="{{no}}">
+            <p class="fld-err" id="lead-name-error"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 7.5v5.5M12 16.5v.01"></path></svg>Γράψε το όνομά σου.</p>
+          </sc-if>
+        </div>
+
+        <div class="fld {{contactCls}}">
+          <label for="lead-contact">Τηλέφωνο ή email</label>
+          <div class="inp">
+            <input id="lead-contact" name="contact" type="text" placeholder="69xx xxx xxx ή το email σου" value="{{contact}}" onChange="{{onContact}}" aria-invalid="{{contactInvalid}}" aria-describedby="lead-contact-error">
+            <sc-if value="{{contactOk}}" hint-placeholder-val="{{no}}"><span class="tick" aria-hidden="true"><svg viewBox="0 0 14 14"><path d="M3 7.2l2.6 2.6L11 4.4"></path></svg></span></sc-if>
+          </div>
+          <sc-if value="{{contactErr}}" hint-placeholder-val="{{no}}">
+            <p class="fld-err" id="lead-contact-error"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 7.5v5.5M12 16.5v.01"></path></svg>{{contactMsg}}</p>
+          </sc-if>
+        </div>
+
+        <div class="fld {{bizCls}}">
+          <label for="lead-business">Τι δουλειά κάνεις; <span class="opt">ΠΡΟΑΙΡΕΤΙΚΟ</span></label>
+          <input id="lead-business" name="business" type="text" placeholder="π.χ. ταβέρνα, ηλεκτρολόγος, ενοικιαζόμενα" value="{{business}}" onChange="{{onBusiness}}">
+          <div class="chips" role="group" aria-label="Γρήγορη επιλογή">
+            <sc-for list="{{chips}}" as="c" hint-placeholder-count="5">
+              <button type="button" class="chip {{c.cls}}" onClick="{{c.pick}}" data-chip="{{c.label}}">{{c.label}}</button>
+            </sc-for>
+          </div>
+        </div>
+
+        <button type="submit" class="btn btn-cta btn-block" id="lead-submit" data-cta="form-submit" disabled="{{sending}}">
+          <sc-if value="{{sending}}" hint-placeholder-val="{{no}}"><span class="spin" aria-hidden="true"></span>Στέλνεται…</sc-if>
+          <sc-if value="{{notSending}}" hint-placeholder-val="{{yes}}">Στείλε το αίτημα <span class="bars" aria-hidden="true"><b></b><b></b></span></sc-if>
+        </button>
+
+        <p class="lf-note"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 2"></path></svg>Σου απαντάμε το ίδιο βράδυ ή την επόμενη μέρα.</p>
+        <p class="lf-legal">Χρησιμοποιούμε τα στοιχεία σου μόνο για να σου απαντήσουμε. <a href="/privacy">Πολιτική απορρήτου</a></p>
+      </form>
+    </sc-if>
+
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"forceState":{"editor":"enum","options":["live","error","success"],"default":"live","section":"Κατάσταση"},"$preview":{"width":480,"height":700}}'>
+class Component extends DCLogic {
+  base() {
+    const f = this.props.forceState;
+    if (f === 'error') return { name: '', contact: '6971 23', business: '', status: 'error' };
+    if (f === 'success') return { name: 'Μαρία Π.', contact: '6971234567', business: 'Ταβέρνα', status: 'success' };
+    return { name: '', contact: '', business: '', status: 'idle' };
+  }
+  cur() { return Object.assign({}, this.base(), this.state || {}); }
+  check(v) {
+    const e = {};
+    if (!String(v.name).trim()) e.name = 'empty';
+    const c = String(v.contact).trim();
+    const digits = c.replace(/\D/g, '');
+    const isEmail = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(c);
+    const isPhone = /^[+\d\s().-]+$/.test(c) && digits.length >= 10;
+    if (!c) e.contact = 'empty'; else if (!(isEmail || isPhone)) e.contact = 'invalid';
+    return e;
+  }
+  componentWillUnmount() { clearTimeout(this._t); }
+  renderVals() {
+    const v = this.cur();
+    const showErr = v.status === 'error';
+    const e = showErr ? this.check(v) : {};
+    const errCount = Object.keys(e).length;
+    const okName = String(v.name).trim().length > 1;
+    const okContact = !this.check({ name: 'x', contact: v.contact }).contact;
+    const labels = ['Εστίαση', 'Κατάλυμα', 'Τεχνίτης', 'Σύλλογος', 'Κατάστημα'];
+    const submit = (ev) => {
+      ev.preventDefault();
+      const now = this.cur();
+      const errs = this.check(now);
+      if (Object.keys(errs).length) { this.setState(Object.assign({}, now, { status: 'error' })); return; }
+      this.setState(Object.assign({}, now, { status: 'sending' }));
+      this._t = setTimeout(() => {
+        window.dataLayer = window.dataLayer || [];
+        window.dataLayer.push({ event: 'generate_lead', form_id: 'lead-form', lead_type: now.business ? 'with_business' : 'basic' });
+        this.setState({ status: 'success' });
+      }, 1100);
+    };
+    return {
+      yes: true, no: false,
+      status: v.status,
+      isSuccess: v.status === 'success',
+      notSuccess: v.status !== 'success',
+      sending: v.status === 'sending',
+      notSending: v.status !== 'sending',
+      name: v.name, contact: v.contact, business: v.business,
+      nameErr: !!e.name, contactErr: !!e.contact,
+      nameInvalid: e.name ? 'true' : 'false',
+      contactInvalid: e.contact ? 'true' : 'false',
+      nameOk: !e.name && okName,
+      contactOk: !e.contact && okContact,
+      nameCls: e.name ? 'err' : (okName ? 'ok' : ''),
+      contactCls: e.contact ? 'err' : (okContact ? 'ok' : ''),
+      bizCls: v.business ? 'ok' : '',
+      contactMsg: e.contact === 'empty' ? 'Γράψε ένα τηλέφωνο ή email για να σε βρούμε.' : 'Αυτό δεν μοιάζει με τηλέφωνο ή email. Δες το ξανά.',
+      showAlert: errCount > 0,
+      alertText: errCount > 1 ? 'Λείπουν δύο στοιχεία. Δες τα πεδία με κόκκινο.' : 'Λείπει ένα στοιχείο. Δες το πεδίο με κόκκινο.',
+      d1: okName ? 'on' : '', d2: okContact ? 'on' : '', d3: v.business ? 'on' : '',
+      chips: labels.map((l) => ({ label: l, cls: v.business === l ? 'on' : '', pick: () => this.setState({ business: v.business === l ? '' : l }) })),
+      onName: (ev) => this.setState({ name: ev.target.value }),
+      onContact: (ev) => this.setState({ contact: ev.target.value }),
+      onBusiness: (ev) => this.setState({ business: ev.target.value }),
+      submit: submit,
+      reset: () => this.setState({ name: '', contact: '', business: '', status: 'idle' })
+    };
+  }
+}
+</script>
+</body>
+</html>

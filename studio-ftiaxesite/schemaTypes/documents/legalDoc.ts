@@ -15,6 +15,7 @@ export const legalDoc = defineType({
         list: [
           {title: 'Privacy policy', value: 'privacy'},
           {title: 'Cookie policy', value: 'cookies'},
+          {title: 'Terms of service', value: 'terms'},
         ],
         layout: 'radio',
       },

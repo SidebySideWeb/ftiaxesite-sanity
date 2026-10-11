@@ -1,0 +1,97 @@
+---
+import {getLocaleBlock} from '../../data/content'
+import {PHONE_DISPLAY, PHONE_TEL} from '../../data/site'
+import {DEFAULT_LOCALE, alternateLocalePath, type Locale} from '../../lib/locale'
+
+const locale: Locale = Astro.locals.locale ?? DEFAULT_LOCALE
+const header = getLocaleBlock('header', locale)
+const otherLocale: Locale = locale === 'el' ? 'en' : 'el'
+const switchHref = alternateLocalePath(Astro.locals.publicPath || '/', otherLocale)
+const switchLabel = otherLocale === 'en' ? 'EN' : 'ΕΛ'
+const homeHref = locale === 'en' ? '/en/' : '/'
+---
+
+<header class="hdr" data-component="Header">
+  <div class="wrap hdr-in">
+    <a class="logo" href={homeHref} aria-label="ftiaxesite.gr">
+      <svg viewBox="0 0 64 64" aria-hidden="true"
+        ><rect class="b1" x="10" y="6" width="17" height="44" rx="2.5" fill="#13232E"></rect><rect
+          class="b2"
+          x="37"
+          y="14"
+          width="17"
+          height="44"
+          rx="2.5"
+          fill="#F0B429"></rect></svg
+      >
+      ftiaxesite<span>.gr</span>
+    </a>
+    <nav class="nav" aria-label={locale === 'en' ? 'Main menu' : 'Κύριο μενού'}>
+      {header.nav.map((item) => (
+        <a href={item.href}>{item.label}</a>
+      ))}
+    </nav>
+    <a class="lang" href={switchHref} lang={otherLocale} hreflang={otherLocale}>
+      {switchLabel}
+    </a>
+    <a class="tel" href={PHONE_TEL} data-cta="call-header">
+      <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"
+        ><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2"></path></svg
+      >
+      <span class="ph">{PHONE_DISPLAY}</span>
+    </a>
+    <a
+      class="tel-ico"
+      href={PHONE_TEL}
+      data-cta="call-header-mobile"
+      aria-label={header.callLabel}
+    >
+      <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"
+        ><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2"></path></svg
+      >
+    </a>
+    <a class="btn btn-cta btn-sm" href="#request" data-cta="header">{header.cta}</a>
+  </div>
+  <div class="hdr-line" aria-hidden="true"></div>
+  <div class="hdr-progress" aria-hidden="true"></div>
+</header>
+
+<style>
+  .lang {
+    font-family: var(--mono, 'JetBrains Mono', monospace);
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 8px 10px;
+    border: 2px solid var(--mist, #d7dedb);
+    border-radius: 6px;
+    color: var(--ink, #13232e);
+    text-decoration: none;
+    margin-inline-start: auto;
+  }
+  @container page (max-width: 760px) {
+    .lang {
+      font-size: 11px;
+      padding: 6px 8px;
+      margin-inline-start: 0;
+    }
+  }
+</style>
+
+<script>
+  function bindCtaClick() {
+    if (document.documentElement.dataset.ftxCtaBound === 'true') return
+    document.documentElement.dataset.ftxCtaBound = 'true'
+    document.addEventListener('click', (event) => {
+      const target = event.target
+      if (!(target instanceof Element)) return
+      const el = target.closest('[data-cta]')
+      if (!el || !(el instanceof HTMLElement) || !el.dataset.cta) return
+      window.dataLayer = window.dataLayer || []
+      window.dataLayer.push({event: 'cta_click', cta_id: el.dataset.cta})
+    })
+  }
+  bindCtaClick()
+  document.addEventListener('astro:page-load', bindCtaClick)
+</script>

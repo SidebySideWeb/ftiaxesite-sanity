@@ -1,0 +1,50 @@
+---
+import {getLocaleBlock} from '../../data/content'
+import {DEFAULT_LOCALE, type Locale} from '../../lib/locale'
+
+const locale: Locale = Astro.locals.locale ?? DEFAULT_LOCALE
+const packages = getLocaleBlock('packages', locale)
+
+const packageIds = ['corporate', 'functions', 'eshop'] as const
+const eyebrow = locale === 'en' ? 'LARGER PROJECTS' : 'ΜΕΓΑΛΥΤΕΡΑ ΕΡΓΑ'
+const askLabel = locale === 'en' ? 'Ask us' : 'Ρώτησέ μας'
+---
+
+<section class="sec paper pk-sec" id="megalytera" data-component="Packages">
+  <div class="wrap">
+    <div class="pk-hd">
+      <div>
+        <span class="eyebrow"><i><b></b><b></b></i>{eyebrow}</span>
+        <h2>{packages.title}</h2>
+      </div>
+      <p>{packages.note}</p>
+    </div>
+    <div class="pks">
+      {
+        packages.items.map((item, index) => (
+          <a
+            class="pk rv"
+            href="#request"
+            data-cta={`package-${packageIds[index] ?? index}`}
+            data-package={packageIds[index] ?? `package-${index + 1}`}
+          >
+            <span class="pn">
+              {locale === 'en' ? `PACKAGE ${String(index + 1).padStart(2, '0')}` : `ΠΑΚΕΤΟ ${String(index + 1).padStart(2, '0')}`}
+            </span>
+            <h3>{item.name}</h3>
+            <p class="pd">{item.text}</p>
+            <span class="pf">
+              <span class="pp">{item.price}</span>
+              <span class="pl">
+                {askLabel}
+                <svg class="ico" viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M5 12h14M13 6l6 6-6 6"></path>
+                </svg>
+              </span>
+            </span>
+          </a>
+        ))
+      }
+    </div>
+  </div>
+</section>

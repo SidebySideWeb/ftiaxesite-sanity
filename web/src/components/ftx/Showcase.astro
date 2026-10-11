@@ -1,0 +1,124 @@
+---
+import {getLocaleBlock} from '../../data/content'
+import {SHOWCASE_PROJECTS} from '../../data/projects'
+import {DEFAULT_LOCALE, hostFromUrl, type Locale} from '../../lib/locale'
+
+const locale: Locale = Astro.locals.locale ?? DEFAULT_LOCALE
+const showcase = getLocaleBlock('showcase', locale)
+const header = getLocaleBlock('header', locale)
+
+const fxVariant: Record<string, string> = {
+  baroque: '',
+  'casa-enastron': 'v-villa',
+  'al-anastasiou': 'v-alu',
+  kallitechnia: 'v-club',
+  moutaki: 'v-shop',
+}
+
+const ctaSub = locale === 'en' ? 'Want your own?' : 'Θέλεις το δικό σου;'
+const scrollHint = locale === 'en' ? 'SWIPE FOR MORE' : 'ΣΥΡΕ ΓΙΑ ΤΑ ΥΠΟΛΟΙΠΑ'
+---
+
+<section class="sec" id="deigmata" data-component="Showcase">
+  <div class="wrap">
+    <div class="sec-hd">
+      <div>
+        <span class="eyebrow"><i><b></b><b></b></i>{locale === 'en' ? 'SHOWCASE' : 'ΔΕΙΓΜΑΤΑ'}</span>
+        <h2 class="rv-l">{showcase.title}</h2>
+      </div>
+      <p>{showcase.sub}</p>
+    </div>
+
+    <div class="work">
+      {
+        SHOWCASE_PROJECTS.map((project) => {
+          const host = hostFromUrl(project.url)
+          const typeLabel = project.type[locale] ?? project.type.el
+          const variant = fxVariant[project.id] ?? ''
+          const xl = project.size === 'xl' ? ' xl' : ''
+          return (
+            <article class={`wk${xl} rv`} data-project={project.id}>
+              <div class="wk-shot">
+                <div class="bbar">
+                  <i />
+                  <i />
+                  <i />
+                  <span>{host}</span>
+                </div>
+                <div class="screen">
+                  <div class={`fx ${variant}`.trim()}>
+                    <div class="fx-nav">
+                      <b />
+                      <i />
+                      <i />
+                      <i />
+                      <i />
+                    </div>
+                    <div class="fx-hero">
+                      <span class="fx-t">{project.name}</span>
+                      <i />
+                      <span class="fx-btn" />
+                    </div>
+                    <div class="fx-lines">
+                      <i />
+                      <i />
+                      <i />
+                    </div>
+                    <div class="fx-row">
+                      <i />
+                      <i />
+                      <i />
+                    </div>
+                    <div class="fx-split">
+                      <i />
+                      <div>
+                        <i />
+                        <i />
+                        <i />
+                      </div>
+                    </div>
+                    <div class="fx-foot" />
+                  </div>
+                  <span class="shot-tag">
+                    SCREENSHOT · {host.toUpperCase()}
+                  </span>
+                </div>
+              </div>
+              <div class="wk-meta">
+                <div>
+                  <h3>{project.name}</h3>
+                  <span class="wk-type">{typeLabel}</span>
+                </div>
+                <a
+                  class="wk-link"
+                  href={project.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  data-cta={`showcase-${project.id}`}
+                >
+                  {showcase.open}
+                  <span class="c">
+                    <svg class="ico" viewBox="0 0 24 24" aria-hidden="true">
+                      <path d="M5 12h14M13 6l6 6-6 6" />
+                    </svg>
+                  </span>
+                </a>
+              </div>
+            </article>
+          )
+        })
+      }
+    </div>
+    <div class="wk-hint" aria-hidden="true">
+      <i><b></b><b></b><b></b><b></b><b></b></i>{scrollHint}
+    </div>
+
+    <div class="sec-cta">
+      <p>{ctaSub}</p>
+      <a class="btn btn-cta" href="#request" data-cta="showcase">
+        {header.cta}
+        <span class="bars" aria-hidden="true"><b></b><b></b></span>
+      </a>
+    </div>
+  </div>
+</section>

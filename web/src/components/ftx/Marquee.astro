@@ -1,0 +1,47 @@
+---
+import {DEFAULT_LOCALE, type Locale} from '../../lib/locale'
+
+const locale: Locale = Astro.locals.locale ?? DEFAULT_LOCALE
+
+const bandA =
+  locale === 'en'
+    ? [
+        'Food & drink',
+        'Lodging',
+        'Trades',
+        'Clubs',
+        'Local services',
+        'Small businesses',
+      ]
+    : ['Εστίαση', 'Καταλύματα', 'Τεχνίτες', 'Σύλλογοι', 'Τοπικές υπηρεσίες', 'Μικροί επαγγελματίες']
+
+const bandB =
+  locale === 'en'
+    ? ['Site in 48 hours', 'Fixed price', 'Works on mobile']
+    : ['Site σε 48 ώρες', 'Σταθερή τιμή', 'Σωστό στο κινητό']
+
+const sr =
+  locale === 'en'
+    ? 'For food and drink, lodging, trades, clubs, local services and small businesses.'
+    : 'Για εστίαση, καταλύματα, τεχνίτες, συλλόγους, τοπικές υπηρεσίες και μικρούς επαγγελματίες.'
+
+const repeat = (items: string[]) => [...items, ...items]
+---
+
+<div class="mq" aria-hidden="true">
+  <div class="mq-band">
+    <div class="mq-track">
+      {repeat(bandA).map((label) => (
+        <span>{label}</span>
+      ))}
+    </div>
+  </div>
+  <div class="mq-band alt">
+    <div class="mq-track">
+      {repeat(bandB).map((label) => (
+        <span>{label}</span>
+      ))}
+    </div>
+  </div>
+</div>
+<p class="sr">{sr}</p>

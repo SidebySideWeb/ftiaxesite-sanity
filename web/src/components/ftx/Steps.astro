@@ -1,0 +1,113 @@
+---
+import {getLocaleBlock} from '../../data/content'
+import {DEFAULT_LOCALE, type Locale} from '../../lib/locale'
+
+const locale: Locale = Astro.locals.locale ?? DEFAULT_LOCALE
+const steps = getLocaleBlock('steps', locale)
+const hero = getLocaleBlock('hero', locale)
+const eyebrow = locale === 'en' ? 'HOW IT WORKS' : 'ΠΩΣ ΔΟΥΛΕΥΕΙ'
+const stepTimes =
+  locale === 'en'
+    ? ['2 MIN', 'CHECKLIST', '24 HOURS', '48 HOURS']
+    : ['2 ΛΕΠΤΑ', 'ΛΙΣΤΑ', '24 ΩΡΕΣ', '48 ΩΡΕΣ']
+const illClasses = ['ill-form', 'ill-prev', 'ill-prev', 'ill-live']
+const ctaLabel =
+  locale === 'en' ? 'Start with step 1' : 'Ξεκίνα με το βήμα 1'
+const tlMarks =
+  locale === 'en' ? ['0 HOURS', '24 HOURS', '48 HOURS'] : ['0 ΩΡΕΣ', '24 ΩΡΕΣ', '48 ΩΡΕΣ']
+---
+
+<section class="sec paper" id="vimata" data-component="Steps">
+  <div class="wrap">
+    <div class="sec-hd">
+      <div>
+        <span class="eyebrow"><i><b></b><b></b></i>{eyebrow}</span>
+        <h2 class="rv-l">{steps.title}</h2>
+      </div>
+    </div>
+    <ol class="steps">
+      {
+        steps.items.map((item, index) => (
+          <li class="step rv">
+            <div class="st-top">
+              <span class="st-n">{String(index + 1).padStart(2, '0')}</span>
+              <span class="st-time">{stepTimes[index] ?? ''}</span>
+            </div>
+            <div class={`ill ${illClasses[index] ?? 'ill-form'}`} aria-hidden="true">
+              {index === 0 ? (
+                <>
+                  <span class="r" />
+                  <span class="r" />
+                  <span class="r" />
+                  <span class="go" />
+                </>
+              ) : null}
+              {index === 1 || index === 2 ? (
+                <div class="pw">
+                  <span class="t" />
+                  <span class="h" />
+                  <span class="c">
+                    <i />
+                    <i />
+                    <i />
+                  </span>
+                </div>
+              ) : null}
+              {index === 3 ? (
+                <>
+                  <span class="sw">
+                    <b />
+                    <span />
+                  </span>
+                  <span class="live-url">
+                    <i />
+                    {locale === 'en' ? 'yoursite.gr' : 'tositesou.gr'}
+                  </span>
+                </>
+              ) : null}
+            </div>
+            <h3>{item.title}</h3>
+            <p>{item.text}</p>
+          </li>
+        ))
+      }
+    </ol>
+
+    <div class="tl" aria-hidden="true">
+      <div class="tl-track"><span class="tl-fill"></span><span class="tl-dot"></span></div>
+      <div class="tl-marks">
+        {tlMarks.map((mark) => (
+          <span>{mark}</span>
+        ))}
+      </div>
+    </div>
+
+    <div class="note rv-s" id="timer-note">
+      <span class="ni">
+        <svg class="ico" viewBox="0 0 24 24" aria-hidden="true">
+          <circle cx="12" cy="13" r="8"></circle>
+          <path d="M12 9v4l2.5 2.5M9.5 2.5h5"></path>
+        </svg>
+      </span>
+      <p>{hero.conditionNote}</p>
+    </div>
+
+    <div class="sec-cta">
+      <a class="btn btn-cta" href="#request" data-cta="steps">
+        {ctaLabel}
+        <svg class="ico arr" viewBox="0 0 24 24" aria-hidden="true"
+          ><path d="M5 12h14M13 6l6 6-6 6"></path></svg
+        >
+      </a>
+    </div>
+  </div>
+</section>
+
+<style>
+  .step p {
+    margin: 8px 0 0;
+    color: var(--slate, #52616b);
+    font-size: 0.95rem;
+    line-height: 1.45;
+  }
+</style>

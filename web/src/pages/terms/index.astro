@@ -1,0 +1,38 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro'
+import Header from '../../components/ftx/Header.astro'
+import Footer from '../../components/ftx/Footer.astro'
+import {fetchLegalDoc} from '../../lib/sanity'
+import {DEFAULT_LOCALE, t, type Locale} from '../../lib/locale'
+
+const locale: Locale = Astro.locals.locale ?? DEFAULT_LOCALE
+const doc = await fetchLegalDoc('terms')
+const title = t(doc?.title, locale)
+
+const stubTitle = locale === 'en' ? 'Terms of service' : 'Όροι παροχής υπηρεσιών'
+const stubNote =
+  locale === 'en'
+    ? 'Text pending legal review. This page is a placeholder so footer links do not 404.'
+    : 'Κείμενο προς έλεγχο από νομικό. Η σελίδα υπάρχει ώστε τα links του footer να μην δίνουν 404.'
+---
+
+<BaseLayout title={`${title || stubTitle} | ftiaxesite.gr`} variant="ftx">
+  <div class="ftx" id="top">
+    <Header />
+    <main class="wrap" style="padding: 48px 0 80px; max-width: 720px">
+      <h1>{title || stubTitle}</h1>
+      {
+        doc?.body ? (
+          <div class="legal-body" style="white-space: pre-wrap; margin-top: 24px; line-height: 1.7">
+            {t(doc.body, locale)}
+          </div>
+        ) : (
+          <p style="margin-top: 24px; padding: 16px; border: 2px solid var(--mist, #d7dedb); border-radius: 10px">
+            {stubNote}
+          </p>
+        )
+      }
+    </main>
+    <Footer />
+  </div>
+</BaseLayout>

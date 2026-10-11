@@ -2,4 +2,10 @@ User-agent: *
 Allow: /
 Disallow: /api/
 
+User-agent: AdsBot-Google
+Allow: /
+
+User-agent: AdsBot-Google-Mobile
+Allow: /
+
 Sitemap: https://ftiaxesite.gr/sitemap-index.xml

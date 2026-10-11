@@ -1,23 +1,14 @@
 ---
-import '@fontsource/manrope/latin-500.css'
-import '@fontsource/manrope/latin-600.css'
-import '@fontsource/manrope/latin-700.css'
-import '@fontsource/manrope/latin-800.css'
-import '@fontsource/manrope/greek-500.css'
-import '@fontsource/manrope/greek-600.css'
-import '@fontsource/manrope/greek-700.css'
-import '@fontsource/manrope/greek-800.css'
-import '@fontsource/inter/latin-400.css'
-import '@fontsource/inter/latin-500.css'
-import '@fontsource/inter/latin-600.css'
-import '@fontsource/inter/greek-400.css'
-import '@fontsource/inter/greek-500.css'
-import '@fontsource/inter/greek-600.css'
+import '@fontsource-variable/commissioner/wght.css'
+import '@fontsource/jetbrains-mono/400.css'
+import '@fontsource/jetbrains-mono/500.css'
+import '@fontsource/jetbrains-mono/600.css'
+import '../styles/ftx.css'
 import '../styles/global.css'
 import Analytics from '../components/Analytics.astro'
 import CookieConsent from '../components/CookieConsent.astro'
 import {buildCanonicalUrl, resolveSiteOrigin} from '../lib/site-url'
-import {alternateLocalePath, DEFAULT_LOCALE, ogLocale, t, type Locale} from '../lib/locale'
+import {alternateLocalePath, DEFAULT_LOCALE, ogLocale, type Locale} from '../lib/locale'
 import type {SiteSettingsDoc} from '../lib/types'
 
 interface Props {
@@ -25,9 +16,11 @@ interface Props {
   description?: string
   settings?: SiteSettingsDoc | null
   noindex?: boolean
+  /** ftx = lead-gen homepage design system */
+  variant?: 'ftx' | 'legacy'
 }
 
-const {title, description, settings = null, noindex = false} = Astro.props
+const {title, description, settings = null, noindex = false, variant = 'ftx'} = Astro.props
 const locale: Locale = Astro.locals.locale ?? DEFAULT_LOCALE
 const siteOrigin = resolveSiteOrigin(Astro.site)
 const publicPath = Astro.locals.publicPath || Astro.url.pathname
@@ -37,16 +30,14 @@ const alternateEn = buildCanonicalUrl(alternateLocalePath(publicPath, 'en'), sit
 
 const pageTitle =
   title ??
-  t(settings?.defaultSeoTitle, locale) ??
   (locale === 'en'
-    ? 'Website & Eshop Development | Your Site in 2 Weeks | ftiaxesite.gr'
-    : 'Κατασκευή Ιστοσελίδων & Eshop | Το Site σου σε 2 Εβδομάδες | ftiaxesite.gr')
+    ? 'Website in 48 hours from €490 | ftiaxesite.gr'
+    : 'Ιστοσελίδα σε 48 ώρες από 490 € | ftiaxesite.gr')
 const pageDescription =
   description ??
-  t(settings?.defaultSeoDescription, locale) ??
   (locale === 'en'
-    ? 'Professional website design and rebuilds for Greek businesses. Clear pricing from €900, delivery in about 2 weeks, no hidden fees.'
-    : 'Επαγγελματική κατασκευή και ανακατασκευή ιστοσελίδων για ελληνικές επιχειρήσεις. Ξεκάθαρες τιμές από 900 ευρώ, γρήγορη παράδοση σε 2 εβδομάδες, χωρίς κρυφές χρεώσεις.')
+    ? 'A professional website for small businesses, from €490. Send us your details and see your site online within 48 hours of receiving your material.'
+    : 'Επαγγελματική ιστοσελίδα για μικρές επιχειρήσεις, από 490 €. Στείλε τα στοιχεία σου και δες το site σου online σε 48 ώρες από την παραλαβή του υλικού.')
 ---
 
 <!doctype html>
@@ -67,6 +58,7 @@ const pageDescription =
     <meta property="og:title" content={pageTitle} />
     <meta property="og:description" content={pageDescription} />
     <meta property="og:url" content={canonical} />
+    <meta property="og:site_name" content="ftiaxesite.gr" />
     <link rel="icon" href="/favicon.ico" sizes="any" />
     <link rel="icon" href="/ftiaxesite-favicon.svg" type="image/svg+xml" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
@@ -89,7 +81,7 @@ const pageDescription =
     <Analytics placement="head" />
     <slot name="head" />
   </head>
-  <body>
+  <body class={variant === 'ftx' ? 'ftx-body' : undefined}>
     <Analytics placement="body" />
     <slot />
     <CookieConsent />
@@ -98,26 +90,34 @@ const pageDescription =
         localStorage.setItem('ftiaxesite-lang', document.documentElement.lang === 'en' ? 'en' : 'el')
       } catch (e) {}
 
-      var io = new IntersectionObserver(
-        function (entries) {
-          entries.forEach(function (entry) {
-            if (entry.isIntersecting) {
-              entry.target.classList.add('in')
-              io.unobserve(entry.target)
-            }
+      // Fallback for browsers without scroll-driven animations
+      if (!CSS.supports('animation-timeline', 'view()')) {
+        var io = new IntersectionObserver(
+          function (entries) {
+            entries.forEach(function (entry) {
+              if (entry.isIntersecting) {
+                entry.target.classList.add('in')
+                io.unobserve(entry.target)
+              }
+            })
+          },
+          {threshold: 0.12},
+        )
+        function initReveal() {
+          document.querySelectorAll('.rv, .rv-l, .rv-s, .tl, .price, .reveal').forEach(function (el) {
+            io.observe(el)
           })
-        },
-        {threshold: 0.12},
-      )
-
-      function initReveal() {
-        document.querySelectorAll('.reveal').forEach(function (el) {
-          io.observe(el)
-        })
+        }
+        initReveal()
+        document.addEventListener('astro:page-load', initReveal)
       }
-
-      initReveal()
-      document.addEventListener('astro:page-load', initReveal)
     </script>
   </body>
 </html>
+
+<style is:global>
+  .ftx-body {
+    margin: 0;
+    background: var(--paper, #f4f6f3);
+  }
+</style>

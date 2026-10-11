@@ -1,0 +1,200 @@
+---
+import {getLocaleBlock} from '../../data/content'
+import {PRICE_FROM} from '../../data/site'
+import {DEFAULT_LOCALE, type Locale} from '../../lib/locale'
+
+const locale: Locale = Astro.locals.locale ?? DEFAULT_LOCALE
+const hero = getLocaleBlock('hero', locale)
+
+function splitHeroTitle(h1: string): {line1: string; line2Html: string} {
+  const comma = h1.indexOf(',')
+  if (comma >= 0) {
+    const line1 = h1.slice(0, comma + 1).trim()
+    let line2 = h1.slice(comma + 1).trim()
+    line2 = line2.replace(/(48\s*(?:ώρες|hours))/iu, '<span class="hl">$1</span>')
+    return {line1, line2Html: line2}
+  }
+  const match = h1.match(/^(.*?)(\s+48\s*(?:ώρες|hours).*)$/iu)
+  if (match) {
+    const line2 = match[2].trim().replace(/(48\s*(?:ώρες|hours))/iu, '<span class="hl">$1</span>')
+    return {line1: match[1].trim(), line2Html: line2}
+  }
+  return {line1: h1, line2Html: ''}
+}
+
+const {line1, line2Html} = splitHeroTitle(hero.h1)
+const timerLabel = locale === 'en' ? '48 HOUR TIMER' : 'ΧΡΟΝΟΜΕΤΡΟ 48 ΩΡΩΝ'
+const badgeRing =
+  locale === 'en'
+    ? 'FIXED PRICE · NO SURPRISES · '
+    : 'ΣΤΑΘΕΡΗ ΤΙΜΗ · ΧΩΡΙΣ ΕΚΠΛΗΞΕΙΣ · '
+const badgeFrom = locale === 'en' ? 'FROM' : 'ΑΠΟ'
+const mockAlt =
+  locale === 'en'
+    ? 'Sample project: Baroque le Bistrot on laptop and phone'
+    : 'Δείγμα έργου: Baroque le Bistrot σε laptop και κινητό'
+---
+
+<section class="hero" id="hero" data-component="Hero">
+  <div class="hero-grid-deco" aria-hidden="true"></div>
+  <div class="wrap hero-in">
+    <div>
+      <span class="eyebrow fade" style="--d: 0"
+        ><i><b></b><b></b></i>{hero.eyebrow}</span
+      >
+      <h1>
+        <span class="ln"><span style="--i: 0">{line1}</span></span>
+        {
+          line2Html ? (
+            <span class="ln">
+              <span style="--i: 1" set:html={line2Html} />
+            </span>
+          ) : null
+        }
+      </h1>
+      <p class="sub fade" style="--d: 250">{hero.sub}</p>
+      <div class="cta-row fade" style="--d: 400">
+        <a class="btn btn-cta" href="#request" data-cta="hero"
+          >{hero.cta}
+          <span class="bars" aria-hidden="true"><b></b><b></b></span></a
+        >
+        <span class="cta-micro">
+          <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"
+            ><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg
+          >
+          {hero.micro}
+        </span>
+      </div>
+      <p class="hero-note fade" style="--d: 520">{hero.conditionNote}</p>
+    </div>
+
+    <div class="hv" id="hero-visual" aria-label={mockAlt} role="img">
+      <div class="hv-stage">
+        <div class="laptop">
+          <div class="lid">
+            <div class="browser">
+              <div class="bbar"><i></i><i></i><i></i><span>baroquelebistrot.gr</span></div>
+              <div class="screen">
+                <div class="fx">
+                  <div class="fx-nav"><b></b><i></i><i></i><i></i><i></i></div>
+                  <div class="fx-hero">
+                    <span class="fx-t">Baroque le Bistrot</span><i></i><span class="fx-btn"></span>
+                  </div>
+                  <div class="fx-lines"><i></i><i></i><i></i></div>
+                  <div class="fx-row"><i></i><i></i><i></i></div>
+                  <div class="fx-split"><i></i><div><i></i><i></i><i></i></div></div>
+                  <div class="fx-row"><i></i><i></i><i></i></div>
+                  <div class="fx-lines"><i></i><i></i><i></i></div>
+                  <div class="fx-foot"></div>
+                </div>
+                <span class="shot-tag">SCREENSHOT</span>
+              </div>
+            </div>
+          </div>
+          <div class="base"></div>
+        </div>
+        <div class="phone">
+          <div class="pscreen">
+            <span class="notch"></span>
+            <div class="fx fx-m">
+              <div class="fx-nav"><b></b><i></i></div>
+              <div class="fx-hero">
+                <span class="fx-t">Baroque le Bistrot</span><i></i><span class="fx-btn"></span>
+              </div>
+              <div class="fx-lines"><i></i><i></i><i></i></div>
+              <div class="fx-row"><i></i><i></i></div>
+              <div class="fx-lines"><i></i><i></i><i></i></div>
+              <div class="fx-row"><i></i><i></i></div>
+              <div class="fx-foot"></div>
+            </div>
+          </div>
+        </div>
+        <div class="timer" aria-hidden="true">
+          <svg viewBox="0 0 42 42">
+            <circle class="tr-bg" cx="21" cy="21" r="18"></circle>
+            <circle class="tr-fg" cx="21" cy="21" r="18" id="hero-timer-ring"></circle>
+          </svg>
+          <div>
+            <div class="tk"><i></i>{timerLabel}</div>
+            <div class="tv" id="hero-timer-display">48:00:00</div>
+          </div>
+        </div>
+        <div class="badge" aria-hidden="true">
+          <span class="disc"></span>
+          <svg class="ring" viewBox="0 0 120 120">
+            <defs>
+              <path id="ftx-ring" d="M60 60 m-44 0 a44 44 0 1 1 88 0 a44 44 0 1 1 -88 0"></path>
+            </defs>
+            <text><textPath href="#ftx-ring">{badgeRing}</textPath></text>
+          </svg>
+          <span class="ctr"
+            ><small>{badgeFrom}</small><b>{PRICE_FROM}</b></span
+          >
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .hero-note {
+    margin: 16px 0 0;
+    max-width: 36rem;
+    font-size: 0.92rem;
+    line-height: 1.45;
+    color: var(--slate, #52616b);
+  }
+</style>
+
+<script>
+  const START_SECONDS = 48 * 3600
+  const CIRC = 113.1
+
+  function pad(n) {
+    return String(n).padStart(2, '0')
+  }
+
+  function initHeroMotion() {
+    const hv = document.getElementById('hero-visual')
+    const ring = document.getElementById('hero-timer-ring')
+    const display = document.getElementById('hero-timer-display')
+    if (!display) return
+
+    let seconds = START_SECONDS
+    const tick = () => {
+      seconds = seconds > 0 ? seconds - 1 : START_SECONDS
+      const h = Math.floor(seconds / 3600)
+      const m = Math.floor((seconds % 3600) / 60)
+      const sec = seconds % 60
+      display.textContent = `${pad(h)}:${pad(m)}:${pad(sec)}`
+      if (ring) {
+        const dash = CIRC * (1 - (sec === 0 ? 60 : sec) / 60)
+        ring.style.strokeDashoffset = String(dash)
+      }
+    }
+    tick()
+    window.setInterval(tick, 1000)
+
+    if (!hv || hv.dataset.tiltBound === 'true') return
+    hv.dataset.tiltBound = 'true'
+    const stage = hv.querySelector('.hv-stage')
+    if (!stage) return
+    const fine = window.matchMedia('(pointer: fine)').matches
+    if (!fine) return
+
+    hv.addEventListener('pointermove', (event) => {
+      const r = hv.getBoundingClientRect()
+      const x = (event.clientX - r.left) / r.width - 0.5
+      const y = (event.clientY - r.top) / r.height - 0.5
+      stage.style.setProperty('--ry', `${(x * 18 - 6).toFixed(2)}deg`)
+      stage.style.setProperty('--rx', `${(-y * 12 + 3).toFixed(2)}deg`)
+    })
+    hv.addEventListener('pointerleave', () => {
+      stage.style.removeProperty('--ry')
+      stage.style.removeProperty('--rx')
+    })
+  }
+
+  initHeroMotion()
+  document.addEventListener('astro:page-load', initHeroMotion)
+</script>

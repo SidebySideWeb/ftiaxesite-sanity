@@ -74,7 +74,9 @@ export async function fetchTechItems(): Promise<readonly TechItemDoc[]> {
   return sanityClient.fetch<readonly TechItemDoc[]>(TECH_ITEMS_QUERY)
 }
 
-export async function fetchLegalDoc(type: 'privacy' | 'cookies'): Promise<LegalDocDoc | null> {
+export async function fetchLegalDoc(
+  type: 'privacy' | 'cookies' | 'terms',
+): Promise<LegalDocDoc | null> {
   return sanityClient.fetch<LegalDocDoc | null>(LEGAL_DOC_QUERY, {type})
 }
 

@@ -82,11 +82,12 @@ export default defineConfig({
       },
       customPages: [
         `${siteUrl}/en/`,
-        `${siteUrl}/en/quote/`,
         `${siteUrl}/en/portfolio/`,
         `${siteUrl}/en/blog/`,
         `${siteUrl}/en/privacy/`,
         `${siteUrl}/en/cookies/`,
+        `${siteUrl}/en/terms/`,
+        `${siteUrl}/terms/`,
       ],
     }),
     sanity({

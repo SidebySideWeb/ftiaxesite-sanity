@@ -6,6 +6,7 @@ export type FormSubmissionType = 'quote-request' | 'contact'
 export interface FormSubmissionEmailFields {
   readonly name: string
   readonly email: string
+  readonly phone?: string | null
   readonly company?: string | null
   readonly projectType?: string | null
   readonly hasExistingWebsite?: boolean | null
@@ -42,9 +43,12 @@ function buildEmailContent(formType: FormSubmissionType, fields: FormSubmissionE
       ? [
           formatField('Όνοματεπώνυμο', fields.name),
           formatField('Email', fields.email),
-          formatField('Επωνυμία Επιχείρησης', fields.company),
+          formatField('Τηλέφωνο', fields.phone),
+          formatField('Επιχείρηση / δουλειά', fields.company),
           formatField('Τύπος Project', fields.projectType),
-          `Έχει ήδη ιστοσελίδα: ${yesNo(fields.hasExistingWebsite)}`,
+          fields.hasExistingWebsite != null
+            ? `Έχει ήδη ιστοσελίδα: ${yesNo(fields.hasExistingWebsite)}`
+            : '',
           fields.hasExistingWebsite ? formatField('URL υπάρχουσας ιστοσελίδας', fields.existingWebsiteUrl) : '',
           formatField('Περιγραφή Project', fields.message),
           formatField('Επιθυμητό Χρονοδιάγραμμα', fields.timeline),
@@ -52,6 +56,7 @@ function buildEmailContent(formType: FormSubmissionType, fields: FormSubmissionE
       : [
           formatField('Όνοματεπώνυμο', fields.name),
           formatField('Email', fields.email),
+          formatField('Τηλέφωνο', fields.phone),
           formatField('Μήνυμα', fields.message),
         ]
 

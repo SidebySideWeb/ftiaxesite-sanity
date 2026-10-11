@@ -1,0 +1,63 @@
+---
+import {getLocaleBlock} from '../../data/content'
+import {
+  ADDRESS_EL,
+  ADDRESS_EN,
+  EMAIL,
+  PHONE,
+  PRICE_FROM,
+  COMPANY_NAME_EL,
+  COMPANY_NAME_EN,
+} from '../../data/site'
+import type {Locale} from '../../lib/locale'
+
+interface Props {
+  siteOrigin: string
+  locale: Locale
+}
+
+const {siteOrigin, locale} = Astro.props
+const faq = getLocaleBlock('faq', locale)
+const meta = getLocaleBlock('meta', locale)
+
+const localBusiness = {
+  '@context': 'https://schema.org',
+  '@type': 'LocalBusiness',
+  name: 'ftiaxesite.gr',
+  legalName: locale === 'en' ? COMPANY_NAME_EN : COMPANY_NAME_EL,
+  url: siteOrigin,
+  telephone: PHONE,
+  email: EMAIL,
+  description: meta.description,
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress: locale === 'en' ? ADDRESS_EN : ADDRESS_EL,
+    addressLocality: locale === 'en' ? 'Voula' : 'Βούλα',
+    addressCountry: 'GR',
+  },
+  priceRange: PRICE_FROM,
+  makesOffer: {
+    '@type': 'Offer',
+    name: locale === 'en' ? 'Website in 48 hours' : 'Ιστοσελίδα σε 48 ώρες',
+    price: '490',
+    priceCurrency: 'EUR',
+    description: meta.description,
+  },
+}
+
+const faqPage = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faq.items.map((item) => ({
+    '@type': 'Question',
+    name: item.q,
+    acceptedAnswer: {
+      '@type': 'Answer',
+      text: item.a,
+    },
+  })),
+}
+---
+
+<script type="application/ld+json" set:html={JSON.stringify(localBusiness)} />
+<script type="application/ld+json" set:html={JSON.stringify(faqPage)} />

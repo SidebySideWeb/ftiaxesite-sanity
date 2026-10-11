@@ -1,0 +1,499 @@
+---
+import {getLocaleBlock} from '../../data/content'
+import {PRICE_FROM, CAL_BOOKING_URL} from '../../data/site'
+import {DEFAULT_LOCALE, type Locale} from '../../lib/locale'
+
+const locale: Locale = Astro.locals.locale ?? DEFAULT_LOCALE
+const form = getLocaleBlock('form', locale)
+const recaptchaSiteKey = (import.meta.env.PUBLIC_RECAPTCHA_SITE_KEY ?? '').trim()
+
+const chips =
+  locale === 'en'
+    ? ['Food & drink', 'Lodging', 'Trades', 'Club', 'Shop']
+    : ['Εστίαση', 'Κατάλυμα', 'Τεχνίτης', 'Σύλλογος', 'Κατάστημα']
+
+const chipsAria = locale === 'en' ? 'Quick pick' : 'Γρήγορη επιλογή'
+const optionalTag = locale === 'en' ? 'OPTIONAL' : 'ΠΡΟΑΙΡΕΤΙΚΟ'
+const eyebrow = locale === 'en' ? 'REQUEST YOUR SITE' : 'ΖΗΤΗΣΕ ΤΟ SITE ΣΟΥ'
+
+const assure =
+  locale === 'en'
+    ? [`Fixed price, from ${PRICE_FROM}`, 'Online in 48 hours', 'No commitment']
+    : [`Σταθερή τιμή, από ${PRICE_FROM}`, 'Online σε 48 ώρες', 'Χωρίς δέσμευση']
+
+const invalidContact =
+  locale === 'en'
+    ? 'That does not look like a phone number or email. Please check it.'
+    : 'Αυτό δεν μοιάζει με τηλέφωνο ή email. Δες το ξανά.'
+
+const alertOne =
+  locale === 'en' ? 'One field is missing. Check the field in red.' : 'Λείπει ένα στοιχείο. Δες το πεδίο με κόκκινο.'
+const alertTwo =
+  locale === 'en'
+    ? 'Two fields are missing. Check the fields in red.'
+    : 'Λείπουν δύο στοιχεία. Δες τα πεδία με κόκκινο.'
+
+const sentBanner = locale === 'en' ? 'REQUEST SENT' : 'ΤΟ ΑΙΤΗΜΑ ΣΤΑΛΘΗΚΕ'
+const resetLabel = locale === 'en' ? 'Send another request' : 'Στείλε νέο αίτημα'
+---
+
+<section class="sec lf-sec on-dark" id="request" data-legacy-id="forma" data-component="LeadForm">
+  <div class="lf-deco" aria-hidden="true"><b></b><b></b></div>
+  <div class="wrap lf-grid">
+    <div class="lf-copy">
+      <span class="eyebrow"><i><b></b><b></b></i>{eyebrow}</span>
+      <h2 class="rv-l">
+        {form.sub}<span class="m">.</span>
+      </h2>
+      <ul class="assure">
+        {
+          assure.map((line) => (
+            <li>
+              <i><b></b><b></b></i>
+              {line}
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+
+    <div class="lf-root">
+      <div class="lf-card" id="lead-form-card" data-state="idle">
+        <div class="lf-success hidden" id="lead-success" role="status" aria-live="polite" tabindex="-1">
+          <div class="ok-mark">
+            <svg viewBox="0 0 40 40" aria-hidden="true"><path d="M9 21l7.5 7.5L31 13"></path></svg>
+          </div>
+          <div class="burst" aria-hidden="true">
+            <b></b><b></b><b></b><b></b><b></b><b></b><b></b><b></b><b></b><b></b><b></b><b></b>
+          </div>
+          <span class="lf-k" style="--d: 0"><i></i>{sentBanner}</span>
+          <h3 style="--d: 80">{form.success.title}</h3>
+          <p style="--d: 160">{form.success.text}</p>
+          <a
+            class="btn btn-ink"
+            href={CAL_BOOKING_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            id="cta-book-call"
+            data-cta="book-call"
+            style="--d: 320"
+          >
+            {form.success.callCta}
+            <svg class="ico arr" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M5 12h14M13 6l6 6-6 6"></path>
+            </svg>
+          </a>
+          <button type="button" class="lf-reset" id="lead-reset" style="--d: 400">{resetLabel}</button>
+        </div>
+
+        <form class="lf-form" id="lead-form" name="lead-form" method="post" novalidate>
+          <div class="lf-head">
+            <span class="lf-k"><i></i>{form.title.toUpperCase()}</span>
+            <span class="lf-dots" aria-hidden="true"><b id="lf-dot-1"></b><b id="lf-dot-2"></b><b id="lf-dot-3"></b></span>
+          </div>
+
+          <div class="lf-alert hidden" role="alert" id="lead-error-summary">
+            <svg class="ico" viewBox="0 0 24 24" aria-hidden="true">
+              <circle cx="12" cy="12" r="9"></circle>
+              <path d="M12 7.5v5.5M12 16.5v.01"></path>
+            </svg>
+            <span id="lead-error-summary-text"></span>
+          </div>
+
+          <div class="hp" aria-hidden="true">
+            <label for="lead-website">Website</label>
+            <input id="lead-website" name="website" type="text" tabindex="-1" autocomplete="off" />
+          </div>
+
+          <div class="fld" id="fld-name">
+            <label for="lead-name">{form.fields.name.label}</label>
+            <div class="inp">
+              <input
+                id="lead-name"
+                name="name"
+                type="text"
+                autocomplete="name"
+                aria-describedby="lead-name-error"
+              />
+              <span class="tick hidden" id="tick-name" aria-hidden="true">
+                <svg viewBox="0 0 14 14"><path d="M3 7.2l2.6 2.6L11 4.4"></path></svg>
+              </span>
+            </div>
+            <p class="fld-err hidden" id="lead-name-error">
+              <svg class="ico" viewBox="0 0 24 24" aria-hidden="true">
+                <circle cx="12" cy="12" r="9"></circle>
+                <path d="M12 7.5v5.5M12 16.5v.01"></path>
+              </svg>
+              {form.fields.name.error}
+            </p>
+          </div>
+
+          <div class="fld" id="fld-contact">
+            <label for="lead-contact">{form.fields.contact.label}</label>
+            <div class="inp">
+              <input
+                id="lead-contact"
+                name="contact"
+                type="text"
+                autocomplete="email tel"
+                aria-describedby="lead-contact-error"
+              />
+              <span class="tick hidden" id="tick-contact" aria-hidden="true">
+                <svg viewBox="0 0 14 14"><path d="M3 7.2l2.6 2.6L11 4.4"></path></svg>
+              </span>
+            </div>
+            <p class="fld-err hidden" id="lead-contact-error">
+              <svg class="ico" viewBox="0 0 24 24" aria-hidden="true">
+                <circle cx="12" cy="12" r="9"></circle>
+                <path d="M12 7.5v5.5M12 16.5v.01"></path>
+              </svg>
+              <span id="lead-contact-error-text">{form.fields.contact.error}</span>
+            </p>
+          </div>
+
+          <div class="fld" id="fld-business">
+            <label for="lead-business">
+              {form.fields.business.label}{' '}
+              <span class="opt">{optionalTag}</span>
+            </label>
+            <input
+              id="lead-business"
+              name="business"
+              type="text"
+              placeholder={form.fields.business.placeholder}
+            />
+            <div class="chips" role="group" aria-label={chipsAria}>
+              {
+                chips.map((label) => (
+                  <button type="button" class="chip" data-chip={label}>
+                    {label}
+                  </button>
+                ))
+              }
+            </div>
+          </div>
+
+          <button type="submit" class="btn btn-cta btn-block" id="lead-submit" data-cta="form-submit">
+            <span class="spin hidden" id="lead-spin" aria-hidden="true"></span>
+            <span id="lead-submit-label">{form.submit}</span>
+            <span class="bars" aria-hidden="true"><b></b><b></b></span>
+          </button>
+
+          <p class="lf-note">
+            <svg class="ico" viewBox="0 0 24 24" aria-hidden="true">
+              <circle cx="12" cy="12" r="9"></circle>
+              <path d="M12 7v5l3 2"></path>
+            </svg>
+            {form.success.text}
+          </p>
+          <p class="lf-legal" set:html={form.privacyNotice} />
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .hidden {
+    display: none !important;
+  }
+  .hp {
+    position: absolute;
+    left: -9999px;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+  }
+  .fld.err .inp input {
+    border-color: var(--err, #b42318);
+  }
+  .fld.ok .inp input {
+    border-color: var(--ink, #13232e);
+  }
+  .chip.on {
+    background: var(--mari, #f0b429);
+    border-color: var(--ink, #13232e);
+  }
+  .lf-form[data-state='error'] {
+    animation: ftxShake 0.45s ease;
+  }
+</style>
+
+<script
+  define:vars={{
+    recaptchaSiteKey,
+    invalidContact,
+    alertOne,
+    alertTwo,
+    genericError: form.genericError,
+    sendingLabel: form.sending,
+    submitLabel: form.submit,
+    contactEmpty: form.fields.contact.error,
+  }}
+>
+  function loadRecaptchaScript() {
+    if (!recaptchaSiteKey) return Promise.resolve()
+    if (window.grecaptcha?.execute) return Promise.resolve()
+    if (window.__ftiaxesiteRecaptchaLoading) return window.__ftiaxesiteRecaptchaLoading
+
+    window.__ftiaxesiteRecaptchaLoading = new Promise((resolve, reject) => {
+      const existing = document.querySelector('script[data-ftiaxesite-recaptcha]')
+      if (existing) {
+        existing.addEventListener('load', () => resolve())
+        existing.addEventListener('error', () => reject(new Error('reCAPTCHA failed to load')))
+        return
+      }
+      const script = document.createElement('script')
+      script.src = `https://www.google.com/recaptcha/api.js?render=${encodeURIComponent(recaptchaSiteKey)}`
+      script.async = true
+      script.dataset.ftiaxesiteRecaptcha = '1'
+      script.onload = () => resolve()
+      script.onerror = () => reject(new Error('reCAPTCHA failed to load'))
+      document.head.appendChild(script)
+    })
+
+    return window.__ftiaxesiteRecaptchaLoading
+  }
+
+  function executeRecaptcha() {
+    return new Promise((resolve, reject) => {
+      if (!recaptchaSiteKey) {
+        resolve('')
+        return
+      }
+      loadRecaptchaScript()
+        .then(() => {
+          if (!window.grecaptcha?.execute) {
+            reject(new Error('reCAPTCHA unavailable'))
+            return
+          }
+          window.grecaptcha.ready(() => {
+            window.grecaptcha
+              .execute(recaptchaSiteKey, {action: 'quote_submit'})
+              .then(resolve)
+              .catch(reject)
+          })
+        })
+        .catch(reject)
+    })
+  }
+
+  function checkLead(values) {
+    const errors = {}
+    if (!String(values.name).trim()) errors.name = 'empty'
+    const c = String(values.contact).trim()
+    const digits = c.replace(/\D/g, '')
+    const isEmail = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(c)
+    const isPhone = /^[+\d\s().-]+$/.test(c) && digits.length >= 10
+    if (!c) errors.contact = 'empty'
+    else if (!(isEmail || isPhone)) errors.contact = 'invalid'
+    return errors
+  }
+
+  function setVisible(el, show) {
+    if (!el) return
+    el.classList.toggle('hidden', !show)
+  }
+
+  function initLeadForm() {
+    const card = document.getElementById('lead-form-card')
+    const form = document.getElementById('lead-form')
+    const success = document.getElementById('lead-success')
+    if (!(form instanceof HTMLFormElement) || form.dataset.bound === 'true') return
+    form.dataset.bound = 'true'
+
+    const nameInput = document.getElementById('lead-name')
+    const contactInput = document.getElementById('lead-contact')
+    const businessInput = document.getElementById('lead-business')
+    const websiteInput = document.getElementById('lead-website')
+    const submitBtn = document.getElementById('lead-submit')
+    const submitLabelEl = document.getElementById('lead-submit-label')
+    const spin = document.getElementById('lead-spin')
+    const summary = document.getElementById('lead-error-summary')
+    const summaryText = document.getElementById('lead-error-summary-text')
+    const contactErrText = document.getElementById('lead-contact-error-text')
+    const resetBtn = document.getElementById('lead-reset')
+
+    let liveValidate = false
+
+    const readValues = () => ({
+      name: nameInput instanceof HTMLInputElement ? nameInput.value : '',
+      contact: contactInput instanceof HTMLInputElement ? contactInput.value : '',
+      business: businessInput instanceof HTMLInputElement ? businessInput.value : '',
+    })
+
+    const applyPackagePrefill = () => {
+      const pkg = sessionStorage.getItem('ftx_selected_package')
+      if (!pkg || !(businessInput instanceof HTMLInputElement) || businessInput.value.trim()) return
+      businessInput.value = pkg
+      sessionStorage.removeItem('ftx_selected_package')
+    }
+
+    document.querySelectorAll('[data-package]').forEach((el) => {
+      el.addEventListener('click', () => {
+        const pkg = el.getAttribute('data-package')
+        if (pkg) sessionStorage.setItem('ftx_selected_package', pkg)
+      })
+    })
+
+    const updateUi = (errors = {}) => {
+      const values = readValues()
+      const okName = String(values.name).trim().length > 1
+      const okContact = !checkLead({name: 'x', contact: values.contact}).contact
+      const okBiz = Boolean(String(values.business).trim())
+
+      const fldName = document.getElementById('fld-name')
+      const fldContact = document.getElementById('fld-contact')
+      const fldBusiness = document.getElementById('fld-business')
+      fldName?.classList.toggle('err', Boolean(errors.name))
+      fldName?.classList.toggle('ok', !errors.name && okName)
+      fldContact?.classList.toggle('err', Boolean(errors.contact))
+      fldContact?.classList.toggle('ok', !errors.contact && okContact)
+      fldBusiness?.classList.toggle('ok', okBiz)
+
+      setVisible(document.getElementById('tick-name'), !errors.name && okName)
+      setVisible(document.getElementById('tick-contact'), !errors.contact && okContact)
+      setVisible(document.getElementById('lead-name-error'), Boolean(errors.name))
+      setVisible(document.getElementById('lead-contact-error'), Boolean(errors.contact))
+
+      if (contactErrText) {
+        contactErrText.textContent =
+          errors.contact === 'invalid' ? invalidContact : contactEmpty
+      }
+      if (nameInput instanceof HTMLInputElement) {
+        nameInput.setAttribute('aria-invalid', errors.name ? 'true' : 'false')
+      }
+      if (contactInput instanceof HTMLInputElement) {
+        contactInput.setAttribute('aria-invalid', errors.contact ? 'true' : 'false')
+      }
+
+      document.getElementById('lf-dot-1')?.classList.toggle('on', okName)
+      document.getElementById('lf-dot-2')?.classList.toggle('on', okContact)
+      document.getElementById('lf-dot-3')?.classList.toggle('on', okBiz)
+
+      const errCount = Object.keys(errors).length
+      if (summary && summaryText) {
+        setVisible(summary, errCount > 0)
+        summaryText.textContent = errCount > 1 ? alertTwo : alertOne
+      }
+    }
+
+    const onInput = () => {
+      if (!liveValidate) return
+      updateUi(checkLead(readValues()))
+    }
+
+    nameInput?.addEventListener('input', onInput)
+    contactInput?.addEventListener('input', onInput)
+    businessInput?.addEventListener('input', onInput)
+
+    document.querySelectorAll('[data-chip]').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        if (!(businessInput instanceof HTMLInputElement) || !(btn instanceof HTMLButtonElement)) return
+        const label = btn.dataset.chip || btn.textContent || ''
+        businessInput.value = businessInput.value === label ? '' : label
+        document.querySelectorAll('[data-chip]').forEach((chip) => {
+          chip.classList.toggle('on', chip === btn && businessInput.value === label)
+        })
+        onInput()
+      })
+    })
+
+    const warmup = () => loadRecaptchaScript().catch(() => {})
+    form.addEventListener('focusin', warmup, {once: true})
+
+    resetBtn?.addEventListener('click', () => {
+      form.reset()
+      liveValidate = false
+      setVisible(success, false)
+      form.classList.remove('hidden')
+      card?.setAttribute('data-state', 'idle')
+      form.dataset.leadTracked = 'false'
+      updateUi()
+    })
+
+    applyPackagePrefill()
+    updateUi()
+
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault()
+      if (form.dataset.submitting === 'true') return
+
+      const values = readValues()
+      if (websiteInput instanceof HTMLInputElement && websiteInput.value.trim()) return
+
+      const errors = checkLead(values)
+      liveValidate = true
+      updateUi(errors)
+      form.setAttribute('data-state', Object.keys(errors).length ? 'error' : 'idle')
+      card?.setAttribute('data-state', Object.keys(errors).length ? 'error' : 'idle')
+
+      if (Object.keys(errors).length) {
+        const first = errors.name ? nameInput : contactInput
+        if (first instanceof HTMLElement) first.focus()
+        return
+      }
+
+      form.dataset.submitting = 'true'
+      card?.setAttribute('data-state', 'sending')
+      if (submitBtn instanceof HTMLButtonElement) submitBtn.disabled = true
+      setVisible(spin, true)
+      if (submitLabelEl) submitLabelEl.textContent = sendingLabel
+
+      try {
+        const recaptchaToken = await executeRecaptcha()
+        if (recaptchaSiteKey && !recaptchaToken) {
+          throw new Error(genericError)
+        }
+
+        const payload = {
+          name: values.name.trim(),
+          contact: values.contact.trim(),
+          business: values.business.trim() || undefined,
+          recaptchaToken,
+        }
+
+        const response = await fetch('/api/quote-request/', {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify(payload),
+        })
+        let result = null
+        try {
+          result = await response.json()
+        } catch {
+          result = null
+        }
+        if (!response.ok || !result?.success) {
+          throw new Error(result?.error || genericError)
+        }
+
+        if (form.dataset.leadTracked !== 'true') {
+          form.dataset.leadTracked = 'true'
+          window.dataLayer = window.dataLayer || []
+          window.dataLayer.push({event: 'generate_lead', form_id: 'quote_form'})
+        }
+
+        form.classList.add('hidden')
+        setVisible(success, true)
+        card?.setAttribute('data-state', 'success')
+        success?.focus()
+      } catch (error) {
+        console.error(error)
+        card?.setAttribute('data-state', 'error')
+        if (summary && summaryText) {
+          setVisible(summary, true)
+          summaryText.textContent = error instanceof Error && error.message ? error.message : genericError
+        }
+      } finally {
+        form.dataset.submitting = 'false'
+        if (submitBtn instanceof HTMLButtonElement) submitBtn.disabled = false
+        setVisible(spin, false)
+        if (submitLabelEl) submitLabelEl.textContent = submitLabel
+      }
+    })
+  }
+
+  initLeadForm()
+  document.addEventListener('astro:page-load', initLeadForm)
+</script>

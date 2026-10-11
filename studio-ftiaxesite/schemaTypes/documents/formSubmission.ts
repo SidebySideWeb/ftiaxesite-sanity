@@ -8,9 +8,8 @@ import {EnvelopeIcon} from '@sanity/icons'
  * export exactly (see the reference comment at the bottom of quotePage.ts).
  * Two corrections vs. the earlier draft of this schema:
  *   - removed `budgetRange` — the real form does not ask for budget
- *   - removed `phone` — the real form does not collect a phone number
- *   - added `hasExistingWebsite` + `existingWebsiteUrl` — a toggle field
- *     that reveals a URL input, present in the real design
+ *   - `phone` optional (lead form accepts phone OR email)
+ *   - `hasExistingWebsite` + `existingWebsiteUrl` for legacy submissions
  *
  * NOT edited by hand in the Studio. Your Astro API route (server-side, using
  * a write-enabled Sanity token that is NEVER exposed to the browser) creates
@@ -56,7 +55,14 @@ export const formSubmission = defineType({
     }),
     defineField({name: 'name', title: 'Όνοματεπώνυμο', type: 'string', readOnly: true}),
     defineField({name: 'email', title: 'Email', type: 'string', readOnly: true}),
-    defineField({name: 'company', title: 'Επωνυμία Επιχείρησης', type: 'string', readOnly: true}),
+    defineField({name: 'phone', title: 'Τηλέφωνο', type: 'string', readOnly: true}),
+    defineField({
+      name: 'company',
+      title: 'Επιχείρηση / δουλειά',
+      type: 'string',
+      description: 'Optional “what do you do?” from the lead form',
+      readOnly: true,
+    }),
     defineField({
       name: 'projectType',
       title: 'Τύπος Project',
@@ -102,11 +108,11 @@ export const formSubmission = defineType({
     },
   ],
   preview: {
-    select: {title: 'name', subtitle: 'email', read: 'read'},
-    prepare({title, subtitle, read}) {
+    select: {title: 'name', email: 'email', phone: 'phone', read: 'read'},
+    prepare({title, email, phone, read}) {
       return {
         title: read ? title : `🔵 ${title}`,
-        subtitle,
+        subtitle: email || phone || '',
       }
     },
   },

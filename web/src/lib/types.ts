@@ -167,7 +167,7 @@ export interface TechItemDoc {
 
 export interface LegalDocDoc {
   readonly _id: string
-  readonly type?: 'privacy' | 'cookies'
+  readonly type?: 'privacy' | 'cookies' | 'terms'
   readonly title?: LocalizedString
   readonly lastUpdated?: string
   readonly body?: LocalizedString

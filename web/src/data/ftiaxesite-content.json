@@ -1,0 +1,434 @@
+{
+  "_readme": "Κείμενα νέας αρχικής του ftiaxesite.gr, el και en. Tokens {{...}} που απομένουν: PRICE_FROM, PHONE, EMAIL, και η απάντηση του FAQ για την ιδιοκτησία του domain.",
+  "constants": {
+    "PRICE_FROM": "490 €",
+    "PHONE": "{{ΣΥΜΠΛΗΡΩΣΕ ελληνικό τηλέφωνο}}",
+    "EMAIL": "{{ΣΥΜΠΛΗΡΩΣΕ email}}",
+    "_note": "Μόνο αυτές οι τρεις σταθερές παραμένουν tokens. Τα υπόλοιπα έχουν συμπληρωθεί απευθείας στα κείμενα."
+  },
+  "meta": {
+    "el": {
+      "title": "Ιστοσελίδα σε 48 ώρες από 490 € | ftiaxesite.gr",
+      "description": "Επαγγελματική ιστοσελίδα για μικρές επιχειρήσεις, από 490 €. Στείλε τα στοιχεία σου και δες το site σου online σε 48 ώρες από την παραλαβή του υλικού."
+    },
+    "en": {
+      "title": "Website in 48 hours from €490 | ftiaxesite.gr",
+      "description": "A professional website for small businesses, from €490. Send us your details and see your site online within 48 hours of receiving your material."
+    }
+  },
+  "header": {
+    "el": {
+      "cta": "Ζήτησε το site σου",
+      "nav": [
+        {
+          "label": "Πακέτα",
+          "href": "#packages"
+        },
+        {
+          "label": "Ερωτήσεις",
+          "href": "#faq"
+        }
+      ],
+      "callLabel": "Κάλεσε μας"
+    },
+    "en": {
+      "cta": "Request your site",
+      "nav": [
+        {
+          "label": "Packages",
+          "href": "#packages"
+        },
+        {
+          "label": "FAQ",
+          "href": "#faq"
+        }
+      ],
+      "callLabel": "Call us"
+    }
+  },
+  "hero": {
+    "el": {
+      "eyebrow": "Για μικρές επιχειρήσεις και επαγγελματίες",
+      "h1": "Η ιστοσελίδα σου, έτοιμη σε 48 ώρες",
+      "sub": "Από {{PRICE_FROM}} με σταθερή τιμή. Στείλε μας τα στοιχεία σου και δες το site σου online μέσα σε 48 ώρες από την παραλαβή τους.",
+      "cta": "Ζήτησε το site σου",
+      "micro": "Χωρίς δέσμευση. Συνήθως απαντάμε μέσα σε μία εργάσιμη μέρα.",
+      "conditionNote": "Τα 48 ώρες μετρούν από τη στιγμή που θα παραλάβουμε κείμενα και φωτογραφίες, σε εργάσιμες ημέρες. Οι τιμές δεν περιλαμβάνουν ΦΠΑ."
+    },
+    "en": {
+      "eyebrow": "For small businesses and professionals",
+      "h1": "Your website, ready in 48 hours",
+      "sub": "From {{PRICE_FROM}} at a fixed price. Send us your details and see your site online within 48 hours of us receiving them.",
+      "cta": "Request your site",
+      "micro": "No commitment. We usually reply within one working day.",
+      "conditionNote": "The 48 hours start when we receive your texts and photos, on working days. Prices do not include VAT."
+    }
+  },
+  "steps": {
+    "el": {
+      "title": "Πώς δουλεύει",
+      "items": [
+        {
+          "title": "Στέλνεις τα στοιχεία σου",
+          "text": "Συμπληρώνεις τη μικρή φόρμα σε 2 λεπτά. Σε καλούμε ή σου γράφουμε για να συμφωνήσουμε τι χρειάζεσαι."
+        },
+        {
+          "title": "Μας δίνεις κείμενα και φωτογραφίες",
+          "text": "Σου στέλνουμε μια απλή λίστα με ό,τι χρειάζεται. Από εδώ ξεκινά το 48ωρο."
+        },
+        {
+          "title": "Βλέπεις την πρώτη έκδοση",
+          "text": "Σε 24 ώρες από την παραλαβή του υλικού έχεις ένα link να δεις το site σου."
+        },
+        {
+          "title": "Εγκρίνεις και βγαίνει online",
+          "text": "Κάνουμε τις διορθώσεις που συμφωνήσαμε και το site βγαίνει στο δικό σου domain."
+        }
+      ]
+    },
+    "en": {
+      "title": "How it works",
+      "items": [
+        {
+          "title": "You send us your details",
+          "text": "Fill in the short form in 2 minutes. We call or write to you to agree on what you need."
+        },
+        {
+          "title": "You give us texts and photos",
+          "text": "We send you a simple checklist of what we need. The 48 hours start from here."
+        },
+        {
+          "title": "You see the first version",
+          "text": "Within 24 hours of receiving your material you get a link to preview your site."
+        },
+        {
+          "title": "You approve and it goes live",
+          "text": "We make the agreed corrections and your site goes live on your own domain."
+        }
+      ]
+    }
+  },
+  "showcase": {
+    "el": {
+      "title": "Έργα που έχουμε φτιάξει",
+      "sub": "Πραγματικά sites επιχειρήσεων. Άνοιξέ τα και δες πώς δουλεύουν.",
+      "open": "Δες το site"
+    },
+    "en": {
+      "title": "Sites we have built",
+      "sub": "Real business websites. Open them and see how they work.",
+      "open": "View the site"
+    },
+    "items": [
+      {
+        "name": "Baroque le Bistrot",
+        "url": "https://baroquelebistrot.gr",
+        "type": {
+          "el": "Εστιατόριο και μπιστρό, Κεφαλονιά",
+          "en": "Restaurant and bistrot, Kefalonia"
+        }
+      },
+      {
+        "name": "Casa Enastron",
+        "url": "https://casaenastron.gr",
+        "type": {
+          "el": "Βίλα με κρατήσεις, Κρήτη",
+          "en": "Villa with bookings, Crete"
+        }
+      },
+      {
+        "name": "Al. Anastasiou",
+        "url": "https://al-anastasiou.gr",
+        "type": {
+          "el": "Κουφώματα αλουμινίου, Χαλκίδα",
+          "en": "Aluminium windows and doors, Chalkida"
+        }
+      },
+      {
+        "name": "Kallitechnia",
+        "url": "https://kallitechnia.gr",
+        "type": {
+          "el": "Γυμναστικός σύλλογος, Κεφαλονιά",
+          "en": "Gymnastics club, Kefalonia"
+        }
+      },
+      {
+        "name": "Moutaki",
+        "url": "https://moutaki.com",
+        "type": {
+          "el": "Ελληνική μάρκα γυναικείων ρούχων",
+          "en": "Greek women's clothing brand"
+        }
+      }
+    ]
+  },
+  "included": {
+    "el": {
+      "title": "Τι περιλαμβάνεται στα {{PRICE_FROM}}",
+      "includedTitle": "Περιλαμβάνεται",
+      "included": [
+        "Έως 5 ενότητες στη σελίδα, για παράδειγμα αρχική, υπηρεσίες, φωτογραφίες, επικοινωνία",
+        "Σωστή εμφάνιση σε κινητό, tablet και υπολογιστή",
+        "Φόρμα επικοινωνίας που στέλνει τα μηνύματα στο email σου",
+        "Χάρτης Google και κουμπί κλήσης",
+        "Βασικό SEO: τίτλοι, περιγραφές, ταχύτητα",
+        "Πιστοποιητικό SSL (https)",
+        "Ένας γύρος διορθώσεων στη φάση του σχεδιασμού"
+      ],
+      "notIncludedTitle": "Δεν περιλαμβάνεται",
+      "notIncluded": [
+        "Συγγραφή κειμένων και φωτογράφιση: τα φέρνεις εσύ",
+        "Ηλεκτρονικό κατάστημα, κρατήσεις ή ειδικές λειτουργίες: γίνονται με ξεχωριστή προσφορά",
+        "Domain και hosting, που χρεώνονται ξεχωριστά"
+      ],
+      "yearlyCost": "Domain και hosting: 150 έως 200 € τον χρόνο, ξεχωριστά από την τιμή του site. Το γράφουμε στην προσφορά πριν αποφασίσεις.",
+      "vat": "Οι τιμές δεν περιλαμβάνουν ΦΠΑ."
+    },
+    "en": {
+      "title": "What is included in the {{PRICE_FROM}}",
+      "includedTitle": "Included",
+      "included": [
+        "Up to 5 sections on the page, for example home, services, photos, contact",
+        "Correct display on mobile, tablet and desktop",
+        "A contact form that sends messages to your email",
+        "Google Map and a call button",
+        "Basic SEO: titles, descriptions, speed",
+        "SSL certificate (https)",
+        "One round of corrections during the design phase"
+      ],
+      "notIncludedTitle": "Not included",
+      "notIncluded": [
+        "Copywriting and photography: you provide them",
+        "Online store, bookings or special features: quoted separately",
+        "Domain and hosting, which are charged separately"
+      ],
+      "yearlyCost": "Domain and hosting: €150 to €200 per year, separate from the price of the site. We state it in the quote before you decide.",
+      "vat": "Prices do not include VAT."
+    }
+  },
+  "form": {
+    "el": {
+      "title": "Ζήτησε το site σου",
+      "sub": "Τρία πεδία και είσαι έτοιμος.",
+      "fields": {
+        "name": {
+          "label": "Όνομα",
+          "error": "Γράψε το όνομά σου."
+        },
+        "contact": {
+          "label": "Τηλέφωνο ή email",
+          "error": "Γράψε ένα τηλέφωνο ή ένα email για να σε βρούμε."
+        },
+        "business": {
+          "label": "Τι δουλειά κάνεις; (προαιρετικό)",
+          "placeholder": "π.χ. εστιατόριο, υδραυλικός, σύλλογος"
+        }
+      },
+      "submit": "Στείλε το αίτημα",
+      "sending": "Αποστολή...",
+      "privacyNotice": "Στέλνοντας τη φόρμα, τα στοιχεία σου χρησιμοποιούνται μόνο για να απαντήσουμε στο αίτημά σου. Δες την <a href=\"/privacy/\">Πολιτική Απορρήτου</a>.",
+      "genericError": "Δεν στάλθηκε το αίτημα. Δοκίμασε ξανά ή κάλεσε μας στο {{PHONE}}.",
+      "success": {
+        "title": "Λάβαμε το αίτημά σου",
+        "text": "Θα επικοινωνήσουμε μαζί σου συνήθως μέσα σε μία εργάσιμη μέρα.",
+        "callCta": "Προτιμάς να μιλήσουμε τώρα; Κλείσε ένα τηλεφώνημα 15 λεπτών"
+      }
+    },
+    "en": {
+      "title": "Request your site",
+      "sub": "Three fields and you are done.",
+      "fields": {
+        "name": {
+          "label": "Name",
+          "error": "Please enter your name."
+        },
+        "contact": {
+          "label": "Phone or email",
+          "error": "Please enter a phone number or an email so we can reach you."
+        },
+        "business": {
+          "label": "What do you do? (optional)",
+          "placeholder": "e.g. restaurant, plumber, club"
+        }
+      },
+      "submit": "Send the request",
+      "sending": "Sending...",
+      "privacyNotice": "By sending this form, your details are used only to reply to your request. See our <a href=\"/en/privacy/\">Privacy Policy</a>.",
+      "genericError": "Your request was not sent. Please try again or call us on {{PHONE}}.",
+      "success": {
+        "title": "We received your request",
+        "text": "We will contact you, usually within one working day.",
+        "callCta": "Prefer to talk now? Book a 15 minute call"
+      }
+    }
+  },
+  "faq": {
+    "el": {
+      "title": "Συχνές ερωτήσεις",
+      "items": [
+        {
+          "q": "Πόσο κοστίζει συνολικά;",
+          "a": "Το πακέτο ξεκινά από {{PRICE_FROM}} για site με έως 5 ενότητες. Το domain και το hosting κοστίζουν 150 έως 200 € τον χρόνο, ξεχωριστά. Οι τιμές δεν περιλαμβάνουν ΦΠΑ. Αν χρειάζεσαι κάτι παραπάνω, σου στέλνουμε γραπτή προσφορά πριν ξεκινήσουμε."
+        },
+        {
+          "q": "Τι χρειάζεται να σου στείλω;",
+          "a": "Κείμενα για την επιχείρησή σου, το λογότυπό σου αν έχεις, και φωτογραφίες. Αν δεν έχεις κάτι από αυτά, πες μας και βρίσκουμε λύση. Ο χρόνος παράδοσης όμως μπορεί να αλλάξει."
+        },
+        {
+          "q": "Είναι σίγουρα 48 ώρες;",
+          "a": "Είναι ο χρόνος που στοχεύουμε για τα sites του πακέτου, από τη στιγμή που έχουμε όλο το υλικό. Αν το υλικό είναι ελλιπές ή ζητηθούν αλλαγές εκτός πακέτου, το συμφωνούμε μαζί σου πριν ξεκινήσουμε."
+        },
+        {
+          "q": "Μπορώ να ζητήσω αλλαγές;",
+          "a": "Ναι. Το πακέτο περιλαμβάνει έναν γύρο διορθώσεων στη φάση του σχεδιασμού. Επιπλέον αλλαγές συμφωνούνται ξεχωριστά."
+        },
+        {
+          "q": "Σε ποιον ανήκει το domain και το site;",
+          "a": "{{ΣΥΜΠΛΗΡΩΣΕ ΜΕ ΤΟΝ ΤΡΟΠΟ ΠΟΥ ΔΟΥΛΕΥΕΤΕ ΠΡΑΓΜΑΤΙΚΑ: π.χ. Το domain γράφεται στο όνομά σου και το περιεχόμενο του site είναι δικό σου.}}"
+        },
+        {
+          "q": "Χρειάζομαι κάτι μεγαλύτερο, για παράδειγμα e-shop. Τι κάνω;",
+          "a": "Δες τα μεγαλύτερα πακέτα παρακάτω ή συμπλήρωσε τη φόρμα και γράψε μας τι χρειάζεσαι. Θα σου στείλουμε γραπτή προσφορά."
+        }
+      ]
+    },
+    "en": {
+      "title": "Frequently asked questions",
+      "items": [
+        {
+          "q": "What is the total cost?",
+          "a": "The package starts from {{PRICE_FROM}} for a site with up to 5 sections. Domain and hosting cost €150 to €200 per year, separately. Prices do not include VAT. If you need more, we send you a written quote before we start."
+        },
+        {
+          "q": "What do I need to send you?",
+          "a": "Texts about your business, your logo if you have one, and photos. If you do not have some of these, tell us and we will find a solution, but the delivery time may change."
+        },
+        {
+          "q": "Is it really 48 hours?",
+          "a": "It is the time we aim for with the sites of this package, from the moment we have all your material. If the material is incomplete or changes outside the package are requested, we agree on it with you before we start."
+        },
+        {
+          "q": "Can I ask for changes?",
+          "a": "Yes. The package includes one round of corrections during the design phase. Additional changes are agreed separately."
+        },
+        {
+          "q": "Who owns the domain and the site?",
+          "a": "{{FILL IN ACCORDING TO HOW YOU ACTUALLY WORK, e.g. The domain is registered in your name and the content of the site is yours.}}"
+        },
+        {
+          "q": "I need something bigger, for example an online store. What do I do?",
+          "a": "See the larger packages below, or fill in the form and tell us what you need. We will send you a written quote."
+        }
+      ]
+    }
+  },
+  "packages": {
+    "el": {
+      "title": "Χρειάζεσαι κάτι μεγαλύτερο;",
+      "note": "Οι τιμές είναι ενδεικτικές. Η τελική τιμή δίνεται γραπτά, πριν ξεκινήσουμε. Οι τιμές δεν περιλαμβάνουν ΦΠΑ.",
+      "cta": "Ζήτησε προσφορά",
+      "items": [
+        {
+          "name": "Εταιρική ιστοσελίδα",
+          "price": "από 1.500 €",
+          "text": "Έως 6 σελίδες, διαχείριση περιεχομένου, blog."
+        },
+        {
+          "name": "Site με λειτουργίες",
+          "price": "από 2.500 €",
+          "text": "Online κρατήσεις, σύνδεση με CRM, δύο γλώσσες."
+        },
+        {
+          "name": "Ηλεκτρονικό κατάστημα",
+          "price": "από 3.500 €",
+          "text": "Πληρωμές με κάρτα, διαχείριση προϊόντων, εκπαίδευση."
+        }
+      ]
+    },
+    "en": {
+      "title": "Need something bigger?",
+      "note": "Prices are indicative. The final price is given in writing before we start. Prices do not include VAT.",
+      "cta": "Request a quote",
+      "items": [
+        {
+          "name": "Corporate website",
+          "price": "from €1,500",
+          "text": "Up to 6 pages, content management, blog."
+        },
+        {
+          "name": "Website with features",
+          "price": "from €2,500",
+          "text": "Online bookings, CRM connection, two languages."
+        },
+        {
+          "name": "Online store",
+          "price": "from €3,500",
+          "text": "Card payments, product management, training."
+        }
+      ]
+    }
+  },
+  "footer": {
+    "el": {
+      "identity": "Side By Side Web Ε.Ε., ΑΦΜ 802759510",
+      "address": "Σμόλικα, Βούλα",
+      "contact": "Τηλέφωνο {{PHONE}}, email {{EMAIL}}",
+      "links": [
+        {
+          "label": "Πολιτική Απορρήτου",
+          "href": "/privacy/"
+        },
+        {
+          "label": "Πολιτική Cookies",
+          "href": "/cookies/"
+        },
+        {
+          "label": "Όροι παροχής υπηρεσιών",
+          "href": "/terms/"
+        }
+      ],
+      "family": "Μέλος της οικογένειας sidebysideweb.gr"
+    },
+    "en": {
+      "identity": "Side By Side Web E.E., VAT ID 802759510",
+      "address": "Smolika, Voula",
+      "contact": "Phone {{PHONE}}, email {{EMAIL}}",
+      "links": [
+        {
+          "label": "Privacy Policy",
+          "href": "/en/privacy/"
+        },
+        {
+          "label": "Cookie Policy",
+          "href": "/en/cookies/"
+        },
+        {
+          "label": "Terms of service",
+          "href": "/en/terms/"
+        }
+      ],
+      "family": "Part of the sidebysideweb.gr family"
+    }
+  },
+  "ads": {
+    "el": {
+      "headlines": [
+        "Ιστοσελίδα σε 48 Ώρες",
+        "Ιστοσελίδα από 490 €",
+        "Σταθερή Τιμή από την Αρχή",
+        "Site για Μικρές Επιχειρήσεις",
+        "Στείλε Στοιχεία, Δες το Site",
+        "Δες Πραγματικά Έργα",
+        "Ζήτησε Προσφορά Online",
+        "Κατασκευή Ιστοσελίδας",
+        "Ιστοσελίδα για Επαγγελματίες",
+        "Δες Τι Περιλαμβάνεται"
+      ],
+      "descriptions": [
+        "Στείλε τα στοιχεία σου και δες το site σου online σε 48 ώρες από την παραλαβή υλικού.",
+        "Από 490 €. Γράφουμε από την αρχή τι περιλαμβάνεται και πόσο κοστίζει το domain.",
+        "Δες πραγματικά sites που έχουμε φτιάξει και ζήτησε προσφορά με τρία πεδία."
+      ]
+    }
+  }
+}

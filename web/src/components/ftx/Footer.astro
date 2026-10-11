@@ -1,0 +1,96 @@
+---
+import {getLocaleBlock} from '../../data/content'
+import {PHONE_TEL, EMAIL} from '../../data/site'
+import {DEFAULT_LOCALE, localizeHref, type Locale} from '../../lib/locale'
+
+const locale: Locale = Astro.locals.locale ?? DEFAULT_LOCALE
+const footer = getLocaleBlock('footer', locale)
+const header = getLocaleBlock('header', locale)
+const homeHref = locale === 'en' ? '/en/' : '/'
+
+const footerCta =
+  locale === 'en' ? 'Your website, in 48 hours.' : 'Η ιστοσελίδα σου, σε 48 ώρες.'
+const contactHeading = locale === 'en' ? 'CONTACT' : 'ΕΠΙΚΟΙΝΩΝΙΑ'
+const linksHeading = locale === 'en' ? 'USEFUL' : 'ΧΡΗΣΙΜΑ'
+const packagesLabel = locale === 'en' ? 'Packages' : 'Πακέτα'
+const faqLabel = locale === 'en' ? 'FAQ' : 'Ερωτήσεις'
+const year = new Date().getFullYear()
+---
+
+<footer class="ftr on-dark" data-component="Footer">
+  <div class="wrap">
+    <div class="ftr-cta">
+      <h2>
+        {footerCta}<span class="m">.</span>
+      </h2>
+      <a class="btn btn-cta" href="#request" data-cta="footer">
+        {header.cta}
+        <span class="bars" aria-hidden="true"><b></b><b></b></span>
+      </a>
+    </div>
+    <div class="ftr-grid">
+      <div>
+        <a class="logo" href={homeHref} aria-label="ftiaxesite.gr">
+          <svg viewBox="0 0 64 64" aria-hidden="true">
+            <rect class="b1" x="10" y="6" width="17" height="44" rx="2.5" fill="#F4F6F3"></rect>
+            <rect class="b2" x="37" y="14" width="17" height="44" rx="2.5" fill="#F0B429"></rect>
+          </svg>
+          ftiaxesite<span>.gr</span>
+        </a>
+        <p class="ftr-id">{footer.identity}</p>
+        <a class="fam" href="https://sidebysideweb.gr" target="_blank" rel="noopener noreferrer" id="link-sidebyside">
+          <svg viewBox="0 0 64 64" aria-hidden="true">
+            <rect x="10" y="6" width="17" height="44" rx="2.5" fill="#F4F6F3"></rect>
+            <rect x="37" y="14" width="17" height="44" rx="2.5" fill="#F0B429"></rect>
+          </svg>
+          <span set:html={footer.family.replace('sidebysideweb.gr', '<b>sidebysideweb.gr</b>')} />
+        </a>
+      </div>
+      <div>
+        <h4>{contactHeading}</h4>
+        <ul>
+          <li>
+            <a href={PHONE_TEL} id="tel-footer" data-cta="call-footer">
+              {footer.contact.split(',')[0]?.trim() ?? footer.contact}
+            </a>
+          </li>
+          <li>
+            <a href={`mailto:${EMAIL}`} id="email-footer">
+              {EMAIL}
+            </a>
+          </li>
+          <li>{footer.address}</li>
+        </ul>
+      </div>
+      <div>
+        <h4>{linksHeading}</h4>
+        <ul>
+          <li><a href="#packages">{packagesLabel}</a></li>
+          <li><a href="#faq">{faqLabel}</a></li>
+          {
+            footer.links.map((link) => (
+              <li>
+                <a href={localizeHref(link.href, locale)}>{link.label}</a>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </div>
+    <div class="legal">
+      <span>© {year} ftiaxesite.gr</span>
+      <span>{footer.family}</span>
+    </div>
+    <div class="giant" aria-hidden="true">
+      <span class="gb"><b></b><b></b></span>ftiaxesite<span>.gr</span>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .ftr-id {
+    margin: 12px 0;
+    font-size: 0.92rem;
+    color: var(--mist, #d7dedb);
+  }
+</style>

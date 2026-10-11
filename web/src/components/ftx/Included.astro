@@ -1,0 +1,130 @@
+---
+import {getLocaleBlock} from '../../data/content'
+import {PRICE_FROM} from '../../data/site'
+import {DEFAULT_LOCALE, type Locale} from '../../lib/locale'
+
+const locale: Locale = Astro.locals.locale ?? DEFAULT_LOCALE
+const included = getLocaleBlock('included', locale)
+const eyebrow = locale === 'en' ? 'THE 48 HOUR PACKAGE' : 'ΤΟ ΠΑΚΕΤΟ 48 ΩΡΩΝ'
+const priceTag =
+  locale === 'en' ? 'FIXED PRICE · LIVE IN 48 HOURS' : 'ΣΤΑΘΕΡΗ ΤΙΜΗ · ΕΤΟΙΜΟ ΣΕ 48 ΩΡΕΣ'
+const yearlyTag = locale === 'en' ? 'YEARLY COST' : 'ΕΤΗΣΙΟ ΚΟΣΤΟΣ'
+const biggerLink =
+  locale === 'en' ? 'See the larger packages' : 'Δες τα μεγαλύτερα πακέτα'
+const notFoot =
+  locale === 'en'
+    ? 'Need one of these?'
+    : 'Χρειάζεσαι κάτι από αυτά;'
+const ctaLabel =
+  locale === 'en' ? 'I want this for my business' : 'Το θέλω για τη δουλειά μου'
+
+const digits = PRICE_FROM.replace(/\D/g, '').padStart(3, '0').slice(-3)
+---
+
+<section class="sec paper" id="packages" data-legacy-id="paketo" data-component="Included">
+  <div class="wrap">
+    <div class="inc-hd">
+      <div>
+        <span class="eyebrow"><i><b></b><b></b></i>{eyebrow}</span>
+        <h2 class="rv-l">{included.title}</h2>
+      </div>
+      <div class="price">
+        <span class="sr">{PRICE_FROM}</span>
+        <span class="big" aria-hidden="true">
+          <span class={`odo n${digits[0]}`}>
+            <span><b>0</b><b>1</b><b>2</b><b>3</b><b>4</b><b>5</b><b>6</b><b>7</b><b>8</b><b>9</b></span>
+          </span>
+          <span class={`odo n${digits[1]}`}>
+            <span><b>0</b><b>1</b><b>2</b><b>3</b><b>4</b><b>5</b><b>6</b><b>7</b><b>8</b><b>9</b></span>
+          </span>
+          <span class={`odo n${digits[2]}`}>
+            <span><b>0</b><b>1</b><b>2</b><b>3</b><b>4</b><b>5</b><b>6</b><b>7</b><b>8</b><b>9</b></span>
+          </span>
+          <span class="eur">€</span>
+        </span>
+        <span class="tag"><i></i>{priceTag}</span>
+      </div>
+    </div>
+
+    <div class="inc-grid">
+      <div class="inc yes rv">
+        <div class="inc-t">
+          <span class="pill">
+            <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"
+              ><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg
+            >
+            {included.includedTitle.toUpperCase()}
+          </span>
+        </div>
+        <ul class="yes-list">
+          {
+            included.included.map((line) => (
+              <li>
+                <span class="ic">
+                  <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"
+                    ><path d="M12 3l9 5-9 5-9-5 9-5z"></path><path d="M3 13l9 5 9-5"></path></svg
+                  >
+                  <span class="ok">
+                    <svg viewBox="0 0 12 12"><path d="M2.5 6.2l2.2 2.2 4.8-4.8"></path></svg>
+                  </span>
+                </span>
+                {line}
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+
+      <div class="inc no rv">
+        <div class="inc-t">
+          <span class="pill">
+            <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 12h12"></path></svg>
+            {included.notIncludedTitle.toUpperCase()}
+          </span>
+        </div>
+        <ul class="no-list">
+          {
+            included.notIncluded.map((line) => (
+              <li>
+                <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 12h12"></path></svg>
+                <span>{line}</span>
+              </li>
+            ))
+          }
+        </ul>
+        <p class="no-foot">
+          {notFoot}{' '}
+          <a href="#megalytera" id="link-bigger-packages">
+            {biggerLink}
+          </a>
+        </p>
+      </div>
+    </div>
+
+    <div class="yearly rv-s" id="yearly-cost">
+      <svg class="ico" viewBox="0 0 24 24" aria-hidden="true">
+        <rect x="3.5" y="5" width="17" height="15" rx="2"></rect>
+        <path d="M3.5 10h17M8 3v4M16 3v4"></path>
+      </svg>
+      <p class="on-dark">{included.yearlyCost}</p>
+      <span class="tagm">{yearlyTag}</span>
+    </div>
+
+    <p class="vat-note">{included.vat}</p>
+
+    <div class="sec-cta">
+      <a class="btn btn-cta" href="#request" data-cta="included">
+        {ctaLabel}
+        <span class="bars" aria-hidden="true"><b></b><b></b></span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<style>
+  .vat-note {
+    margin: 12px 0 0;
+    font-size: 0.9rem;
+    color: var(--slate, #52616b);
+  }
+</style>
