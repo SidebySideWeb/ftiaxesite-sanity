@@ -138,7 +138,6 @@ export function buildVercelHeadersConfig() {
     headers: [
       {source: '/_astro/(.*)', headers: cacheHeaders},
       {source: '/images/(.*)', headers: cacheHeaders},
-      {source: '/fonts/(.*)', headers: cacheHeaders},
       {source: '/(.*)', headers: securityHeaders},
     ],
   }

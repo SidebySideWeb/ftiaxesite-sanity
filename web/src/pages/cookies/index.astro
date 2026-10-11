@@ -16,10 +16,10 @@ const stubNote =
     : 'Κείμενο προς έλεγχο από νομικό. Η σελίδα υπάρχει ώστε τα links του footer να μην δίνουν 404.'
 ---
 
-<BaseLayout title={`${title || stubTitle} | ftiaxesite.gr`} variant="ftx">
+<BaseLayout title={`${title || stubTitle} | ftiaxesite.gr`}>
   <div class="ftx" id="top">
     <Header />
-    <main class="wrap" style="padding: 48px 0 80px; max-width: 720px">
+    <main class="wrap page-main page-prose">
       <h1>{title || stubTitle}</h1>
       {
         doc?.body ? (

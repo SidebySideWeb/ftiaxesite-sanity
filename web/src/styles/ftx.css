@@ -1,5 +1,6 @@
-/* ftiaxesite.gr · home · tokens from the Side by Side design system */
-.ftx,.lf-root{
+/* ftiaxesite.gr · design system (from-scratch frontend) */
+html{scroll-behavior:smooth;overflow-x:hidden}
+:root{
   --paper:#F4F6F3;--white:#FFFFFF;--ink:#13232E;--night:#0B161D;--ink2:#1A2F3C;
   --slate:#52616B;--muted:#9AAAB2;--mist:#D7DEDB;--mari:#F0B429;--mari-h:#FFC845;--mari-t:#8A5E08;
   --err:#B42318;--err-bg:#FDEDEB;
@@ -8,8 +9,9 @@
   --mono:"JetBrains Mono",ui-monospace,Menlo,monospace;
   --ease:cubic-bezier(.2,.8,.2,1);
   --spring:cubic-bezier(.34,1.56,.64,1);
-  font-family:var(--sans);color:var(--ink);-webkit-font-smoothing:antialiased;
 }
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);-webkit-font-smoothing:antialiased}
+.ftx,.lf-root{font-family:var(--sans);color:var(--ink);-webkit-font-smoothing:antialiased}
 .ftx{container:page/inline-size;background:var(--white);font-size:17px;line-height:1.6;overflow-x:clip;position:relative;--gut:clamp(16px,4.4cqi,64px)}
 .ftx *,.lf-root *{box-sizing:border-box}
 .ftx h1,.ftx h2,.ftx h3,.lf-root h3{margin:0;font-weight:800;letter-spacing:-.035em;line-height:1.02;text-wrap:balance}
@@ -260,9 +262,10 @@
 .price{display:grid;justify-items:end;gap:10px}
 .price .big{display:flex;align-items:flex-start;font-weight:900;letter-spacing:-.06em;font-size:clamp(72px,10cqi,150px);line-height:.85;font-variant-numeric:tabular-nums}
 .price .big .eur{font-size:.42em;margin:.12em 0 0 .08em;letter-spacing:0}
-.odo{display:inline-block;height:1em;overflow:hidden;line-height:1}
-.odo>span{display:flex;flex-direction:column}
-.odo.n0>span{transform:translateY(0)}.odo.n4>span{transform:translateY(-4em)}.odo.n9>span{transform:translateY(-9em)}
+.odo{display:inline-block;height:1em;overflow:hidden;line-height:1;--odo-y:0em}
+.odo.n0{--odo-y:0em}.odo.n1{--odo-y:-1em}.odo.n2{--odo-y:-2em}.odo.n3{--odo-y:-3em}.odo.n4{--odo-y:-4em}
+.odo.n5{--odo-y:-5em}.odo.n6{--odo-y:-6em}.odo.n7{--odo-y:-7em}.odo.n8{--odo-y:-8em}.odo.n9{--odo-y:-9em}
+.odo>span{display:flex;flex-direction:column;transform:translateY(var(--odo-y))}
 .odo>span>b{height:1em;line-height:1;font-weight:900}
 .price .tag{font:500 12px var(--mono);letter-spacing:.12em;color:var(--slate);display:flex;gap:10px;align-items:center}
 .price .tag i{width:6px;height:6px;border-radius:50%;background:var(--mari)}
@@ -603,7 +606,8 @@
 @keyframes ftxRvL{from{opacity:0;transform:translateX(-64px)}}
 @keyframes ftxRvS{from{opacity:0;transform:scale(.9) rotate(-1deg)}}
 @keyframes ftxDotMove{from{left:0}to{left:100%}}
-@keyframes ftxOdo{from{transform:translateY(0)}}
+/* Explicit `to` so fill-mode doesn't leave digits stuck at 0 (000 instead of 490). */
+@keyframes ftxOdo{from{transform:translateY(0)}to{transform:translateY(var(--odo-y))}}
 @keyframes ftxDrift{from{transform:translateY(-80px)}to{transform:translateY(120px)}}
 @keyframes ftxGiant{from{opacity:0;transform:translateY(30%)}}
 @keyframes ftxSticky{from{transform:translateY(110%)}to{transform:none}}
@@ -612,3 +616,18 @@
   .ftx *,.lf-root *{animation:none!important;transition:none!important}
   .hv-stage{transform:none!important}
 }
+
+/* ---------- secondary pages (blog / portfolio / legal / 404) ---------- */
+.page-main{padding:48px 0 96px;max-width:920px}
+.page-main h1{font-size:clamp(36px,6cqi,64px);margin:14px 0 18px}
+.page-lead{color:var(--slate);font-size:18px;max-width:48ch;margin-bottom:36px}
+.page-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:20px;margin-top:32px}
+.page-card{display:flex;flex-direction:column;gap:14px;padding:16px;border:1.5px solid var(--ink);border-radius:10px;text-decoration:none;background:var(--white);transition:transform .25s var(--ease),box-shadow .25s var(--ease)}
+.page-card:hover{transform:translate(-2px,-2px);box-shadow:6px 6px 0 var(--mari)}
+.page-card img{width:100%;aspect-ratio:16/10;object-fit:cover;border-radius:6px;background:var(--paper)}
+.page-card h2{font-size:22px;margin:0 0 6px}
+.page-card p{color:var(--slate);font-size:15.5px;margin:0}
+.page-prose{max-width:720px}
+.page-prose :where(p,ul,ol){margin:0 0 1.1em;color:var(--slate);line-height:1.7}
+.page-prose :where(h2,h3){margin:1.6em 0 .6em;font-size:clamp(24px,3cqi,32px)}
+.page-prose a{color:var(--mari-t);font-weight:700}

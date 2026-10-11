@@ -135,16 +135,6 @@ const mockAlt =
   </div>
 </section>
 
-<style>
-  .hero-note {
-    margin: 16px 0 0;
-    max-width: 36rem;
-    font-size: 0.92rem;
-    line-height: 1.45;
-    color: var(--slate, #52616b);
-  }
-</style>
-
 <script>
   const START_SECONDS = 48 * 3600
   const CIRC = 113.1
@@ -157,7 +147,8 @@ const mockAlt =
     const hv = document.getElementById('hero-visual')
     const ring = document.getElementById('hero-timer-ring')
     const display = document.getElementById('hero-timer-display')
-    if (!display) return
+    if (!display || display.dataset.bound === 'true') return
+    display.dataset.bound = 'true'
 
     let seconds = START_SECONDS
     const tick = () => {
@@ -168,7 +159,7 @@ const mockAlt =
       display.textContent = `${pad(h)}:${pad(m)}:${pad(sec)}`
       if (ring) {
         const dash = CIRC * (1 - (sec === 0 ? 60 : sec) / 60)
-        ring.style.strokeDashoffset = String(dash)
+        ring.style.strokeDashoffset = String(dash.toFixed(1))
       }
     }
     tick()
@@ -178,8 +169,7 @@ const mockAlt =
     hv.dataset.tiltBound = 'true'
     const stage = hv.querySelector('.hv-stage')
     if (!stage) return
-    const fine = window.matchMedia('(pointer: fine)').matches
-    if (!fine) return
+    if (!window.matchMedia('(pointer: fine)').matches) return
 
     hv.addEventListener('pointermove', (event) => {
       const r = hv.getBoundingClientRect()

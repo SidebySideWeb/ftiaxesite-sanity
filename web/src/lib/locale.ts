@@ -19,53 +19,6 @@ export function t(value: LocalizedString | null | undefined, locale: Locale = DE
   return (primary || fallback || '').trim()
 }
 
-export function localeAttrs(value: LocalizedString | null | undefined): {
-  'data-el': string
-  'data-en': string
-} {
-  const el = value?.el?.trim() ?? ''
-  const en = value?.en?.trim() ?? el
-  return {'data-el': el, 'data-en': en}
-}
-
-export function formatPrice(amount: number, locale: Locale = DEFAULT_LOCALE): string {
-  return new Intl.NumberFormat(locale === 'el' ? 'el-GR' : 'en-GB', {
-    style: 'currency',
-    currency: 'EUR',
-    maximumFractionDigits: 0,
-  }).format(amount)
-}
-
-export function formatDeliveryRange(
-  min: number | null | undefined,
-  max: number | null | undefined,
-  locale: Locale = DEFAULT_LOCALE,
-): string {
-  if (min == null || max == null) return ''
-  if (locale === 'en') {
-    return `${min}-${max} days`
-  }
-  return `${min}-${max} ημέρες`
-}
-
-export function deliveryLabel(
-  min: number | null | undefined,
-  max: number | null | undefined,
-  locale: Locale = DEFAULT_LOCALE,
-): string {
-  const range = formatDeliveryRange(min, max, locale)
-  if (!range) return ''
-  return locale === 'en' ? `Delivered in ${range}` : `Παράδοση σε ${range}`
-}
-
-export function hostFromUrl(url: string): string {
-  try {
-    return new URL(url).hostname.replace(/^www\./, '')
-  } catch {
-    return url.replace(/^https?:\/\//, '').replace(/\/.*$/, '')
-  }
-}
-
 /** Strip `/en` prefix so `/en/quote/` → `/quote/`. */
 export function stripLocalePrefix(pathname: string): string {
   if (pathname === '/en' || pathname === '/en/') return '/'

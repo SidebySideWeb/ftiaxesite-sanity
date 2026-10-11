@@ -21,7 +21,7 @@ const meta = getLocaleBlock('meta', locale)
 const siteOrigin = resolveSiteOrigin(Astro.site)
 ---
 
-<BaseLayout title={meta.title} description={meta.description} variant="ftx">
+<BaseLayout title={meta.title} description={meta.description}>
   <HomeJsonLd slot="head" siteOrigin={siteOrigin} locale={locale} />
   <div class="ftx" id="top" style="font-family: 'Commissioner', 'Segoe UI', system-ui, sans-serif; color: #13232E">
     <Header />

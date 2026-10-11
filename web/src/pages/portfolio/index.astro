@@ -1,33 +1,45 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro'
-import Nav from '../../components/Nav.astro'
-import Footer from '../../components/Footer.astro'
-import ProjectCard from '../../components/ProjectCard.astro'
-import Localized from '../../components/Localized.astro'
-import {fetchHomePage, fetchProjects, fetchServicePackages, fetchSiteSettings} from '../../lib/sanity'
+import Header from '../../components/ftx/Header.astro'
+import Footer from '../../components/ftx/Footer.astro'
+import {fetchHomePage, fetchProjects, imageUrl} from '../../lib/sanity'
 import {DEFAULT_LOCALE, t, type Locale} from '../../lib/locale'
 
 const locale: Locale = Astro.locals.locale ?? DEFAULT_LOCALE
-const [settings, home, projects, packages] = await Promise.all([
-  fetchSiteSettings(),
-  fetchHomePage(),
-  fetchProjects(),
-  fetchServicePackages(),
-])
+const [home, projects] = await Promise.all([fetchHomePage(), fetchProjects()])
 const heading = t(home?.workHeading, locale)
 ---
 
-<BaseLayout title={heading ? `${heading} | ftiaxesite.gr` : undefined} settings={settings}>
-  <Nav settings={settings} />
-  <main class="wrap block">
-    <div class="page-hero reveal">
-      <Localized value={home?.workEyebrow} tag="span" class="eyebrow" />
-      <Localized value={home?.workHeading} tag="h1" />
-      <Localized value={home?.workIntro} tag="p" />
-    </div>
-    <div class="work-grid card-grid">
-      {projects.map((project) => <ProjectCard project={project} />)}
-    </div>
-  </main>
-  <Footer settings={settings} packages={packages} />
+<BaseLayout title={heading ? `${heading} | ftiaxesite.gr` : undefined}>
+  <div class="ftx" id="top">
+    <Header />
+    <main class="wrap page-main">
+      <span class="eyebrow"><i><b></b><b></b></i>{t(home?.workEyebrow, locale) || 'Portfolio'}</span>
+      <h1>{heading || (locale === 'en' ? 'Work' : 'Έργα')}</h1>
+      {home?.workIntro ? <p class="page-lead">{t(home.workIntro, locale)}</p> : null}
+      <div class="page-grid">
+        {
+          projects.map((project) => {
+            const image = imageUrl(project.screenshot, 640)
+            const name = t(project.title, locale)
+            return (
+              <a
+                class="page-card"
+                href={project.liveUrl || '#'}
+                target={project.liveUrl ? '_blank' : undefined}
+                rel={project.liveUrl ? 'noopener noreferrer' : undefined}
+              >
+                {image ? <img src={image} alt="" loading="lazy" /> : null}
+                <div>
+                  <h2>{name}</h2>
+                  {project.description ? <p>{t(project.description, locale)}</p> : null}
+                </div>
+              </a>
+            )
+          })
+        }
+      </div>
+    </main>
+    <Footer />
+  </div>
 </BaseLayout>

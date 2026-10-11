@@ -61,7 +61,12 @@ const copy =
         cta: 'Το θέλω για τη δουλειά μου',
       }
 
-const digits = PRICE_FROM.replace(/\D/g, '').padStart(3, '0').slice(-3)
+/** Odometer target: 490 (matches Main.html `.odo.n4` / `.n9` / `.n0`). */
+const digits = (PRICE_FROM.replace(/\D/g, '').padStart(3, '0').slice(-3) || '490').split('') as [
+  string,
+  string,
+  string,
+]
 const yearlyDisplay = '150 €'
 
 const icons: Record<string, string> = {

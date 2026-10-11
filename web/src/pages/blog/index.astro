@@ -1,52 +1,44 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro'
-import Nav from '../../components/Nav.astro'
-import Footer from '../../components/Footer.astro'
-import Localized from '../../components/Localized.astro'
-import {fetchHomePage, fetchPosts, fetchServicePackages, fetchSiteSettings} from '../../lib/sanity'
+import Header from '../../components/ftx/Header.astro'
+import Footer from '../../components/ftx/Footer.astro'
+import {fetchHomePage, fetchPosts} from '../../lib/sanity'
 import {imageUrl} from '../../lib/sanity'
 import {DEFAULT_LOCALE, localizeHref, t, type Locale} from '../../lib/locale'
 
 const locale: Locale = Astro.locals.locale ?? DEFAULT_LOCALE
-const [settings, home, posts, packages] = await Promise.all([
-  fetchSiteSettings(),
-  fetchHomePage(),
-  fetchPosts(),
-  fetchServicePackages(),
-])
+const [home, posts] = await Promise.all([fetchHomePage(), fetchPosts()])
 ---
 
-<BaseLayout title="Blog | ftiaxesite.gr" settings={settings}>
-  <Nav settings={settings} />
-  <main class="wrap block">
-    <div class="page-hero reveal">
-      <Localized value={home?.workEyebrow} tag="span" class="eyebrow" />
+<BaseLayout title="Blog | ftiaxesite.gr">
+  <div class="ftx" id="top">
+    <Header />
+    <main class="wrap page-main">
+      <span class="eyebrow"><i><b></b><b></b></i>{t(home?.workEyebrow, locale) || 'Blog'}</span>
       <h1>Blog</h1>
-      <Localized value={home?.workIntro} tag="p" />
-    </div>
-    {
-      posts.length === 0 ? (
-        <p class="reveal">{locale === 'en' ? 'No posts yet.' : 'Δεν υπάρχουν άρθρα ακόμα.'}</p>
-      ) : (
-        <div class="blog-grid">
-          {
-            posts.map((post) => {
+      {home?.workIntro ? <p class="page-lead">{t(home.workIntro, locale)}</p> : null}
+      {
+        posts.length === 0 ? (
+          <p>{locale === 'en' ? 'No posts yet.' : 'Δεν υπάρχουν άρθρα ακόμα.'}</p>
+        ) : (
+          <div class="page-grid">
+            {posts.map((post) => {
               const slug = post.slug?.current ?? ''
               const image = imageUrl(post.mainImage, 640)
               return (
-                <a class="blog-card reveal" href={localizeHref(`/blog/${slug}/`, locale)}>
+                <a class="page-card" href={localizeHref(`/blog/${slug}/`, locale)}>
                   {image ? <img src={image} alt="" loading="lazy" /> : null}
-                  <div class="body">
+                  <div>
                     <h2>{t(post.title, locale)}</h2>
                     <p>{t(post.excerpt, locale)}</p>
                   </div>
                 </a>
               )
-            })
-          }
-        </div>
-      )
-    }
-  </main>
-  <Footer settings={settings} packages={packages} />
+            })}
+          </div>
+        )
+      }
+    </main>
+    <Footer />
+  </div>
 </BaseLayout>

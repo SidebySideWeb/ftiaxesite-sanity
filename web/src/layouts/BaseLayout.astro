@@ -4,23 +4,18 @@ import '@fontsource/jetbrains-mono/400.css'
 import '@fontsource/jetbrains-mono/500.css'
 import '@fontsource/jetbrains-mono/600.css'
 import '../styles/ftx.css'
-import '../styles/global.css'
 import Analytics from '../components/Analytics.astro'
 import CookieConsent from '../components/CookieConsent.astro'
 import {buildCanonicalUrl, resolveSiteOrigin} from '../lib/site-url'
 import {alternateLocalePath, DEFAULT_LOCALE, ogLocale, type Locale} from '../lib/locale'
-import type {SiteSettingsDoc} from '../lib/types'
 
 interface Props {
   title?: string
   description?: string
-  settings?: SiteSettingsDoc | null
   noindex?: boolean
-  /** ftx = lead-gen homepage design system */
-  variant?: 'ftx' | 'legacy'
 }
 
-const {title, description, settings = null, noindex = false, variant = 'ftx'} = Astro.props
+const {title, description, noindex = false} = Astro.props
 const locale: Locale = Astro.locals.locale ?? DEFAULT_LOCALE
 const siteOrigin = resolveSiteOrigin(Astro.site)
 const publicPath = Astro.locals.publicPath || Astro.url.pathname
@@ -81,7 +76,7 @@ const pageDescription =
     <Analytics placement="head" />
     <slot name="head" />
   </head>
-  <body class={variant === 'ftx' ? 'ftx-body' : undefined}>
+  <body>
     <Analytics placement="body" />
     <slot />
     <CookieConsent />
@@ -114,10 +109,3 @@ const pageDescription =
     </script>
   </body>
 </html>
-
-<style is:global>
-  .ftx-body {
-    margin: 0;
-    background: var(--paper, #f4f6f3);
-  }
-</style>

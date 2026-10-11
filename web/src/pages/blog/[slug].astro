@@ -1,20 +1,16 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro'
-import Nav from '../../components/Nav.astro'
-import Footer from '../../components/Footer.astro'
+import Header from '../../components/ftx/Header.astro'
+import Footer from '../../components/ftx/Footer.astro'
 import {PortableText} from 'astro-portabletext'
-import {fetchPostBySlug, fetchServicePackages, fetchSiteSettings} from '../../lib/sanity'
+import {fetchPostBySlug} from '../../lib/sanity'
 import {DEFAULT_LOCALE, localizeHref, t, type Locale} from '../../lib/locale'
 
 export const prerender = false
 
 const locale: Locale = Astro.locals.locale ?? DEFAULT_LOCALE
 const slug = Astro.params.slug ?? ''
-const [settings, packages, post] = await Promise.all([
-  fetchSiteSettings(),
-  fetchServicePackages(),
-  fetchPostBySlug(slug),
-])
+const post = await fetchPostBySlug(slug)
 
 if (!post) {
   return Astro.redirect(localizeHref('/404/', locale))
@@ -25,14 +21,16 @@ const seoTitle = t(post.seoTitle, locale) || t(post.title, locale)
 const seoDescription = t(post.seoDescription, locale) || t(post.excerpt, locale)
 ---
 
-<BaseLayout title={`${seoTitle} | ftiaxesite.gr`} description={seoDescription} settings={settings}>
-  <Nav settings={settings} />
-  <main class="wrap block">
-    <article class="prose reveal">
-      <h1>{t(post.title, locale)}</h1>
-      {post.excerpt ? <p>{t(post.excerpt, locale)}</p> : null}
-      <PortableText value={body} />
-    </article>
-  </main>
-  <Footer settings={settings} packages={packages} />
+<BaseLayout title={`${seoTitle} | ftiaxesite.gr`} description={seoDescription}>
+  <div class="ftx" id="top">
+    <Header />
+    <main class="wrap page-main page-prose">
+      <article>
+        <h1>{t(post.title, locale)}</h1>
+        {post.excerpt ? <p class="page-lead">{t(post.excerpt, locale)}</p> : null}
+        <PortableText value={body} />
+      </article>
+    </main>
+    <Footer />
+  </div>
 </BaseLayout>

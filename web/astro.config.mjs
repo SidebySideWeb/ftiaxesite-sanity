@@ -1,5 +1,4 @@
 import sitemap from '@astrojs/sitemap'
-import tailwind from '@astrojs/tailwind'
 import vercel from '@astrojs/vercel'
 import sanity from '@sanity/astro'
 import {defineConfig, envField} from 'astro/config'
@@ -70,7 +69,6 @@ export default defineConfig({
     },
   },
   integrations: [
-    tailwind({applyBaseStyles: false}),
     sitemap({
       filter: (page) => !page.includes('/api/'),
       i18n: {

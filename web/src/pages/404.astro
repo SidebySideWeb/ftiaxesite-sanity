@@ -1,24 +1,28 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro'
-import {fetchServicePackages, fetchSiteSettings} from '../lib/sanity'
+import Header from '../components/ftx/Header.astro'
+import Footer from '../components/ftx/Footer.astro'
 import {DEFAULT_LOCALE, localizeHref, type Locale} from '../lib/locale'
 
 const locale: Locale = Astro.locals.locale ?? DEFAULT_LOCALE
-const [settings] = await Promise.all([fetchSiteSettings(), fetchServicePackages()])
 ---
 
-<BaseLayout title="404 | ftiaxesite.gr" settings={settings} noindex={true}>
-  <main class="not-found">
-    <h1>{locale === 'en' ? 'Page not found' : 'Η σελίδα δεν βρέθηκε'}</h1>
-    <p>
-      {
-        locale === 'en'
-          ? 'The page you requested does not exist.'
-          : 'Η διεύθυνση που ζήτησες δεν υπάρχει.'
-      }
-    </p>
-    <a href={localizeHref('/', locale)} class="btn btn-primary">
-      {locale === 'en' ? 'Back to home' : 'Πίσω στην αρχική'}
-    </a>
-  </main>
+<BaseLayout title="404 | ftiaxesite.gr" noindex={true}>
+  <div class="ftx" id="top">
+    <Header />
+    <main class="wrap page-main">
+      <h1>{locale === 'en' ? 'Page not found' : 'Η σελίδα δεν βρέθηκε'}</h1>
+      <p>
+        {
+          locale === 'en'
+            ? 'The page you requested does not exist.'
+            : 'Η διεύθυνση που ζήτησες δεν υπάρχει.'
+        }
+      </p>
+      <a href={localizeHref('/', locale)} class="btn btn-cta">
+        {locale === 'en' ? 'Back to home' : 'Πίσω στην αρχική'}
+      </a>
+    </main>
+    <Footer />
+  </div>
 </BaseLayout>
